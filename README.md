@@ -13,6 +13,7 @@
 - 2026-10-30：從 `alvin-ai-workspace` 的 `400_Project/` 搬到本 repo，此後以本 repo 為正本。
 - 2026-10-31：v1.0.1 資料源修正。首次部署實測發現證交所 OpenAPI 隔日才更新、Yahoo 當晚缺當日 K 棒，改用證交所 MI_INDEX 並以官方行情補當日 K 棒（詳見 `SPEC.md` 第 14 節）。
 - 2026-10-31：啟用 GitHub Pages；手動執行 2026-10-30 正式資料成功發布（股票池 1,084、入選 6），bot 的資料 commit 會自動觸發 Pages 重新部署。
+- 2026-10-31：儀表板改版為暗色毛玻璃風格，差 1 條件加入搜尋與分頁（詳見 `SPEC.md` 第 14 節）。
 - 下一步：完成 M3 上線驗收（見下方清單）；第一次自動排程為 2026-11-02 18:00。
 
 ## 選股條件
@@ -99,7 +100,7 @@ python -m http.server -d docs
 | `config.yaml` | 參數與開關 |
 | `screener/` | 程式（各模組職責見 `AGENTS.md`） |
 | `tests/` | pytest 單元與流程測試 |
-| `docs/index.html` | 儀表板（原生 JavaScript，無外部字型與追蹤） |
+| `docs/index.html` | 儀表板（暗色毛玻璃風格，原生 JavaScript，無外部字型與追蹤） |
 | `docs/data/` | `latest.json`、`history.json`（由 workflow 自動更新） |
 | `.github/workflows/daily.yml` | 每日選股排程 |
 | `.github/workflows/tests.yml` | push／PR 時執行 pytest |
