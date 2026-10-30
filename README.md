@@ -4,7 +4,7 @@
 
 規格與規則定義見 [`SPEC.md`](SPEC.md)；維護規則見 [`AGENTS.md`](AGENTS.md)。
 
-- 儀表板：<https://zxcheng19970303.github.io/tw-macd-screener/>（啟用 Pages 後生效）
+- 儀表板：<https://zxcheng19970303.github.io/tw-macd-screener/>
 - 執行紀錄：<https://github.com/zxcheng19970303/tw-macd-screener/actions>
 
 ## 目前狀態
@@ -12,8 +12,8 @@
 - 2026-10-30：T1–T8 完成。`pytest` 64 項通過；`--demo` 產出 JSON，儀表板手機（375px）與桌機、亮色與深色模式檢查完成。
 - 2026-10-30：從 `alvin-ai-workspace` 的 `400_Project/` 搬到本 repo，此後以本 repo 為正本。
 - 2026-10-31：v1.0.1 資料源修正。首次部署實測發現證交所 OpenAPI 隔日才更新、Yahoo 當晚缺當日 K 棒，改用證交所 MI_INDEX 並以官方行情補當日 K 棒（詳見 `SPEC.md` 第 14 節）。
-- `docs/data/` 目前是 **demo 模擬資料**（儀表板會顯示「示範資料」橫幅），第一次正式排程跑完後自動取代。
-- 下一步：啟用 Pages、第一次手動執行 workflow，完成 M3 上線驗收（見下方清單）。
+- 2026-10-31：啟用 GitHub Pages；手動執行 2026-10-30 正式資料成功發布（股票池 1,084、入選 6），bot 的資料 commit 會自動觸發 Pages 重新部署。
+- 下一步：完成 M3 上線驗收（見下方清單）；第一次自動排程為 2026-11-02 18:00。
 
 ## 選股條件
 
@@ -87,7 +87,7 @@ python -m http.server -d docs
 
 - [ ] 2330、2317、2454 的日線羅 DIF、MACD 與看盤軟體同日數值誤差 < 1%
 - [ ] 抽查 5 檔入選股，人工對照 K 線確認 8 個條件皆成立
-- [ ] GitHub Actions 手動觸發成功，總執行時間 < 20 分鐘
+- [x] GitHub Actions 手動觸發成功，總執行時間 < 20 分鐘（2026-10-30：約 2 分鐘）
 - [ ] 連續 5 個交易日自動更新成功
 - [ ] 週末或假日執行時不產生 commit
 - [ ] 手機實機開啟儀表板（寬 375px）無水平捲動
