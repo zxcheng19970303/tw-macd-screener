@@ -71,24 +71,27 @@ W1 與 D1 的簡化：講義兩種情況的共通點分別只有 DIF > 0、MACD 
 
 ```
 輸入                         模組（screener/）                     輸出（docs/data/）
-證交所 OpenAPI ──► universe.py ─┐
+證交所 MI_INDEX ─► universe.py ─┐
 yfinance ────────► prices.py ───┼─► indicators.py ─► rules.py ─► report.py ─► latest.json
 config.yaml ─────► main.py（流程與結束碼）                                   ├► history.json
                                                                              └► Actions job summary
 GitHub Pages：docs/index.html 讀取 latest.json、history.json
 ```
 
-官方 OpenAPI 提供股票池與成交量，yfinance 提供還原權值價格；選股條件只寫在 rules.py，參數只放在 config.yaml。
+證交所每日收盤行情（MI_INDEX）提供股票池、當日 K 棒與成交量，yfinance 提供還原權值歷史價格；選股條件只寫在 rules.py，參數只放在 config.yaml。
 
 ## 4. 資料來源與股票池
 
-當日股票清單與成交量取自證交所官方 OpenAPI；MACD 計算所需的歷史價格取自 yfinance 的還原權值股價。歷史價格必須使用還原權值，否則除權息缺口會產生假的綠柱與死叉。
+當日股票清單、當日 K 棒與成交量取自證交所網站的每日收盤行情（MI_INDEX）；MACD 計算所需的歷史價格取自 yfinance 的還原權值股價。歷史價格必須使用還原權值，否則除權息缺口會產生假的綠柱與死叉。
 
 | 用途 | 來源 | 端點／代碼 | 備註 |
 | --- | --- | --- | --- |
-| 上市當日行情與清單 | [證交所 OpenAPI](https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL) | `STOCK_DAY_ALL` | 欄位已驗證：`Date`（民國 YYYMMDD）、`Code`、`Name`、`TradeVolume`（股）、`TradeValue`（元）、`ClosingPrice` |
-| 歷史 OHLCV（還原權值） | yfinance | `2330.TW` 格式 | `auto_adjust=True`，抓取近 8 年日線 |
+| 上市當日行情與清單 | [證交所每日收盤行情](https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?type=ALLBUT0999&response=json) | `MI_INDEX`，`date=YYYYMMDD`、`type=ALLBUT0999` | 2026-10-31 實測：收盤當天即有資料、可指定日期。取 `tables` 中含「證券代號」欄位的每日收盤行情表；數字含千分位，無成交為 `--`；`stat` 非 `OK` 表示當日無資料 |
+| 歷史 OHLCV（還原權值） | yfinance | `2330.TW` 格式 | `auto_adjust=True`，抓取近 8 年日線；量為 0 的列（休市日假 K 棒）一律剔除 |
 | 上櫃行情（v2 預留） | 櫃買中心 OpenAPI | `tpex_mainboard_daily_close_quotes` | v1 不使用；網站有機器人防護，納入前需先驗證 |
+| ~~上市當日行情（原規格）~~ | 證交所 OpenAPI | `STOCK_DAY_ALL` | 2026-10-31 實測隔日清晨約 05:20 才更新，趕不上盤後排程，已停用 |
+
+**當日 K 棒**：Yahoo 的台股日線在當晚常只有成交量、開高低收為空值（2026-10-31 實測）。Yahoo 缺當日有效 K 棒時，以證交所官方開高低收與成交量補上；已有有效 K 棒時（例如 `--date` 重跑過去日期）沿用 Yahoo 的還原權值價格。
 
 **股票池過濾規則**
 
@@ -96,9 +99,11 @@ GitHub Pages：docs/index.html 讀取 latest.json、history.json
 2. 當日收盤價不為空（排除當日無成交）
 3. 歷史資料至少 60 個月，確保月線 MACD 羅的 EMA 已穩定；不足者標記為「資料不足」，不參與選股
 
-**量能單位換算**：OpenAPI 的 `TradeVolume` 單位為股，1 張 = 1,000 股，程式一律換算成張後再比較。
+**量能單位換算**：證交所的「成交股數」單位為股，1 張 = 1,000 股，程式一律換算成張後再比較。
 
-**資料日期檢查**：OpenAPI 回傳的 `Date` 必須等於當日交易日，否則視為資料尚未更新，本次不產出結果。
+**資料日期檢查**：證交所回傳的 `date` 必須等於預期交易日，`stat` 非 `OK` 或日期不符都視為非交易日或資料尚未更新，本次不產出結果。
+
+**抓價落後判斷**：個股在 yfinance 的前一交易日 K 棒，若早於多數股票的前一交易日（眾數），標記為「日期落後」；不需要交易日曆。
 
 ## 5. 模組設計與介面
 
@@ -117,7 +122,7 @@ tw-macd-screener/
 │   ├── indicators.py        # EMA、MACD、週月線轉換
 │   ├── rules.py             # 選股條件
 │   ├── report.py            # 輸出 JSON 與歷史紀錄
-│   ├── demo.py              # --demo 模擬資料（OpenAPI 格式行情＋日線）
+│   ├── demo.py              # --demo 模擬資料（MI_INDEX 格式行情＋日線）
 │   └── main.py              # CLI 進入點
 ├── tests/
 ├── docs/                    # GitHub Pages
@@ -263,10 +268,10 @@ GitHub Actions 每個平日 18:00（台北時間）執行一次選股，結果�
 
 | 情境 | 偵測方式 | 處理 |
 | --- | --- | --- |
-| 非交易日（假日、颱風假） | OpenAPI 的 `Date` 不等於今日 | 結束碼 2，不 commit |
-| OpenAPI 尚未更新 | 同上 | 結束碼 2；可在 20:00 加一次補跑排程 |
-| OpenAPI 連線失敗 | HTTP 錯誤或逾時 | 重試 3 次，間隔 30 秒，仍失敗則結束碼 1 |
-| yfinance 部分股票缺資料 | 回傳空值或最新日期落後 | 該股標記「資料不足」並跳過，其餘照常 |
+| 非交易日（假日、颱風假） | 證交所 `stat` 非 `OK`，或 `date` 不等於今日 | 結束碼 2，不 commit |
+| 證交所尚未更新 | 同上 | 結束碼 2；20:00 補跑排程接手 |
+| 證交所連線失敗 | HTTP 錯誤或逾時 | 重試 3 次，間隔 30 秒，仍失敗則結束碼 1 |
+| yfinance 部分股票缺資料 | 回傳空值，或前一交易日 K 棒落後多數股票 | 該股標記「資料不足」並跳過，其餘照常 |
 | yfinance 大量失敗 | 失敗比例 > 20% | 結束碼 1，不發布 |
 | 入選數異常 | 入選數為 0 或超過股票池 30% | 照常發布，`latest.json` 加上 `warnings` 欄位，儀表板顯示提示 |
 
@@ -306,8 +311,9 @@ v1 以下列條件全部通過為驗收標準，前 4 項可在本機完成，�
 | 「綠柱縮」條件過寬 | 跌勢中途放緩也會入選，雜訊多 | 保留 `d2_mode` 開關，回測後決定 |
 | 週月線只用已完成 K 棒 | 訊號最多落後 1 週（週線）或 1 個月（月線） | 回測時比較 `completed` 與 `current` 兩種模式 |
 | 週五或月底遇休市 | 該週／月 K 棒要到下一個交易日才判定完成 | v1 可接受；v1.1 改用交易日曆精確判定 |
-| yfinance 台股資料品質 | 少數股票缺日或量能有誤 | 量能改用官方 OpenAPI；長期可換 FinMind 還原股價 |
-| 證交所 OpenAPI 更新時間不確定 | 18:00 可能還是前一日資料 | 以 `Date` 欄位檢查，必要時加 20:00 補跑 |
+| yfinance 台股資料品質 | 當日 K 棒當晚只有量；休市日有量為 0 的假 K 棒 | 當日 K 棒與量能用證交所官方數字；剔除量為 0 的列；長期可換 FinMind 還原股價 |
+| 證交所資料更新時間 | OpenAPI 隔日清晨才更新（已實測） | 改用 MI_INDEX（當天即有）；以 `date` 檢查，20:00 補跑 |
+| 除息日當天 Yahoo 未及調整 | 補上的官方價與歷史價有缺口，可能出現一天假綠柱 | v1 可接受；長期改用 FinMind 還原股價 |
 | 300 張門檻對不同價位不公平 | 低價冷門股容易過關 | 保留 `volume_rule` 開關，可改成交金額 |
 | repo 公開 | 程式碼、規則與每日名單任何人可見 | 不放 token 或個人資料；需要保密時改 private＋付費方案 |
 
@@ -340,7 +346,7 @@ v1 分 M0 至 M3 共 4 個階段依序進行，每個階段都能獨立驗收；
 - [x] T1：建立專案結構、`config.yaml`、`requirements.txt`、`AGENTS.md`
 - [x] T2：實作 `indicators.py`（EMA、MACD、resample）與 `test_indicators`、`test_resample`
 - [x] T3：實作 `rules.py`（8 個條件、4 個開關）與 `test_rules`
-- [x] T4：實作 `universe.py`（證交所 OpenAPI、代號過濾、日期檢查）與 `test_universe`
+- [x] T4：實作 `universe.py`（證交所行情、代號過濾、日期檢查）與 `test_universe`
 - [x] T5：實作 `prices.py`（yfinance 分批 100 檔、重試、資料不足標記）與 demo 資料產生器
 - [x] T6：實作 `report.py` 與 `main.py`（結束碼、near\_miss、streak、history 保留 60 日）
 - [x] T7：實作 `docs/index.html` 儀表板，用 demo 資料檢查手機版面
@@ -367,11 +373,25 @@ v1 分 M0 至 M3 共 4 個階段依序進行，每個階段都能獨立驗收；
 | --- | --- | --- | --- | --- |
 | 1 | 4 位數 TDR | 代號規則可排除 TDR | 另以名稱 `-DR$` 排除（`config.yaml` 的 `exclude_name_patterns`） | 9105 泰金寶-DR 等 4 位數 TDR 會通過 `^[1-9]\d{3}$` |
 | 2 | `shrink_2d` | 取最後兩根 K 棒 | 日線取最後三根 | 「連續 2 日縮短」需要 `D-M[2]` |
-| 3 | `--date` | 可指定日期重跑 | 意義為「預期交易日」：證交所資料必須是這一天 | `STOCK_DAY_ALL` 只提供最新交易日，無法重跑任意過去日期；適合隔天早上補跑前一日 |
+| 3 | `--date` | 可指定日期重跑 | 意義為「預期交易日」：證交所資料必須是這一天 | 原用 `STOCK_DAY_ALL` 只提供最新交易日；2026-10-31 改用 MI_INDEX 後可重跑過去日期（見下方 v1.0.1） |
 | 4 | 20:00 補跑 | 「可加」 | 已加入排程，搭配 `--skip-if-current`，當日已成功就略過 | 對應證交所更新時間不確定的風險 |
-| 5 | demo | prices.py 附 demo 產生器 | 獨立 `demo.py`，產出 OpenAPI 格式行情與日線；`--demo` 逐日回補 60 個交易日 | demo 走正式的解析、過濾與 streak 流程；儀表板 60 日圖表有資料可看 |
+| 5 | demo | prices.py 附 demo 產生器 | 獨立 `demo.py`，產出證交所格式行情與日線；`--demo` 逐日回補 60 個交易日 | demo 走正式的解析、過濾與 streak 流程；儀表板 60 日圖表有資料可看 |
 | 6 | 輸出欄位 | 第 7 節範例 | 額外加上 `demo`、`conditions_meta`（條件說明來自 rules.py）、`stats.insufficient_reasons`、`config.d2_mode`；`near_miss` 含名稱、收盤、量與各條件；`history.json` 加 `names` | 儀表板顯示名稱與條件說明時不必重複定義規則 |
 | 7 | 週月線轉換 | pandas `W-FRI`、`ME` | 標籤規則相同，改用 numpy 分段彙總；測試確認與 pandas resample 結果一致 | pandas resample 每次約 5–10 ms，demo 回補需重算上萬次 |
-| 8 | 5 日均量 | 未定義 | 當日用證交所數值，前 4 日取自 yfinance；成交金額以 收盤 × 量 估算 | `STOCK_DAY_ALL` 只有當日資料 |
+| 8 | 5 日均量 | 未定義 | 當日用證交所數值，前 4 日取自 yfinance；成交金額以 收盤 × 量 估算 | 證交所行情一次只有一日資料 |
 | 9 | demo 與正式資料隔離 | 未定義 | JSON 帶 `demo` 旗標；正式執行讀到 demo 的 history.json 會重新累積 | 首次部署前 repo 內是 demo 資料，避免混入正式紀錄 |
 | 10 | streak 遇缺跑 | 未定義 | 以 history 中的前幾筆交易日往回數；某日排程失敗時，前後兩日會被視為連續 | v1 可接受；v1.1 改用交易日曆 |
+
+### 2026-10-31：v1.0.1 資料源修正
+
+首次部署後在 GitHub Actions 實測（diag 診斷）發現兩個會讓系統每天都不發布的問題，條件邏輯不變。
+
+| 實測現象 | 影響 | 修正 |
+| --- | --- | --- |
+| OpenAPI `STOCK_DAY_ALL` 的 Last-Modified 為隔日 05:20（台北），10/31 01:00 仍是 10/29 資料 | 18:00、20:00 排程每天都判定「資料未更新」 | 股票池改用網站 `MI_INDEX`：當天即有資料、可指定日期，`--date` 可重跑過去日期 |
+| Yahoo 10/30 的 K 棒在當晚只有成交量，開高低收為空值 | 全部股票會被判定日期落後而中止 | Yahoo 缺當日有效 K 棒時，以證交所官方開高低收量補上 |
+| Yahoo 在休市日（10/23）放一根量為 0、價格持平的假 K 棒 | EMA 多算一根，數值略有偏差 | 清理日線時剔除量為 0 的列 |
+| 「日期落後」原以「最新日期 < 交易日」判斷 | 當日由官方補上後此判斷失效 | 改為比較前一交易日 K 棒與多數股票的眾數 |
+| yfinance 對 pandas 3.x 發出上千行棄用警告 | Actions log 無法閱讀 | 下載時關閉警告 |
+
+另外新增 `compare` workflow（手動執行，輸入代號與日期），把 `screener.compare` 的結果寫進 job summary，供 M3 數值比對與人工抽查使用。

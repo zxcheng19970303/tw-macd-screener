@@ -40,17 +40,21 @@ def taipei_now() -> datetime:
 def screen(univ: pd.DataFrame, histories: dict[str, pd.DataFrame], trade_date: date, cfg: dict) -> dict:
     """逐檔計算指標並套用規則，回傳入選、差 1 條件與統計。"""
     ts = pd.Timestamp(trade_date)
+    reference = prices.reference_date(histories, ts)
     min_months = cfg["universe"]["min_months"]
     hits, near_miss = [], []
     insufficient: Counter[str] = Counter()
-    fetch_failed = evaluated = 0
+    fetch_failed = evaluated = patched = 0
     for row in univ.itertuples(index=False):
-        reason = prices.data_status(histories.get(row.code), ts)
+        raw = histories.get(row.code)
+        reason = prices.data_status(raw, ts, reference)
         if reason:
             insufficient[reason] += 1
             fetch_failed += 1
             continue
-        daily, weekly, monthly = indicators.build_frames(histories[row.code], ts, cfg)
+        df = prices.patch_today(raw, prices.official_bar(row), ts)
+        patched += len(df) > len(indicators.clean_daily(raw))
+        daily, weekly, monthly = indicators.build_frames(df, ts, cfg)
         if len(monthly) < min_months:
             insufficient[f"未滿 {min_months} 個月"] += 1
             continue
@@ -77,6 +81,7 @@ def screen(univ: pd.DataFrame, histories: dict[str, pd.DataFrame], trade_date: d
         "universe": len(univ),
         "evaluated": evaluated,
         "fetch_failed": fetch_failed,
+        "patched": patched,
         "insufficient": insufficient,
         "hits": hits,
         "near_miss": near_miss,
@@ -92,7 +97,7 @@ def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) ->
             log.info("%s 已有正式結果，略過補跑", expected)
             return EXIT_SKIP
 
-    univ = universe.load_universe(cfg["markets"], cfg)
+    univ = universe.load_universe(cfg["markets"], cfg, expected)
     trade_date = universe.check_trade_date(univ, expected)
     log.info("股票池 %d 檔，交易日 %s", len(univ), trade_date)
 
@@ -111,7 +116,7 @@ def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) ->
     report.write_latest(out_dir, latest)
 
     elapsed = time.monotonic() - started
-    summary = report.job_summary(latest, result["fetch_failed"], elapsed)
+    summary = report.job_summary(latest, result["fetch_failed"], elapsed, result["patched"])
     report.write_job_summary(summary)
     log.info("完成：入選 %d、差 1 條件 %d，耗時 %.0f 秒", latest["stats"]["hits"], latest["stats"]["near_miss"], elapsed)
     return EXIT_OK
@@ -128,14 +133,14 @@ def run_demo(cfg: dict, out_dir: Path, trade_date: date, n_stocks: int = 150, da
         if i % 10 == 0:
             log.info("demo 回補 %d/%d 日", i, len(dates))
         day = ts.date()
-        univ = universe.parse_stock_day_all(demo.stock_day_all(day, names, histories), uc["code_pattern"], uc["exclude_name_patterns"])
+        univ = universe.parse_mi_index(demo.mi_index(day, names, histories), uc["code_pattern"], uc["exclude_name_patterns"])
         universe.check_trade_date(univ, day)
         result = screen(univ, histories, day, cfg)
         latest, history = report.build_outputs(result, day, cfg, history, True, taipei_now().isoformat(timespec="seconds"))
     report.write_history(out_dir, history)
     report.write_latest(out_dir, latest)
     elapsed = time.monotonic() - started
-    report.write_job_summary(report.job_summary(latest, result["fetch_failed"], elapsed))
+    report.write_job_summary(report.job_summary(latest, result["fetch_failed"], elapsed, result["patched"]))
     log.info("demo 完成：%s 入選 %d、差 1 條件 %d，耗時 %.0f 秒", trade_date, latest["stats"]["hits"], latest["stats"]["near_miss"], elapsed)
     return EXIT_OK
 

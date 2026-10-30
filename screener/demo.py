@@ -1,7 +1,7 @@
 """--demo 模擬資料：不連網，供測試與儀表板預覽。
 
 產生兩種資料，讓 demo 走與正式流程相同的解析、過濾與判斷：
-- OpenAPI STOCK_DAY_ALL 格式的當日行情（字串欄位、民國日期）
+- 證交所 MI_INDEX 格式的當日行情（字串欄位、千分位）
 - yfinance 格式的日線 OHLCV（量為股）
 """
 
@@ -12,12 +12,15 @@ from datetime import date
 import numpy as np
 import pandas as pd
 
-# 應被股票池過濾掉的代號：ETF、槓桿 ETF、特別股、4 位數存託憑證
-EXCLUDED = [("0050", "元大台灣50"), ("00631L", "元大台灣50正2"), ("1101B", "台泥乙特"), ("9105", "泰金寶-DR")]
-
-
-def roc_date(d: date) -> str:
-    return f"{d.year - 1911:03d}{d.month:02d}{d.day:02d}"
+# 應被股票池過濾掉的代號：ETF、槓桿 ETF、特別股、4 位數存託憑證、當日無成交
+EXCLUDED = [
+    ("0050", "元大台灣50", "100.00"),
+    ("00631L", "元大台灣50正2", "100.00"),
+    ("1101B", "台泥乙特", "100.00"),
+    ("9105", "泰金寶-DR", "100.00"),
+    ("9999", "示範無成交", "--"),
+]
+MI_FIELDS = ["證券代號", "證券名稱", "成交股數", "成交筆數", "成交金額", "開盤價", "最高價", "最低價", "收盤價"]
 
 
 def _series(rng: np.random.Generator, days: pd.DatetimeIndex) -> pd.DataFrame:
@@ -51,32 +54,23 @@ def demo_dataset(trade_date: date, n: int = 200, years: int = 8, seed: int = 202
         if i % 37 == 5:
             df = df.iloc[-3 * 252 :]  # 上市未滿 60 個月
         elif i % 53 == 7:
-            df = df.iloc[:-1]  # 最新一日缺資料
+            df = df.iloc[:-3]  # Yahoo 資料落後多日
         histories[code] = df
     return names, histories
 
 
-def stock_day_all(day: date, names: dict[str, str], histories: dict[str, pd.DataFrame]) -> list[dict]:
-    """模擬證交所 STOCK_DAY_ALL 回傳內容。"""
+def mi_index(day: date, names: dict[str, str], histories: dict[str, pd.DataFrame]) -> dict:
+    """模擬證交所 MI_INDEX 回傳內容（只含每日收盤行情表）。"""
     ts = pd.Timestamp(day)
-    records = []
+    rows = []
     for code, df in histories.items():
         bars = df[df.index <= ts]
         if bars.empty:
             continue
-        bar = bars.iloc[-1]
-        records.append(
-            {
-                "Date": roc_date(day),
-                "Code": code,
-                "Name": names[code],
-                "TradeVolume": str(int(bar["Volume"])),
-                "TradeValue": str(int(bar["Volume"] * bar["Close"])),
-                "ClosingPrice": f"{bar['Close']:.2f}",
-            }
-        )
-    for code, name in EXCLUDED:
-        records.append(
-            {"Date": roc_date(day), "Code": code, "Name": name, "TradeVolume": "5000000", "TradeValue": "500000000", "ClosingPrice": "100.00"}
-        )
-    return records
+        b = bars.iloc[-1]
+        price = [f"{b[k]:,.2f}" for k in ("Open", "High", "Low", "Close")]
+        rows.append([code, names[code], f"{int(b['Volume']):,}", "1,000", f"{int(b['Volume'] * b['Close']):,}", *price])
+    for code, name, close in EXCLUDED:
+        rows.append([code, name, "5,000,000", "1,000", "500,000,000", close, close, close, close])
+    table = {"title": f"{day:%Y年%m月%d日} 每日收盤行情（示範）", "fields": MI_FIELDS, "data": rows}
+    return {"stat": "OK", "date": f"{day:%Y%m%d}", "tables": [table]}

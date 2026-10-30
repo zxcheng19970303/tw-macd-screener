@@ -11,6 +11,7 @@
 
 - 2026-10-30：T1–T8 完成。`pytest` 64 項通過；`--demo` 產出 JSON，儀表板手機（375px）與桌機、亮色與深色模式檢查完成。
 - 2026-10-30：從 `alvin-ai-workspace` 的 `400_Project/` 搬到本 repo，此後以本 repo 為正本。
+- 2026-10-31：v1.0.1 資料源修正。首次部署實測發現證交所 OpenAPI 隔日才更新、Yahoo 當晚缺當日 K 棒，改用證交所 MI_INDEX 並以官方行情補當日 K 棒（詳見 `SPEC.md` 第 14 節）。
 - `docs/data/` 目前是 **demo 模擬資料**（儀表板會顯示「示範資料」橫幅），第一次正式排程跑完後自動取代。
 - 下一步：啟用 Pages、第一次手動執行 workflow，完成 M3 上線驗收（見下方清單）。
 
@@ -54,7 +55,7 @@ python -m http.server -d docs
 | 參數 | 用途 |
 | --- | --- |
 | `--demo` | 模擬資料，不連網；逐日回補 60 個交易日（約 2 分鐘） |
-| `--date YYYY-MM-DD` | 預期交易日，預設為台北時間今天。證交所只提供最新交易日，因此只能用於「隔天補跑前一日」，不能重跑任意過去日期 |
+| `--date YYYY-MM-DD` | 預期交易日，預設為台北時間今天；可重跑過去日期（連續在榜天數依 `history.json` 既有紀錄計算） |
 | `--skip-if-current` | 當日已有正式結果就直接結束（補跑排程用） |
 | `--config`、`--out` | 改用其他設定檔或輸出資料夾 |
 
@@ -75,16 +76,16 @@ python -m http.server -d docs
 
 | 狀況 | 處理 |
 | --- | --- |
-| 18:00 結果都是「資料未更新」 | 證交所當天較晚更新，20:00 補跑會接手；也可以把主排程往後移 |
+| 18:00 結果都是「資料未更新」 | 證交所當天較晚更新，20:00 補跑會接手；連假或颱風假屬正常 |
 | 抓價失敗比例超過 20% | 多半是 Yahoo 暫時限流，隔一段時間手動重跑；持續發生時評估改用 FinMind（只需改 `prices.py`） |
 | Pages 沒有更新 | 確認 Actions 有產生 `data: YYYY-MM-DD screener results` commit，再看 Actions 頁的 pages-build-deployment 是否成功 |
-| 證交所 API 出現 SSL 憑證錯誤 | 維持 Python 3.12；較新的 Python 對憑證檢查較嚴格 |
+| 證交所連線出現 SSL 憑證錯誤 | 維持 Python 3.12；較新的 Python 對憑證檢查較嚴格 |
 
 ## M3 上線驗收
 
-本機無法連到證交所與 Yahoo，以下項目需部署後驗證：
+數值比對與抽查可在 GitHub 上完成，不需本機 Python：Actions → compare → Run workflow，輸入代號（以空白分隔）與日期，結果在該次執行的 Summary。本機則是 `python -m screener.compare 2330 2317 2454 --date YYYY-MM-DD`。
 
-- [ ] 2330、2317、2454 的日線羅 DIF、MACD 與看盤軟體同日數值誤差 < 1%（`latest.json` 的 `values` 只列入選與差 1 條件的股票；其他個股可在本機用 `indicators.build_frames` 計算）
+- [ ] 2330、2317、2454 的日線羅 DIF、MACD 與看盤軟體同日數值誤差 < 1%
 - [ ] 抽查 5 檔入選股，人工對照 K 線確認 8 個條件皆成立
 - [ ] GitHub Actions 手動觸發成功，總執行時間 < 20 分鐘
 - [ ] 連續 5 個交易日自動更新成功
@@ -102,6 +103,7 @@ python -m http.server -d docs
 | `docs/data/` | `latest.json`、`history.json`（由 workflow 自動更新） |
 | `.github/workflows/daily.yml` | 每日選股排程 |
 | `.github/workflows/tests.yml` | push／PR 時執行 pytest |
+| `.github/workflows/compare.yml` | 手動比對指定個股的三週期數值與條件 |
 
 ## 免責聲明
 

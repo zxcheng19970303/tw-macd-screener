@@ -29,7 +29,7 @@ universe:
   exclude_name_patterns: ['-DR$']  # 排除 4 位數代號的存託憑證（如 9105 泰金寶-DR）
   min_months: 60                   # 月線至少 60 根已完成 K 棒
 
-openapi:
+twse:                       # 證交所每日收盤行情（MI_INDEX）
   timeout_sec: 30
   retries: 3
   retry_wait_sec: 30

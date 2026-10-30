@@ -31,14 +31,18 @@ def price_series(df: pd.DataFrame, source: str) -> pd.Series:
 
 
 def clean_daily(df: pd.DataFrame) -> pd.DataFrame:
-    """依日期排序、去除重複日期與無收盤價的列。"""
+    """依日期排序，去除重複日期、無收盤價與成交量為 0 的列。
+
+    Yahoo 會在部分休市日放一根量為 0、開高低收都等於前一日收盤的假 K 棒，
+    留著會讓 EMA 多算一根；個股無成交日在證交所也沒有收盤價，一併排除。
+    """
     out = df.copy()
     out.index = pd.DatetimeIndex(out.index)
     if out.index.tz is not None:
         out.index = out.index.tz_localize(None)
     out.index = out.index.normalize()
     out = out[~out.index.duplicated(keep="last")].sort_index()
-    return out.dropna(subset=["Close"])
+    return out[out["Close"].notna() & (out["Volume"].fillna(0) > 0)]
 
 
 def period_label(index: pd.DatetimeIndex, rule: str) -> np.ndarray:

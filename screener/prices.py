@@ -8,9 +8,13 @@ from __future__ import annotations
 
 import logging
 import time
+import warnings
+from collections import Counter
 from datetime import date, timedelta
 
 import pandas as pd
+
+from .indicators import clean_daily
 
 log = logging.getLogger(__name__)
 
@@ -66,16 +70,19 @@ def fetch_history(
         for i in range(0, len(pending), batch_size):
             batch = pending[i : i + batch_size]
             try:
-                data = yf.download(
-                    batch,
-                    start=start.isoformat(),
-                    end=(end + timedelta(days=1)).isoformat(),  # end 不含當日，需 +1
-                    interval="1d",
-                    auto_adjust=True,
-                    group_by="ticker",
-                    threads=True,
-                    progress=False,
-                )
+                # yfinance 對新版 pandas 會發出大量棄用警告，洗掉 Actions 的 log
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    data = yf.download(
+                        batch,
+                        start=start.isoformat(),
+                        end=(end + timedelta(days=1)).isoformat(),  # end 不含當日，需 +1
+                        interval="1d",
+                        auto_adjust=True,
+                        group_by="ticker",
+                        threads=True,
+                        progress=False,
+                    )
             except Exception as e:  # yfinance 對網路錯誤的例外型別不固定
                 log.warning("yfinance 批次 %d 下載失敗：%s", i // batch_size + 1, e)
                 data = None
@@ -94,17 +101,43 @@ def fetch_history(
     return result
 
 
-def data_status(df: pd.DataFrame | None, trade_date: pd.Timestamp) -> str | None:
-    """資料源層級的問題：無資料或最新日期落後。正常時回傳 None。"""
+def official_bar(row) -> dict:
+    """證交所當日行情（universe 的一列）轉成日線 K 棒；量換回股。"""
+    return {"Open": row.open, "High": row.high, "Low": row.low, "Close": row.close, "Volume": row.volume_lots * 1000}
+
+
+def patch_today(df: pd.DataFrame | None, bar: dict, trade_date: pd.Timestamp) -> pd.DataFrame:
+    """Yahoo 缺當日 K 棒時，以證交所官方數字補上。
+
+    Yahoo 的台股日線常到隔天才有當日開高低收（實測只有量）。已有有效 K 棒時不動，
+    以免 --date 重跑過去日期時，未還原的官方價與還原權值的歷史價混用。
+    """
+    d = clean_daily(df) if df is not None and not df.empty else pd.DataFrame(columns=OHLCV)
+    if trade_date in d.index:
+        return d
+    return pd.concat([d, pd.DataFrame([bar], index=pd.DatetimeIndex([trade_date]))[OHLCV]]).sort_index()
+
+
+def last_before(df: pd.DataFrame | None, trade_date: pd.Timestamp) -> pd.Timestamp | None:
+    """trade_date 之前最後一根有效 K 棒的日期。"""
     if df is None or df.empty:
+        return None
+    idx = clean_daily(df).index
+    idx = idx[idx < trade_date]
+    return idx.max() if len(idx) else None
+
+
+def reference_date(histories: dict[str, pd.DataFrame], trade_date: pd.Timestamp) -> pd.Timestamp | None:
+    """多數股票的前一交易日，作為判斷個股資料是否落後的基準（不需交易日曆）。"""
+    counts = Counter(d for d in (last_before(df, trade_date) for df in histories.values()) if d is not None)
+    return counts.most_common(1)[0][0] if counts else None
+
+
+def data_status(df: pd.DataFrame | None, trade_date: pd.Timestamp, reference: pd.Timestamp | None) -> str | None:
+    """資料源層級的問題：無資料，或前一交易日以前的資料落後於多數股票。正常時回傳 None。"""
+    last = last_before(df, trade_date)
+    if last is None:
         return "無資料"
-    idx = pd.DatetimeIndex(df.index)
-    if idx.tz is not None:
-        idx = idx.tz_localize(None)
-    idx = idx.normalize()
-    upto = idx[idx <= trade_date]
-    if upto.empty:
-        return "無資料"
-    if upto.max() < trade_date:
+    if reference is not None and last < reference:
         return "日期落後"
     return None

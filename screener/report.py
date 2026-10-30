@@ -118,7 +118,7 @@ def write_history(out_dir: Path, history: dict) -> None:
     write_json(out_dir / "history.json", history)
 
 
-def job_summary(latest: dict, fetch_failed: int, elapsed_sec: float) -> str:
+def job_summary(latest: dict, fetch_failed: int, elapsed_sec: float, patched: int = 0) -> str:
     s = latest["stats"]
     lines = [
         f"## MACD 選股 {latest['trade_date']}{'（demo）' if latest['demo'] else ''}",
@@ -127,6 +127,7 @@ def job_summary(latest: dict, fetch_failed: int, elapsed_sec: float) -> str:
         "| --: | --: | --: | --: | --: | --: | --: |",
         f"| {s['universe']} | {s['evaluated']} | {s['insufficient_data']} | {fetch_failed} | {s['hits']} | {s['near_miss']} | {elapsed_sec:.0f} 秒 |",
     ]
+    lines += ["", f"當日 K 棒以證交所官方行情補上：{patched} 檔（Yahoo 尚未更新）"]
     if s["insufficient_reasons"]:
         lines += ["", "資料不足原因：" + "、".join(f"{k} {v}" for k, v in s["insufficient_reasons"].items())]
     if latest["warnings"]:
