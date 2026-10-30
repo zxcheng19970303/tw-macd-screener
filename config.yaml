@@ -1,0 +1,46 @@
+# 猶太操盤術 MACD 選股系統設定檔
+# 規則參數與開關只放這裡；條件邏輯只寫在 screener/rules.py。
+
+markets: [TWSE]            # v1 只支援上市；TPEX 列為 v2
+
+# MACD 參數（快線 / 慢線 / 訊號線）
+macd:
+  bo: {fast: 6, slow: 12, signal: 3}     # 波（下級）：v1 僅計算顯示
+  ro: {fast: 10, slow: 20, signal: 10}   # 羅（本級）：選股主軸
+  mi: {fast: 26, slow: 52, signal: 13}   # 蜜（上級）：日線確認
+
+# v1 未使用，保留設定
+ma: [3, 10, 30, 100, 300, 900]
+wrsi: [3, 6]
+
+# 規則開關（規格書第 2 節）
+switches:
+  price_source: close      # close：收盤價｜hlcc4：(高+低+2×收)/4
+  htf_bar_mode: completed  # completed：只用已收完的週月 K｜current：含未完成 K 棒
+  volume_rule: day_lots    # day_lots：當日張數｜avg5_lots：5 日均張｜avg5_value：5 日均成交金額
+  d2_mode: shrink_1d       # shrink_1d：綠柱比前一日短｜shrink_2d：連續 2 日縮短
+
+thresholds:
+  volume_lots: 300          # day_lots、avg5_lots 門檻（張）
+  avg5_value: 50000000      # avg5_value 門檻（元）
+
+universe:
+  code_pattern: '^[1-9]\d{3}$'     # 4 位數且非 0 開頭
+  exclude_name_patterns: ['-DR$']  # 排除 4 位數代號的存託憑證（如 9105 泰金寶-DR）
+  min_months: 60                   # 月線至少 60 根已完成 K 棒
+
+openapi:
+  timeout_sec: 30
+  retries: 3
+  retry_wait_sec: 30
+
+prices:
+  years: 8
+  batch_size: 100
+  retries: 3
+  retry_wait_sec: 10
+  max_fail_ratio: 0.2       # 抓價失敗（無資料或日期落後）超過此比例即中止，不發布
+
+report:
+  history_days: 60
+  hits_warn_ratio: 0.3      # 入選數超過股票池此比例時加上警示

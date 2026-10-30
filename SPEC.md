@@ -1,0 +1,377 @@
+# 猶太操盤術 MACD 選股系統開發規格書
+
+Oct 30, 2026 · @Alvin
+
+## 1. 專案概述
+
+本系統每個交易日盤後自動篩選符合「日線 2 走 3 修正波」三週期 MACD 共振條件的台股，並發布到可用手機瀏覽的儀表板。v1 目標是用零成本架構跑通完整流程，規則先照原始講義實作，修正項目以設定檔開關保留。
+
+**v1 範圍**
+
+- 股票池：上市普通股（排除 ETF、特別股、權證、存託憑證）
+- 條件：月線、週線、日線三週期 MACD 條件，加上成交量門檻
+- 排程：週一至週五 18:00（台北時間）自動執行
+- 輸出：今日入選清單、各條件達成狀態、新進榜／連續在榜天數、近 60 個交易日入選紀錄
+- 部署：GitHub Actions 運算＋GitHub Pages 儀表板
+
+**非目標（v1 不做）**
+
+- 回測、勝率統計、出場與停損規則（列為 v1.1）
+- 上櫃股票、盤中即時選股、自動下單、推播通知
+- 均線、WRSI 與 MACD 波（下級）參數的條件（講義目前未提供對應條件）
+
+## 2. 策略規則定義
+
+一檔股票必須同時滿足下表全部條件（AND）才會入選。條件以 MACD 羅（本級）為主軸，日線再加上 MACD 蜜（上級）確認。
+
+**參數**
+
+| 項目 | 參數 | v1 是否使用 |
+| --- | --- | --- |
+| MACD 波（下級） | 6 / 12 / 3 | 否，僅計算顯示 |
+| MACD 羅（本級） | 10 / 20 / 10 | 是 |
+| MACD 蜜（上級） | 26 / 52 / 13 | 是 |
+| 均線 | 3 / 10 / 30 / 100 / 300 / 900 | 否，保留設定 |
+| WRSI | 3 / 6 | 否，保留設定 |
+
+**名詞定義**
+
+- DIF = EMA(價格, 快線) − EMA(價格, 慢線)
+- MACD = EMA(DIF, 訊號線)，即台灣看盤軟體慣稱的 MACD 值
+- D-M = DIF − MACD（柱狀體）；D-M > 0 為紅柱，D-M < 0 為綠柱
+- `[1]` 表示前一根 K 棒的值
+
+**選股條件**
+
+| ID | 週期 | 講義原文 | 程式邏輯 |
+| --- | --- | --- | --- |
+| M1 | 月線 | MACD 羅 → 紅柱 | `DM_羅 > 0` |
+| W1 | 週線 | 羅 → 0 軸上（DIF 與 MACD > 0，或 DIF 由負轉正且 MACD < 0） | `DIF_羅 > 0` |
+| W2 | 週線 | D-M 為正值或紅柱放大中 | `DM_羅 > 0` |
+| D1 | 日線 | 羅 → 0 軸上（DIF 與 MACD > 0，或 DIF 跌破 0 但 MACD 仍 > 0） | `MACD_羅 > 0` |
+| D2 | 日線 | D-M 為負，綠柱要縮腳或綠柱轉紅柱 | `DM_羅[1] < 0 AND DM_羅 > DM_羅[1]` |
+| D3 | 日線 | 蜜 → 0 軸上 | `MACD_蜜 > 0` |
+| D4 | 日線 | 蜜 D-M 為正，或 D-M 為負＋綠柱縮 | `DM_蜜 > 0 OR DM_蜜 > DM_蜜[1]` |
+| V1 | 日線 | 每日成交量大於 300 張 | `當日成交量 > 300 張` |
+
+W1 與 D1 的簡化：講義兩種情況的共通點分別只有 DIF > 0、MACD > 0，因此以單一條件實作。D3 依講義沿用日線「0 軸上」的同一定義，即 MACD\_蜜 > 0。W2 的「紅柱放大」必然 D-M > 0，與前半句重複。
+
+**設定檔開關（預設值已確認）**
+
+| 開關 | 預設 | 替代選項 |
+| --- | --- | --- |
+| `price_source` | `close`（收盤價） | `hlcc4`：(高＋低＋2×收)／4，可在 config.yaml 切換 |
+| `htf_bar_mode` | `completed`：只用已收完的週／月 K 棒 | `current`：含當週／當月未完成 K 棒 |
+| `volume_rule` | `day_lots > 300` | `avg5_lots > 300`，或 `avg5_value > 5000 萬元` |
+| `d2_mode` | `shrink_1d`：綠柱比前一日短 | `shrink_2d`：連續 2 日縮短 |
+
+## 3. 系統架構
+
+全部運算在 GitHub Actions 免費額度內完成，不需要自備伺服器；儀表板是純靜態網頁，沒有後端與資料庫。
+
+```
+輸入                         模組（screener/）                     輸出（docs/data/）
+證交所 OpenAPI ──► universe.py ─┐
+yfinance ────────► prices.py ───┼─► indicators.py ─► rules.py ─► report.py ─► latest.json
+config.yaml ─────► main.py（流程與結束碼）                                   ├► history.json
+                                                                             └► Actions job summary
+GitHub Pages：docs/index.html 讀取 latest.json、history.json
+```
+
+官方 OpenAPI 提供股票池與成交量，yfinance 提供還原權值價格；選股條件只寫在 rules.py，參數只放在 config.yaml。
+
+## 4. 資料來源與股票池
+
+當日股票清單與成交量取自證交所官方 OpenAPI；MACD 計算所需的歷史價格取自 yfinance 的還原權值股價。歷史價格必須使用還原權值，否則除權息缺口會產生假的綠柱與死叉。
+
+| 用途 | 來源 | 端點／代碼 | 備註 |
+| --- | --- | --- | --- |
+| 上市當日行情與清單 | [證交所 OpenAPI](https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL) | `STOCK_DAY_ALL` | 欄位已驗證：`Date`（民國 YYYMMDD）、`Code`、`Name`、`TradeVolume`（股）、`TradeValue`（元）、`ClosingPrice` |
+| 歷史 OHLCV（還原權值） | yfinance | `2330.TW` 格式 | `auto_adjust=True`，抓取近 8 年日線 |
+| 上櫃行情（v2 預留） | 櫃買中心 OpenAPI | `tpex_mainboard_daily_close_quotes` | v1 不使用；網站有機器人防護，納入前需先驗證 |
+
+**股票池過濾規則**
+
+1. 代號符合 `^[1-9]\d{3}$`：4 位數且非 0 開頭，排除 ETF（00 開頭）、特別股（如 1101B）、6 位數權證與 TDR；名稱以 `-DR` 結尾者另外排除（4 位數 TDR，如 9105 泰金寶-DR，代號規則擋不掉）
+2. 當日收盤價不為空（排除當日無成交）
+3. 歷史資料至少 60 個月，確保月線 MACD 羅的 EMA 已穩定；不足者標記為「資料不足」，不參與選股
+
+**量能單位換算**：OpenAPI 的 `TradeVolume` 單位為股，1 張 = 1,000 股，程式一律換算成張後再比較。
+
+**資料日期檢查**：OpenAPI 回傳的 `Date` 必須等於當日交易日，否則視為資料尚未更新，本次不產出結果。
+
+## 5. 模組設計與介面
+
+程式拆成 6 個單一職責模組，資料源與規則都可獨立替換。日後要換成 FinMind 或 XQ 資料，只需改寫 `prices.py`，其他模組不動。
+
+**專案結構**
+
+```
+tw-macd-screener/
+├── config.yaml              # 參數與開關
+├── requirements.txt
+├── AGENTS.md                # 給 Claude Code / Codex 的維護規則
+├── screener/
+│   ├── universe.py          # 股票池
+│   ├── prices.py            # 歷史價格（可替換資料源）
+│   ├── indicators.py        # EMA、MACD、週月線轉換
+│   ├── rules.py             # 選股條件
+│   ├── report.py            # 輸出 JSON 與歷史紀錄
+│   ├── demo.py              # --demo 模擬資料（OpenAPI 格式行情＋日線）
+│   └── main.py              # CLI 進入點
+├── tests/
+├── docs/                    # GitHub Pages
+│   ├── index.html
+│   └── data/latest.json, history.json
+└── .github/workflows/daily.yml
+```
+
+**模組介面**
+
+| 模組 | 主要函式 | 輸入 | 輸出 |
+| --- | --- | --- | --- |
+| `universe.py` | `load_universe(markets)` | 市場清單 | DataFrame：code、name、market、close、volume\_lots、value、trade\_date |
+| `prices.py` | `fetch_history(codes, years)` | 代號清單、年數 | `dict[code, DataFrame]`，日線 OHLCV（還原權值） |
+| `indicators.py` | `macd(series, fast, slow, signal)`、`resample(df, rule)` | 價格序列、參數 | DataFrame：dif、macd、dm |
+| `rules.py` | `evaluate(daily, weekly, monthly, today, cfg)` | 三週期指標、當日行情 | `dict`：各條件布林值＋是否入選 |
+| `report.py` | `write_latest(...)`、`update_history(...)` | 評估結果 | `latest.json`、`history.json` |
+| `main.py` | `python -m screener.main [--demo] [--date]` | 設定檔 | 結束碼：0 成功、2 非交易日、1 錯誤 |
+
+`--demo` 模式使用程式產生的模擬價格，不連外部網路，供測試與儀表板預覽使用。
+
+## 6. 指標計算規格
+
+EMA 採標準遞迴公式，以第一筆價格為起始值；週線、月線一律由還原後的日線重新取樣，不另外抓週月資料，確保三週期使用同一份價格。
+
+```latex
+\alpha = \frac{2}{n+1}, \quad EMA_t = \alpha \cdot P_t + (1-\alpha) \cdot EMA_{t-1}
+```
+
+**週月線轉換規則**
+
+| 週期 | pandas 規則 | 開 | 高 | 低 | 收 | 量 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 週線 | `W-FRI` | 首日開盤 | 最高 | 最低 | 末日收盤 | 加總 |
+| 月線 | `ME` | 首日開盤 | 最高 | 最低 | 末日收盤 | 加總 |
+
+**計算順序**
+
+1. 取得還原權值日線，依日期排序並去除重複日期
+2. 依 `price_source` 取得價格序列（收盤價或 hlcc4）
+3. 日線計算羅、蜜、波三組 MACD
+4. 重新取樣出週線、月線，再計算羅的 MACD
+5. `htf_bar_mode = completed` 時（預設），捨棄週月線最後一根未完成 K 棒；交易日早於該週五或該月最後一個平日，即視為未完成
+6. 取每個週期最後幾根 K 棒的值（`[0]`、`[1]`；`d2_mode = shrink_2d` 另需日線 `[2]`），交給 `rules.py` 判斷
+
+**數值比對基準**：開發完成後挑 3 檔個股（如 2330、2317、2454），與看盤軟體同日的 DIF、MACD 數值比對，誤差需小於 1%。若差異過大，優先檢查 `price_source` 與起始值設定。
+
+## 7. 輸出資料格式
+
+每次執行產出兩個 JSON 檔，放在 `docs/data/`，由儀表板直接讀取。`latest.json` 每天覆寫；`history.json` 只保留最近 60 個交易日。
+
+**latest.json**
+
+```json
+{
+  "trade_date": "2026-10-30",
+  "generated_at": "2026-10-30T18:05:12+08:00",
+  "config": { "price_source": "close", "htf_bar_mode": "completed", "volume_rule": "day_lots>300" },
+  "stats": { "universe": 1780, "evaluated": 1702, "insufficient_data": 78, "hits": 23, "near_miss": 41 },
+  "hits": [
+    {
+      "code": "2330", "name": "台積電", "market": "TWSE",
+      "close": 1450.0, "volume_lots": 32150,
+      "streak": 1, "is_new": true,
+      "conditions": { "M1": true, "W1": true, "W2": true, "D1": true, "D2": true, "D3": true, "D4": true, "V1": true },
+      "values": { "d_ro_dm": -0.82, "d_ro_dm_prev": -1.35, "w_ro_dif": 12.4, "m_ro_dm": 5.1 }
+    }
+  ],
+  "near_miss": [ { "code": "...", "failed": ["D2"] } ]
+}
+```
+
+- `near_miss`：只差 1 個條件就入選的股票，列出未通過的條件 ID，方便提前觀察
+- `streak`：連續入選的交易日數；`is_new` 為 `streak = 1`
+
+**history.json**
+
+```json
+{
+  "days": [
+    { "trade_date": "2026-10-30", "hits": ["2330", "2454"], "count": 2 },
+    { "trade_date": "2026-10-29", "hits": ["2454"], "count": 1 }
+  ]
+}
+```
+
+## 8. 儀表板規格
+
+儀表板是單一靜態頁面 `docs/index.html`，以原生 JavaScript 讀取兩個 JSON 檔，不需要建置工具。設計以手機直式瀏覽為主，桌機自動放寬。
+
+**頁面區塊（由上而下）**
+
+| 區塊 | 內容 | 互動 |
+| --- | --- | --- |
+| 頁首 | 資料日期、產生時間、目前規則設定 | 資料超過 1 個交易日未更新時顯示警示橫幅 |
+| 摘要卡 | 入選數、新進榜數、差 1 條件數、股票池數 | 無 |
+| 今日入選 | 代號、名稱、收盤、成交量（張）、連續在榜天數、新進榜標記 | 依代號、成交量、連續天數排序；點擊展開 8 個條件的通過狀態與數值 |
+| 差 1 條件 | 代號、名稱、未通過的條件 ID | 可依條件 ID 篩選 |
+| 近 60 日紀錄 | 每日入選數長條圖 | 點擊某日顯示當日名單 |
+
+**介面原則**
+
+- 條件以 M／W／D／V 加編號的徽章顯示，通過為實心、未通過為空心
+- 代號連結到外部看盤頁面，方便對照 K 線
+- 支援深色模式；無外部字型與追蹤程式
+- JSON 讀取失敗時顯示錯誤訊息，不顯示空白表格
+
+## 9. 排程與部署
+
+GitHub Actions 每個平日 18:00（台北時間）執行一次選股，結果直接 commit 回 repo，由 GitHub Pages 對外顯示。
+
+**排程設定**
+
+| 項目 | 設定 |
+| --- | --- |
+| cron（UTC） | `0 10 * * 1-5`，即台北時間 18:00；`0 12 * * 1-5` 為 20:00 補跑，當日已有結果時自動略過 |
+| 手動觸發 | `workflow_dispatch`，可指定日期重跑 |
+| 執行環境 | `ubuntu-latest`、Python 3.12 |
+| 權限 | `contents: write` |
+| 逾時 | 30 分鐘 |
+
+**Workflow 步驟**
+
+1. checkout repo
+2. 安裝 Python 與 `requirements.txt`（啟用 pip 快取）
+3. 執行 `python -m screener.main`
+4. 結束碼為 2（非交易日或資料未更新）時直接結束，不 commit
+5. `docs/data/` 有變動時 commit 並 push，訊息為 `data: YYYY-MM-DD screener results`
+
+**首次部署步驟**
+
+1. 建立 public GitHub repo（Pages 免費；程式碼與每日名單任何人都看得到）
+2. 上傳專案檔案
+3. Settings → Actions → General → Workflow permissions 設為「Read and write」
+4. Settings → Pages → Source 選 `main` 分支的 `/docs` 資料夾
+5. 到 Actions 頁手動執行一次 workflow，確認儀表板出現資料
+
+每個交易日自動 commit 一次，可避免公開 repo 因 60 天無活動而被 GitHub 停用排程。
+
+## 10. 錯誤處理與監控
+
+原則是寧可不更新，也不發布錯誤資料：任何關鍵步驟失敗都讓 workflow 失敗，GitHub 會自動寄信通知 repo 擁有者，儀表板則保留前一日結果並顯示過期警示。
+
+| 情境 | 偵測方式 | 處理 |
+| --- | --- | --- |
+| 非交易日（假日、颱風假） | OpenAPI 的 `Date` 不等於今日 | 結束碼 2，不 commit |
+| OpenAPI 尚未更新 | 同上 | 結束碼 2；可在 20:00 加一次補跑排程 |
+| OpenAPI 連線失敗 | HTTP 錯誤或逾時 | 重試 3 次，間隔 30 秒，仍失敗則結束碼 1 |
+| yfinance 部分股票缺資料 | 回傳空值或最新日期落後 | 該股標記「資料不足」並跳過，其餘照常 |
+| yfinance 大量失敗 | 失敗比例 > 20% | 結束碼 1，不發布 |
+| 入選數異常 | 入選數為 0 或超過股票池 30% | 照常發布，`latest.json` 加上 `warnings` 欄位，儀表板顯示提示 |
+
+每次執行的統計（股票池數、成功數、失敗數、耗時）寫入 Actions 的 job summary，方便追查。
+
+## 11. 測試與驗收條件
+
+v1 以下列條件全部通過為驗收標準，前 4 項可在本機完成，後 4 項需部署到 GitHub 後驗證。
+
+**自動化測試（pytest）**
+
+- `test_indicators`：用已知數列驗證 EMA 與 MACD，結果與手算值誤差 < 1e-9
+- `test_resample`：週線收盤為該週最後一個交易日收盤，月線量為當月加總
+- `test_rules`：每個條件 ID 各有通過與不通過的最小案例，D2 涵蓋「綠柱縮」與「綠翻紅」兩種情形
+- `test_universe`：代號過濾正確排除 0050、1101B、00631L
+
+**驗收清單**
+
+- [ ] `pytest` 全數通過
+- [ ] `python -m screener.main --demo` 產出格式正確的 JSON，儀表板能正常顯示
+- [ ] 3 檔個股的 DIF、MACD 與看盤軟體誤差 < 1%
+- [ ] 抽查 5 檔入選股，人工對照 K 線確認 8 個條件皆成立
+- [ ] GitHub Actions 手動觸發成功，總執行時間 < 20 分鐘
+- [ ] 連續 5 個交易日自動更新成功
+- [ ] 週末或假日執行時不產生 commit
+- [ ] 儀表板在手機（寬 375px）無水平捲動，表格可讀
+
+## 12. 風險與待確認事項
+
+最大的風險不在技術，而在規則本身尚未回測：系統做得再穩，也只是每天穩定產出一份未經驗證的名單。
+
+**風險**
+
+| 風險 | 影響 | 對策 |
+| --- | --- | --- |
+| 規則未經回測 | 無法判斷訊號品質，名單可能過長或失準 | v1.1 優先做回測（第 13 節） |
+| 「綠柱縮」條件過寬 | 跌勢中途放緩也會入選，雜訊多 | 保留 `d2_mode` 開關，回測後決定 |
+| 週月線只用已完成 K 棒 | 訊號最多落後 1 週（週線）或 1 個月（月線） | 回測時比較 `completed` 與 `current` 兩種模式 |
+| 週五或月底遇休市 | 該週／月 K 棒要到下一個交易日才判定完成 | v1 可接受；v1.1 改用交易日曆精確判定 |
+| yfinance 台股資料品質 | 少數股票缺日或量能有誤 | 量能改用官方 OpenAPI；長期可換 FinMind 還原股價 |
+| 證交所 OpenAPI 更新時間不確定 | 18:00 可能還是前一日資料 | 以 `Date` 欄位檢查，必要時加 20:00 補跑 |
+| 300 張門檻對不同價位不公平 | 低價冷門股容易過關 | 保留 `volume_rule` 開關，可改成交金額 |
+| repo 公開 | 程式碼、規則與每日名單任何人可見 | 不放 token 或個人資料；需要保密時改 private＋付費方案 |
+
+**已確認決策（2026-10-31）**
+
+| # | 項目 | 決策 |
+| --- | --- | --- |
+| 1 | 日線蜜「0 軸上」定義 | 依講義，沿用日線羅的定義：`MACD_蜜 > 0` |
+| 2 | 週月線 K 棒 | 只用已完成 K 棒（`completed`） |
+| 3 | 講義其他頁 | 目前沒有；日後提供更新版再修訂規格 |
+| 4 | MACD 價格來源 | 做成可選，預設收盤價，可切換 hlcc4 |
+| 5 | 上櫃股票 | v1 不包含 |
+| 6 | repo 可見度 | public |
+
+## 13. 開發里程碑與 Claude Code 執行任務
+
+v1 分 M0 至 M3 共 4 個階段依序進行，每個階段都能獨立驗收；v1 預估與 Claude Code 合作 1 至 2 個工作階段完成。
+
+**里程碑**
+
+1. **M0 規則定案**：已完成，決策見第 12 節
+2. **M1 核心程式**：universe、prices、indicators、rules 與單元測試，`--demo` 可跑通（2026-10-30 完成）
+3. **M2 儀表板與部署**：report、index.html、workflow，GitHub 上手動觸發成功（程式已完成，待部署驗證）
+4. **M3 上線驗收**：數值比對、人工抽查、連續 5 日自動更新
+5. **v1.1 回測**：用近 5 年資料計算訊號後 5、10、20 日報酬分布、勝率與最大回檔
+6. **v2 策略補強**：依回測結果加入價格確認、出場規則與排序，視需要加 LINE／Email 通知
+
+**Claude Code 任務清單（依序交辦，每項完成後跑測試）**
+
+- [x] T1：建立專案結構、`config.yaml`、`requirements.txt`、`AGENTS.md`
+- [x] T2：實作 `indicators.py`（EMA、MACD、resample）與 `test_indicators`、`test_resample`
+- [x] T3：實作 `rules.py`（8 個條件、4 個開關）與 `test_rules`
+- [x] T4：實作 `universe.py`（證交所 OpenAPI、代號過濾、日期檢查）與 `test_universe`
+- [x] T5：實作 `prices.py`（yfinance 分批 100 檔、重試、資料不足標記）與 demo 資料產生器
+- [x] T6：實作 `report.py` 與 `main.py`（結束碼、near\_miss、streak、history 保留 60 日）
+- [x] T7：實作 `docs/index.html` 儀表板，用 demo 資料檢查手機版面
+- [x] T8：撰寫 `.github/workflows/daily.yml` 與 README 部署步驟
+
+**AGENTS.md 建議內容**
+
+```markdown
+# AGENTS.md
+- 規則來源：開發規格書第 2 節；修改條件前先更新規格書
+- 條件只寫在 rules.py，參數只放 config.yaml，不可寫死在程式中
+- 歷史價格一律使用還原權值；量能一律以「張」比較
+- 任何改動都要通過 pytest；新增條件必須附通過／不通過測試案例
+- 不得在程式或 commit 中放入 API token；需要時使用 GitHub Secrets
+```
+
+## 14. 實作修訂紀錄
+
+### 2026-10-30：v1 實作（T1–T8）
+
+實作時發現或補上的規格細節。條件邏輯（第 2 節 8 個條件）沒有變更。
+
+| # | 項目 | 原規格 | 實作 | 原因 |
+| --- | --- | --- | --- | --- |
+| 1 | 4 位數 TDR | 代號規則可排除 TDR | 另以名稱 `-DR$` 排除（`config.yaml` 的 `exclude_name_patterns`） | 9105 泰金寶-DR 等 4 位數 TDR 會通過 `^[1-9]\d{3}$` |
+| 2 | `shrink_2d` | 取最後兩根 K 棒 | 日線取最後三根 | 「連續 2 日縮短」需要 `D-M[2]` |
+| 3 | `--date` | 可指定日期重跑 | 意義為「預期交易日」：證交所資料必須是這一天 | `STOCK_DAY_ALL` 只提供最新交易日，無法重跑任意過去日期；適合隔天早上補跑前一日 |
+| 4 | 20:00 補跑 | 「可加」 | 已加入排程，搭配 `--skip-if-current`，當日已成功就略過 | 對應證交所更新時間不確定的風險 |
+| 5 | demo | prices.py 附 demo 產生器 | 獨立 `demo.py`，產出 OpenAPI 格式行情與日線；`--demo` 逐日回補 60 個交易日 | demo 走正式的解析、過濾與 streak 流程；儀表板 60 日圖表有資料可看 |
+| 6 | 輸出欄位 | 第 7 節範例 | 額外加上 `demo`、`conditions_meta`（條件說明來自 rules.py）、`stats.insufficient_reasons`、`config.d2_mode`；`near_miss` 含名稱、收盤、量與各條件；`history.json` 加 `names` | 儀表板顯示名稱與條件說明時不必重複定義規則 |
+| 7 | 週月線轉換 | pandas `W-FRI`、`ME` | 標籤規則相同，改用 numpy 分段彙總；測試確認與 pandas resample 結果一致 | pandas resample 每次約 5–10 ms，demo 回補需重算上萬次 |
+| 8 | 5 日均量 | 未定義 | 當日用證交所數值，前 4 日取自 yfinance；成交金額以 收盤 × 量 估算 | `STOCK_DAY_ALL` 只有當日資料 |
+| 9 | demo 與正式資料隔離 | 未定義 | JSON 帶 `demo` 旗標；正式執行讀到 demo 的 history.json 會重新累積 | 首次部署前 repo 內是 demo 資料，避免混入正式紀錄 |
+| 10 | streak 遇缺跑 | 未定義 | 以 history 中的前幾筆交易日往回數；某日排程失敗時，前後兩日會被視為連續 | v1 可接受；v1.1 改用交易日曆 |
