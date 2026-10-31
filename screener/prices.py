@@ -14,15 +14,15 @@ from datetime import date, timedelta
 
 import pandas as pd
 
-from .indicators import clean_daily
+from .indicators import clean_daily, clean_intraday
 
 log = logging.getLogger(__name__)
 
 OHLCV = ["Open", "High", "Low", "Close", "Volume"]
 
 
-def yahoo_symbol(code: str) -> str:
-    return f"{code}.TW"  # 上市；上櫃為 .TWO（v2）
+def yahoo_symbol(code: str, market: str = "TWSE") -> str:
+    return f"{code}.TWO" if market == "TPEX" else f"{code}.TW"
 
 
 def _split_download(data: pd.DataFrame | None, symbols: list[str]) -> dict[str, pd.DataFrame]:
@@ -50,19 +50,12 @@ def _split_download(data: pd.DataFrame | None, symbols: list[str]) -> dict[str, 
     return out
 
 
-def fetch_history(
-    codes: list[str],
-    years: int,
-    end: date,
-    batch_size: int = 100,
-    retries: int = 3,
-    retry_wait: float = 10,
+def _download(
+    symbol_to_code: dict[str, str], start: date, end: date, interval: str, batch_size: int, retries: int, retry_wait: float
 ) -> dict[str, pd.DataFrame]:
-    """分批下載近 years 年日線（auto_adjust=True）；抓不到的代號會重試，最後仍失敗者不在回傳結果中。"""
+    """分批下載（auto_adjust=True）；抓不到的代號會重試，最後仍失敗者不在回傳結果中。"""
     import yfinance as yf
 
-    start = end - timedelta(days=round(years * 365.25) + 10)
-    symbol_to_code = {yahoo_symbol(c): c for c in codes}
     result: dict[str, pd.DataFrame] = {}
     pending = list(symbol_to_code)
     for attempt in range(retries + 1):
@@ -77,14 +70,14 @@ def fetch_history(
                         batch,
                         start=start.isoformat(),
                         end=(end + timedelta(days=1)).isoformat(),  # end 不含當日，需 +1
-                        interval="1d",
+                        interval=interval,
                         auto_adjust=True,
                         group_by="ticker",
                         threads=True,
                         progress=False,
                     )
             except Exception as e:  # yfinance 對網路錯誤的例外型別不固定
-                log.warning("yfinance 批次 %d 下載失敗：%s", i // batch_size + 1, e)
+                log.warning("yfinance %s 批次 %d 下載失敗：%s", interval, i // batch_size + 1, e)
                 data = None
             got = _split_download(data, batch)
             for s in batch:
@@ -92,13 +85,56 @@ def fetch_history(
                     result[symbol_to_code[s]] = got[s]
                 else:
                     failed.append(s)
-        log.info("yfinance 第 %d 輪：成功 %d，失敗 %d", attempt + 1, len(result), len(failed))
+        log.info("yfinance %s 第 %d 輪：成功 %d，失敗 %d", interval, attempt + 1, len(result), len(failed))
         if not failed:
             break
         pending = failed
         if attempt < retries:
             time.sleep(retry_wait)
     return result
+
+
+def fetch_history(
+    codes: list[str],
+    years: int,
+    end: date,
+    batch_size: int = 100,
+    retries: int = 3,
+    retry_wait: float = 10,
+    markets: dict[str, str] | None = None,
+) -> dict[str, pd.DataFrame]:
+    """近 years 年的還原權值日線；markets 為代號對市場（TWSE／TPEX），未提供時視為上市。"""
+    start = end - timedelta(days=round(years * 365.25) + 10)
+    symbols = {yahoo_symbol(c, (markets or {}).get(c, "TWSE")): c for c in codes}
+    return _download(symbols, start, end, "1d", batch_size, retries, retry_wait)
+
+
+def fetch_intraday(
+    codes: list[str],
+    days: int,
+    end: date,
+    batch_size: int = 100,
+    retries: int = 1,
+    retry_wait: float = 10,
+    markets: dict[str, str] | None = None,
+) -> dict[str, pd.DataFrame]:
+    """近 days 天的 60 分 K（台北時間 09:00～13:00 每天 5 根；Yahoo 最多約 730 天）。"""
+    start = end - timedelta(days=days)
+    symbols = {yahoo_symbol(c, (markets or {}).get(c, "TWSE")): c for c in codes}
+    return _download(symbols, start, end, "60m", batch_size, retries, retry_wait)
+
+
+def intraday_status(df: pd.DataFrame | None, trade_date: pd.Timestamp) -> str | None:
+    """60 分 K 必須有交易日當天的 K 棒；Yahoo 沒有官方資料可補，缺了就只能跳過。"""
+    if df is None or df.empty:
+        return "60 分無資料"
+    days = clean_intraday(df).index.normalize()
+    days = days[days <= trade_date]
+    if days.empty:
+        return "60 分無資料"
+    if days.max() < trade_date:
+        return "60 分資料落後"
+    return None
 
 
 def official_bar(row) -> dict:

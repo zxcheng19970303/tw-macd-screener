@@ -3,7 +3,7 @@
 import pandas as pd
 import pytest
 
-from screener.rules import CONDITION_IDS, describe, evaluate, rule_tag, validate_switches
+from screener.rules import CONDITION_IDS, describe, evaluate, evaluate_watchlist, rule_tag, validate_groups, validate_switches
 
 # 全部通過的基準值；序列由舊到新，最後一個是當根 [0]
 BASE = {
@@ -135,10 +135,53 @@ def test_missing_values_fail_safely(cfg):
 
 
 def test_describe_and_tag(cfg):
-    meta = describe(cfg)
+    g1, g2 = cfg["groups"]
+    meta = describe(cfg, g2)
     assert list(meta) == list(CONDITION_IDS)
     assert "300 張" in meta["V1"]["label"]
+    assert meta["M1"]["label"].startswith("上級（月線）") and meta["D2"]["label"].startswith("下級（日線）")
+    meta = describe(cfg, g1)
+    assert meta["M1"]["label"].startswith("上級（週線）") and meta["W1"]["label"].startswith("本級（日線）")
+    assert meta["D4"]["label"].startswith("下級（60 分線）")
     assert rule_tag(cfg) == "day_lots>300"
+
+
+@pytest.mark.parametrize(
+    "groups",
+    [
+        [],
+        [{"id": "a", "name": "x", "lower": "D", "middle": "W", "upper": "M"}] * 2,  # id 重複
+        [{"id": "a", "name": "x", "lower": "5m", "middle": "D", "upper": "W"}],  # 不支援的週期
+        [{"id": "a", "name": "x", "lower": "W", "middle": "D", "upper": "M"}],  # 順序錯誤
+    ],
+)
+def test_validate_groups_rejects_bad_config(groups):
+    with pytest.raises(ValueError):
+        validate_groups(groups)
+
+
+def _watch(close, ma, macd, dif=-1.0):
+    return pd.DataFrame({"Close": close, "ma10": ma, "ro_macd": [0.0] * (len(close) - 1) + [macd], "ro_dif": [0.0] * (len(close) - 1) + [dif]})
+
+
+@pytest.mark.parametrize(
+    "close, ma, macd, a1, a2",
+    [
+        ([99.0, 101.0], [100.0, 100.0], 0.5, True, True),  # 剛站上 10 日線，MACD > 0
+        ([100.0, 101.0], [100.0, 100.5], 0.5, True, True),  # 昨收剛好等於均線也算「剛站上」
+        ([102.0, 103.0], [100.0, 100.5], 0.5, True, False),  # 昨天就已在均線上：不是「剛」站上
+        ([99.0, 101.0], [100.0, 100.0], -0.2, False, True),  # MACD 在 0 軸下
+        ([99.0, 99.5], [100.0, 100.0], 0.5, True, False),  # 還沒站上
+    ],
+)
+def test_watchlist(cfg, close, ma, macd, a1, a2):
+    res = evaluate_watchlist(_watch(close, ma, macd), cfg)
+    assert res["conditions"] == {"A1": a1, "A2": a2}
+    assert res["selected"] is (a1 and a2)
+
+
+def test_watchlist_ignores_dif(cfg):
+    assert evaluate_watchlist(_watch([99.0, 101.0], [100.0, 100.0], 0.5, dif=-3.0), cfg)["selected"] is True
 
 
 def test_validate_switches(cfg):

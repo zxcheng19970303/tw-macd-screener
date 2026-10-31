@@ -84,6 +84,18 @@ a { color: var(--accent); }
 }
 .banner b { color: var(--c); white-space: nowrap; }
 
+/* 名單分頁 */
+.tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; padding: 4px; margin-top: 12px; border-radius: 16px; }
+.tabs button {
+  font: inherit; color: var(--ink-2); background: transparent; border: 0; border-radius: 12px; cursor: pointer;
+  padding: 8px 6px; display: grid; gap: 1px; text-align: center; min-width: 0;
+}
+.tabs button b { font-size: 14px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button span { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { background: var(--glass-3); color: var(--ink); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12); }
+.tabs button[aria-selected="true"] span { color: var(--ink-2); }
+.tabs .n { font-variant-numeric: tabular-nums; font-style: normal; color: var(--accent); margin-left: 4px; }
+
 /* 摘要 */
 .hero { display: grid; gap: 12px; margin-top: 12px; }
 @media (min-width: 760px) { .hero { grid-template-columns: 1.35fr 1fr; } }
@@ -152,6 +164,7 @@ a { color: var(--accent); }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .pill { font-size: 11px; line-height: 18px; padding: 0 7px; border-radius: 999px; background: var(--glass-2); color: var(--ink-2); white-space: nowrap; }
 .pill.new { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: var(--on-accent); font-weight: 650; }
+.pill.otc { background: transparent; box-shadow: inset 0 0 0 1px var(--line-2); color: var(--ink-2); }
 .nums { text-align: right; white-space: nowrap; }
 .px { font-weight: 650; font-size: 15px; }
 .vol { display: block; font-size: 12px; color: var(--muted); }
@@ -257,10 +270,11 @@ details.panel[open] summary .chev { transform: rotate(90deg); }
   <div class="skeleton" id="skeleton" aria-hidden="true"><div class="sk"></div><div class="sk short"></div><div class="sk"></div></div>
 
   <main id="main" hidden>
+    <nav class="tabs glass" id="tabs" role="tablist" aria-label="選股名單"></nav>
     <section class="hero" aria-label="今日摘要">
       <div class="hero-main glass">
         <div class="eyebrow num" id="eyebrow"></div>
-        <div class="big-row"><span class="big num" id="big"></span><span class="big-unit">檔符合全部 8 條件</span></div>
+        <div class="big-row"><span class="big num" id="big"></span><span class="big-unit" id="big-unit"></span></div>
         <div class="delta num" id="delta"></div>
         <div class="chips" id="cfg"></div>
       </div>
@@ -271,17 +285,22 @@ details.panel[open] summary .chev { transform: rotate(90deg); }
       <div class="col">
         <section class="panel glass" aria-labelledby="hits-title">
           <div class="panel-head">
-            <h2 id="hits-title">今日入選 <span class="count num" id="hits-count"></span></h2>
+            <h2><span id="hits-title">今日入選</span> <span class="count num" id="hits-count"></span></h2>
             <div class="seg" role="group" aria-label="排序">
               <button type="button" data-sort="code" aria-pressed="true">代號</button>
               <button type="button" data-sort="volume" aria-pressed="false">成交量</button>
               <button type="button" data-sort="streak" aria-pressed="false">連續</button>
             </div>
           </div>
+          <div class="tools" id="hits-tools" hidden>
+            <label class="sr" for="hq">搜尋代號或名稱</label>
+            <input class="search" id="hq" type="search" placeholder="搜尋代號或名稱" autocomplete="off">
+          </div>
           <div class="list" id="hits"></div>
+          <div id="hits-more"></div>
         </section>
 
-        <section class="panel glass" aria-labelledby="near-title">
+        <section class="panel glass" id="near-sec" aria-labelledby="near-title">
           <div class="panel-head"><h2 id="near-title">差 1 條件 <span class="count num" id="near-count"></span></h2></div>
           <div class="tools">
             <label class="sr" for="q">搜尋代號或名稱</label>
@@ -303,8 +322,9 @@ details.panel[open] summary .chev { transform: rotate(90deg); }
         <details class="panel glass">
           <summary>條件定義與說明 <svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M3 1.5 6.5 5 3 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></summary>
           <dl class="defs" id="defs"></dl>
+          <p class="fine" id="tf-note"></p>
           <p class="fine">羅＝MACD 10/20/10、蜜＝26/52/13，D-M＝DIF − MACD。<span class="dot up"></span>紅柱（D-M &gt; 0）<span class="dot down" style="margin-left:8px"></span>綠柱（D-M &lt; 0）。價格採還原權值，與看盤軟體比對時請切換為還原。</p>
-          <p class="fine">資料來源：臺灣證券交易所每日收盤行情、Yahoo Finance。每個交易日 18:00 後更新。名單依技術條件自動產生，規則尚未經過回測，僅供研究參考，不構成投資建議。</p>
+          <p class="fine">資料來源：臺灣證券交易所、證券櫃檯買賣中心每日收盤行情，Yahoo Finance 日線與 60 分 K。每個交易日 18:00 後更新。名單依技術條件自動產生，規則尚未經過回測，僅供研究參考，不構成投資建議。</p>
         </details>
       </div>
     </div>
@@ -313,23 +333,34 @@ details.panel[open] summary .chev { transform: rotate(90deg); }
 
 <script>
 "use strict";
-const IDS = ["M1", "W1", "W2", "D1", "D2", "D3", "D4", "V1"];
 const CFG_TEXT = {
   price_source: { close: "收盤價", hlcc4: "hlcc4" },
   htf_bar_mode: { completed: "週月線已完成 K 棒", current: "週月線含未完成 K 棒" },
-  d2_mode: { shrink_1d: "D2 綠柱縮 1 日", shrink_2d: "D2 綠柱連縮 2 日" },
+  d2_mode: { shrink_1d: "D2 綠柱縮 1 根", shrink_2d: "D2 綠柱連縮 2 根" },
 };
-const PAGE = 20;
+const PAGE = 20, HITS_PAGE = 30;
 const WEEK = "日一二三四五六";
-const state = { latest: null, history: null, sort: "code", filter: "ALL", query: "", limit: PAGE, day: null, open: new Set() };
+const MARKET = { TWSE: "上市", TPEX: "上櫃" };
+const state = { latest: null, history: null, gid: null, views: {}, open: new Set() };
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-const quoteUrl = (code) => `https://tw.stock.yahoo.com/quote/${encodeURIComponent(code)}.TW/technical-analysis`;
+const quoteUrl = (code, market) => `https://tw.stock.yahoo.com/quote/${encodeURIComponent(code)}.${market === "TPEX" ? "TWO" : "TW"}/technical-analysis`;
 const int = (n) => Math.round(n).toLocaleString("zh-TW");
 const price = (n) => n.toLocaleString("zh-TW", { minimumFractionDigits: n < 1000 ? 2 : 0, maximumFractionDigits: 2 });
 const weekday = (d) => WEEK[new Date(d + "T00:00:00Z").getUTCDay()];
+const isDm = (key) => /_dm(_|$)/.test(key);
 const CHEV = '<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M3 1.5 6.5 5 3 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 const EXT = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 4 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+const group = () => state.latest.groups.find((g) => g.id === state.gid);
+const ids = (g) => Object.keys(g.conditions_meta);
+function view() {
+  return (state.views[state.gid] ||= { sort: "code", filter: "ALL", query: "", limit: PAGE, hitsQuery: "", hitsLimit: HITS_PAGE, day: null });
+}
+
+function recall(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
 
 function fmtVal(key, v) {
   if (v === null || v === undefined) return "—";
@@ -359,13 +390,31 @@ async function getJson(url) {
   return r.json();
 }
 
+// 相容 v1 格式（只有日／週／月一份名單）：視為第 2 組
+function normalize(latest, history) {
+  if (!Array.isArray(latest.groups)) {
+    latest = {
+      ...latest,
+      universe: { total: latest.stats.universe, markets: { TWSE: latest.stats.universe } },
+      groups: [{ id: "g2", kind: "macd", name: "第 2 組", label: "日／週／月", available: true, stats: latest.stats,
+        warnings: latest.warnings || [], conditions_meta: latest.conditions_meta, hits: latest.hits, near_miss: latest.near_miss }],
+    };
+  }
+  history = {
+    ...history,
+    markets: history.markets || {},
+    days: history.days.map((d) => (d.groups ? d : { trade_date: d.trade_date, groups: { g2: { hits: d.hits, count: d.count } } })),
+  };
+  return [latest, history];
+}
+
 async function load() {
   try {
     const [latest, history] = await Promise.all([getJson("data/latest.json"), getJson("data/history.json")]);
-    if (!latest || !Array.isArray(latest.hits) || !history || !Array.isArray(history.days)) throw new Error("JSON 格式不符");
-    state.latest = latest;
-    state.history = history;
-    state.day = history.days.length ? history.days[0].trade_date : null;
+    if (!latest || !history || !Array.isArray(history.days) || !(Array.isArray(latest.groups) || Array.isArray(latest.hits))) throw new Error("JSON 格式不符");
+    [state.latest, state.history] = normalize(latest, history);
+    const saved = recall("macd-group");
+    state.gid = state.latest.groups.some((g) => g.id === saved) ? saved : state.latest.groups[0].id;
     render();
   } catch (e) {
     showError(e);
@@ -389,55 +438,79 @@ function setStatus(text, color) {
 }
 
 function render() {
-  const L = state.latest, H = state.history;
+  const L = state.latest;
   const gen = L.generated_at ? L.generated_at.slice(5, 16).replace("-", "/").replace("T", " ") : "—";
   $("#meta").textContent = `${L.trade_date.slice(5).replace("-", "/")}（${weekday(L.trade_date)}）收盤 · 更新 ${gen}`;
-
   const lag = weekdaysSince(L.trade_date, taipeiToday());
-  const banners = [];
-  if (L.demo) {
-    setStatus("示範資料", "var(--info)");
-    banners.push(["var(--info)", "示範資料", "由程式產生的模擬價格，不是真實行情。正式排程跑完後會自動取代。"]);
-  } else if (lag > 1) {
-    setStatus("可能過期", "var(--warn)");
-    banners.push(["var(--warn)", "資料可能過期", `最新資料停在 ${L.trade_date}，已超過 1 個交易日未更新（遇連假可忽略）。`]);
-  } else {
-    setStatus("已更新", "var(--ok)");
-  }
-  for (const w of L.warnings || []) banners.push(["var(--warn)", "提示", w]);
-  $("#banners").innerHTML = banners.map(([c, t, m]) => `<div class="banner" role="status" style="--c:${c}"><b>${esc(t)}</b><span>${esc(m)}</span></div>`).join("");
+  if (L.demo) setStatus("示範資料", "var(--info)");
+  else if (lag > 1) setStatus("可能過期", "var(--warn)");
+  else setStatus("已更新", "var(--ok)");
+  $("#skeleton").hidden = true;
+  $("#main").hidden = false;
+  renderGroup();
+}
 
-  const s = L.stats;
-  $("#eyebrow").textContent = `${L.trade_date.replaceAll("-", "/")}（${weekday(L.trade_date)}）收盤選股`;
-  $("#big").textContent = int(s.hits);
-  const prev = [...H.days].sort((a, b) => b.trade_date.localeCompare(a.trade_date)).find((d) => d.trade_date < L.trade_date);
-  if (prev) {
-    const diff = s.hits - prev.count;
-    $("#delta").textContent = `前一交易日 ${prev.count} 檔（${diff > 0 ? "▲ " + diff : diff < 0 ? "▼ " + -diff : "持平"}）`;
+function renderBanners(g) {
+  const L = state.latest;
+  const banners = [];
+  if (L.demo) banners.push(["var(--info)", "示範資料", "由程式產生的模擬價格，不是真實行情。正式排程跑完後會自動取代。"]);
+  else if (weekdaysSince(L.trade_date, taipeiToday()) > 1) banners.push(["var(--warn)", "資料可能過期", `最新資料停在 ${L.trade_date}，已超過 1 個交易日未更新（遇連假可忽略）。`]);
+  for (const w of g.warnings || []) banners.push(["var(--warn)", g.available ? "提示" : "本組未更新", w]);
+  $("#banners").innerHTML = banners.map(([c, t, m]) => `<div class="banner" role="status" style="--c:${c}"><b>${esc(t)}</b><span>${esc(m)}</span></div>`).join("");
+}
+
+function renderTabs() {
+  $("#tabs").innerHTML = state.latest.groups.map((g) =>
+    `<button type="button" role="tab" data-gid="${esc(g.id)}" aria-selected="${g.id === state.gid}">
+      <b>${esc(g.name)}<i class="n">${g.available ? int(g.stats.hits) : "—"}</i></b><span>${esc(g.label || "")}</span></button>`).join("");
+}
+
+function renderGroup() {
+  const L = state.latest, H = state.history, g = group(), v = view();
+  renderTabs();
+  renderBanners(g);
+  const s = g.stats, watch = g.kind === "watch";
+  $("#eyebrow").textContent = `${L.trade_date.replaceAll("-", "/")}（${weekday(L.trade_date)}）收盤 · ${g.name}（${g.label}）`;
+  $("#big").textContent = g.available ? int(s.hits) : "—";
+  $("#big-unit").textContent = watch ? "檔剛站上均線且 MACD 在 0 軸上" : "檔符合全部 8 條件";
+  const prev = [...H.days].sort((a, b) => b.trade_date.localeCompare(a.trade_date)).find((d) => d.trade_date < L.trade_date && d.groups[g.id]);
+  if (!g.available) $("#delta").textContent = "本組今日未更新";
+  else if (prev) {
+    const diff = s.hits - prev.groups[g.id].count;
+    $("#delta").textContent = `前一交易日 ${prev.groups[g.id].count} 檔（${diff > 0 ? "▲ " + diff : diff < 0 ? "▼ " + -diff : "持平"}）`;
   } else {
     $("#delta").textContent = "首日紀錄，之後會顯示與前一交易日的比較";
   }
   const c = L.config;
-  $("#cfg").innerHTML = [
-    CFG_TEXT.price_source[c.price_source] || c.price_source,
-    CFG_TEXT.htf_bar_mode[c.htf_bar_mode] || c.htf_bar_mode,
-    `量 ${c.volume_rule}`,
-    CFG_TEXT.d2_mode[c.d2_mode] || c.d2_mode,
-  ].map((t) => `<span class="chip">${esc(t)}</span>`).join("");
+  const chips = watch
+    ? ["上市＋上櫃全部股票", "不看 8 個條件", "不設量能門檻"]
+    : [
+        `上級 ${g.timeframe_names?.upper ?? ""}`, `本級 ${g.timeframe_names?.middle ?? ""}`, `下級 ${g.timeframe_names?.lower ?? ""}`,
+        CFG_TEXT.price_source[c.price_source] || c.price_source, `量 ${c.volume_rule}`, CFG_TEXT.d2_mode[c.d2_mode] || c.d2_mode,
+      ].filter((t) => !/ $/.test(t));
+  $("#cfg").innerHTML = chips.map((t) => `<span class="chip">${esc(t)}</span>`).join("");
 
-  const newCount = L.hits.filter((h) => h.is_new).length;
-  $("#tiles").innerHTML = [
-    ["新進榜", newCount, "今天首次入選"],
-    ["差 1 條件", s.near_miss, "提前觀察"],
-    ["股票池", s.universe, `評估 ${int(s.evaluated)}・不足 ${int(s.insufficient_data)}`],
-  ].map(([k, v, sub]) => `<div class="tile glass"><div><div class="k">${k}</div><div class="v num">${int(v)}</div></div><div class="s">${esc(sub)}</div></div>`).join("");
+  const u = L.universe, mk = u.markets || {};
+  const split = Object.entries(mk).map(([k, n]) => `${MARKET[k] || k} ${int(n)}`).join("・");
+  const byMarket = (m) => g.hits.filter((h) => (h.market || "TWSE") === m).length;
+  const tiles = watch
+    ? [["上市", byMarket("TWSE"), "名單中的上市股"], ["上櫃", byMarket("TPEX"), "名單中的上櫃股"], ["股票池", u.total, `評估 ${int(s.evaluated)}・不足 ${int(s.insufficient_data)}`]]
+    : [["新進榜", g.hits.filter((h) => h.is_new).length, "今天首次入選"], ["差 1 條件", s.near_miss, "提前觀察"], ["股票池", u.total, `${split}<br>評估 ${int(s.evaluated)}・不足 ${int(s.insufficient_data)}`]];
+  $("#tiles").innerHTML = tiles.map(([k, n, sub]) =>
+    `<div class="tile glass"><div><div class="k">${k}</div><div class="v num">${int(n)}</div></div><div class="s">${sub.split("<br>").map(esc).join("<br>")}</div></div>`).join("");
 
-  $("#defs").innerHTML = IDS.map((id) => `<dt><span class="badge on">${id}</span></dt><dd>${esc(L.conditions_meta[id].label)}</dd>`).join("");
+  $("#defs").innerHTML = ids(g).map((id) => `<dt><span class="badge on">${esc(id)}</span></dt><dd>${esc(g.conditions_meta[id].label)}</dd>`).join("");
+  $("#tf-note").textContent = watch
+    ? "觀察清單獨立於 8 個條件：上市＋上櫃全部股票都判斷，不設量能門檻。"
+    : `本組週期：上級＝${g.timeframe_names?.upper}、本級＝${g.timeframe_names?.middle}、下級＝${g.timeframe_names?.lower}。條件代號沿用講義：M＝上級、W＝本級、D＝下級，V1 一律看當日成交量。`;
+  $("#hits-title").textContent = watch ? "觀察清單" : "今日入選";
+  $("#near-sec").hidden = watch;
+  if (!v.day) v.day = (H.days.find((d) => d.groups[g.id]) || {}).trade_date || null;
   $("#hist-title").textContent = `近 ${H.days.length} 日入選數`;
-  $("#skeleton").hidden = true;
-  $("#main").hidden = false;
+  $("#hq").value = v.hitsQuery;
+  $("#q").value = v.query;
   renderHits();
-  renderNear();
+  if (!watch) renderNear();
   renderChart();
   renderDay();
 }
@@ -455,11 +528,9 @@ function spark(values) {
   return `<svg class="spark" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><line x1="0" x2="${W}" y1="${mid}" y2="${mid}" stroke="var(--axis)" stroke-width="1"/>${bars}</svg>`;
 }
 
-const isDm = (key) => /_dm(_|$)/.test(key);
-
 function detail(item, id, open) {
-  const meta = state.latest.conditions_meta;
-  const lis = IDS.map((cid) => {
+  const meta = group().conditions_meta;
+  const lis = ids(group()).map((cid) => {
     const ok = item.conditions[cid];
     const pairs = meta[cid].values;
     const vals = pairs.map(([label, key]) => {
@@ -468,58 +539,73 @@ function detail(item, id, open) {
       return `<span>${dot}<span class="k">${esc(label)}</span> <span class="num">${fmtVal(key, v)}</span></span>`;
     }).join("");
     const dms = pairs.filter(([, key]) => isDm(key)).map(([, key]) => item.values[key]);
-    return `<li class="cond ${ok ? "pass" : "fail"}"><span class="badge ${ok ? "on" : "off"}" title="${ok ? "通過" : "未通過"}">${cid}</span>
+    return `<li class="cond ${ok ? "pass" : "fail"}"><span class="badge ${ok ? "on" : "off"}" title="${ok ? "通過" : "未通過"}">${esc(cid)}</span>
       <span class="cond-label">${esc(meta[cid].label)}${ok ? "" : "（未通過）"}</span><span class="cond-vals">${vals}</span>${spark(dms)}</li>`;
   }).join("");
   return `<div class="detail" id="${id}"${open ? "" : " hidden"}><ul class="conds">${lis}</ul>
-    <div class="detail-foot"><span>${esc(item.market || "TWSE")} · ${esc(item.code)}</span><a href="${quoteUrl(item.code)}" target="_blank" rel="noopener">在 Yahoo 股市看 K 線 ↗</a></div></div>`;
+    <div class="detail-foot"><span>${esc(MARKET[item.market] || item.market || "上市")} · ${esc(item.code)}</span><a href="${quoteUrl(item.code, item.market)}" target="_blank" rel="noopener">在 Yahoo 股市看 K 線 ↗</a></div></div>`;
 }
 
 function itemHtml(prefix, item, tags) {
-  const key = `${prefix}:${item.code}`;
-  const id = `d-${prefix}-${item.code}`;
+  const key = `${state.gid}:${prefix}:${item.code}`;
+  const id = `d-${state.gid}-${prefix}-${item.code}`;
   const open = state.open.has(key);
+  const otc = item.market === "TPEX" ? '<span class="pill otc">上櫃</span>' : "";
   return `<div class="item${open ? " open" : ""}" data-key="${esc(key)}">
     <button type="button" class="item-main" aria-expanded="${open}" aria-controls="${id}">
       ${CHEV}
       <span class="ident"><span class="code-name"><span class="code num">${esc(item.code)}</span><span class="name">${esc(item.name)}</span></span>
-        <span class="tags">${tags}</span></span>
+        <span class="tags">${otc}${tags}</span></span>
       <span class="nums num"><span class="px">${price(item.close)}</span><span class="vol">${int(item.volume_lots)} 張</span></span>
     </button>
-    <a class="ext" href="${quoteUrl(item.code)}" target="_blank" rel="noopener" aria-label="在 Yahoo 股市查看 ${esc(item.code)} 技術分析">${EXT}</a>
+    <a class="ext" href="${quoteUrl(item.code, item.market)}" target="_blank" rel="noopener" aria-label="在 Yahoo 股市查看 ${esc(item.code)} 技術分析">${EXT}</a>
     ${detail(item, id, open)}
   </div>`;
 }
 
+const matches = (q) => (n) => !q || n.code.includes(q) || n.name.toLowerCase().includes(q);
+
 function renderHits() {
-  const hits = [...state.latest.hits];
+  const g = group(), v = view();
   const by = {
     code: (a, b) => a.code.localeCompare(b.code),
     volume: (a, b) => b.volume_lots - a.volume_lots,
     streak: (a, b) => b.streak - a.streak || a.code.localeCompare(b.code),
   };
-  hits.sort(by[state.sort]);
-  document.querySelectorAll("[data-sort]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.sort === state.sort)));
-  $("#hits-count").textContent = hits.length;
-  $("#hits").innerHTML = hits.length
-    ? hits.map((h) => itemHtml("h", h, `${h.is_new ? '<span class="pill new">新進榜</span>' : ""}<span class="pill">連續 ${h.streak} 天</span>`)).join("")
-    : `<div class="empty">今天沒有符合全部條件的股票。</div>`;
+  document.querySelectorAll("[data-sort]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.sort === v.sort)));
+  $("#hits-count").textContent = g.available ? g.hits.length : "—";
+  $("#hits-tools").hidden = g.hits.length <= 15;
+  if (!g.available) {
+    $("#hits").innerHTML = `<div class="empty">本組今日未更新。${esc((g.warnings || [])[0] || "")}</div>`;
+    $("#hits-more").innerHTML = "";
+    return;
+  }
+  const q = v.hitsQuery.trim().toLowerCase();
+  const list = g.hits.filter(matches(q)).sort(by[v.sort]);
+  const shown = list.slice(0, v.hitsLimit);
+  const empty = q ? "沒有符合搜尋的股票。" : g.kind === "watch" ? "今天沒有剛站上均線且 MACD 在 0 軸上的股票。" : "今天沒有符合全部條件的股票。";
+  $("#hits").innerHTML = shown.length
+    ? shown.map((h) => itemHtml("h", h, `${h.is_new ? '<span class="pill new">新進榜</span>' : ""}<span class="pill">連續 ${h.streak} 天</span>`)).join("")
+    : `<div class="empty">${empty}</div>`;
+  $("#hits-more").innerHTML = list.length > shown.length
+    ? `<button type="button" class="more" id="hits-more-btn">顯示全部 ${list.length} 檔（還有 ${list.length - shown.length} 檔）</button>` : "";
 }
 
 function renderNear() {
-  const all = state.latest.near_miss;
+  const g = group(), v = view();
+  const all = g.near_miss;
   const counts = {};
   for (const n of all) for (const id of n.failed) counts[id] = (counts[id] || 0) + 1;
-  if (state.filter !== "ALL" && !counts[state.filter]) state.filter = "ALL";
-  const opts = [["ALL", `全部 ${all.length}`], ...IDS.filter((id) => counts[id]).map((id) => [id, `${id} · ${counts[id]}`])];
-  $("#near-filter").innerHTML = opts.map(([id, t]) => `<button type="button" data-filter="${id}" aria-pressed="${id === state.filter}">${esc(t)}</button>`).join("");
-  $("#near-count").textContent = all.length;
-  const q = state.query.trim().toLowerCase();
-  const list = all.filter((n) => (state.filter === "ALL" || n.failed.includes(state.filter)) && (!q || n.code.includes(q) || n.name.toLowerCase().includes(q)));
-  const shown = list.slice(0, state.limit);
+  if (v.filter !== "ALL" && !counts[v.filter]) v.filter = "ALL";
+  const opts = [["ALL", `全部 ${all.length}`], ...ids(g).filter((id) => counts[id]).map((id) => [id, `${id} · ${counts[id]}`])];
+  $("#near-filter").innerHTML = opts.map(([id, t]) => `<button type="button" data-filter="${esc(id)}" aria-pressed="${id === v.filter}">${esc(t)}</button>`).join("");
+  $("#near-count").textContent = g.available ? all.length : "—";
+  const q = v.query.trim().toLowerCase();
+  const list = all.filter((n) => (v.filter === "ALL" || n.failed.includes(v.filter)) && matches(q)(n));
+  const shown = list.slice(0, v.limit);
   $("#near").innerHTML = shown.length
-    ? shown.map((n) => itemHtml("n", n, n.failed.map((id) => `<span class="badge off" title="未通過">${id}</span>`).join("") + '<span class="pill">未通過</span>')).join("")
-    : `<div class="empty">${q ? "沒有符合搜尋的股票。" : "沒有只差 1 個條件的股票。"}</div>`;
+    ? shown.map((n) => itemHtml("n", n, n.failed.map((id) => `<span class="badge off" title="未通過">${esc(id)}</span>`).join("") + '<span class="pill">未通過</span>')).join("")
+    : `<div class="empty">${!g.available ? "本組今日未更新。" : q ? "沒有符合搜尋的股票。" : "沒有只差 1 個條件的股票。"}</div>`;
   $("#near-more").innerHTML = list.length > shown.length
     ? `<button type="button" class="more" id="more-btn">顯示全部 ${list.length} 檔（還有 ${list.length - shown.length} 檔）</button>` : "";
 }
@@ -537,7 +623,9 @@ function barPath(x, y, w, h, r) {
 }
 
 function chartDays() {
-  return [...state.history.days].sort((a, b) => a.trade_date.localeCompare(b.trade_date));
+  const gid = state.gid;
+  return [...state.history.days].sort((a, b) => a.trade_date.localeCompare(b.trade_date))
+    .map((d) => ({ trade_date: d.trade_date, count: d.groups[gid] ? d.groups[gid].count : null }));
 }
 
 function renderChart() {
@@ -548,11 +636,11 @@ function renderChart() {
   const W = Math.max(box.clientWidth, 240), H = 170;
   const m = { t: 20, r: 4, b: 22, l: 26 };
   const iw = W - m.l - m.r, ih = H - m.t - m.b;
-  const maxCount = Math.max(...days.map((d) => d.count), 1);
+  const maxCount = Math.max(...days.map((d) => d.count || 0), 1);
   const step = niceStep(maxCount);
   const top = Math.max(step, Math.ceil(maxCount / step) * step);
   const y = (v) => m.t + ih - (v / top) * ih;
-  // 只有少數幾天時不把柱子撐得過寬：以 60 格為基準
+  // 只有少數幾天時不把柱子撐得過寬：至少以 20 格為基準，長條靠右排列
   const slot = iw / Math.max(days.length, 20);
   const x0 = m.l + iw - slot * days.length;
   const bw = Math.max(1, Math.min(24, slot - 2));
@@ -561,14 +649,15 @@ function renderChart() {
     parts.push(`<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(${v ? "--grid" : "--axis"})" stroke-width="1" shape-rendering="crispEdges"/>`);
     parts.push(`<text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`);
   }
+  const selDay = view().day;
   days.forEach((d, i) => {
     const x = x0 + i * slot + (slot - bw) / 2;
-    const sel = d.trade_date === state.day;
+    const sel = d.trade_date === selDay;
     if (d.count) parts.push(`<path d="${barPath(x, y(d.count), bw, y(0) - y(d.count), 4)}" fill="var(${sel ? "--bar-sel" : "--bar"})"/>`);
-    if (sel) parts.push(`<text x="${x + bw / 2}" y="${y(d.count) - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">${d.count}</text>`);
+    if (sel && d.count !== null) parts.push(`<text x="${x + bw / 2}" y="${y(d.count) - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">${d.count}</text>`);
   });
   const lab = (i, anchor) => `<text x="${x0 + i * slot + slot / 2}" y="${H - 5}" text-anchor="${anchor}" font-size="11" fill="var(--muted)">${days[i].trade_date.slice(5).replace("-", "/")}</text>`;
-  // 長條靠右排列：最新一天的日期一律靠右對齊，避免被圖表右緣切掉
+  // 最新一天的日期一律靠右對齊，避免被圖表右緣切掉
   if (days.length > 1) parts.push(lab(0, "start"));
   parts.push(lab(days.length - 1, "end"));
   days.forEach((d, i) => parts.push(`<rect data-i="${i}" x="${x0 + i * slot}" y="${m.t}" width="${slot}" height="${ih}" fill="transparent" style="cursor:pointer"/>`));
@@ -581,12 +670,12 @@ function renderChart() {
     if (i === undefined) { tip.style.display = "none"; return; }
     const d = days[i];
     const scale = svg.getBoundingClientRect().width / W;
-    tip.textContent = `${d.trade_date}（${weekday(d.trade_date)}）入選 ${d.count} 檔`;
+    tip.textContent = d.count === null ? `${d.trade_date}（${weekday(d.trade_date)}）本組無紀錄` : `${d.trade_date}（${weekday(d.trade_date)}）入選 ${d.count} 檔`;
     tip.style.display = "block";
     // 置中於長條上方，但不超出圖表左右邊界（手機上靠邊的長條會讓提示框撐出頁面）
     const half = tip.offsetWidth / 2, cx = (x0 + i * slot + slot / 2) * scale;
     tip.style.left = `${Math.min(Math.max(cx, half), box.clientWidth - half)}px`;
-    tip.style.top = `${(y(d.count) - 4) * scale}px`;
+    tip.style.top = `${(y(d.count || 0) - 4) * scale}px`;
   });
   svg.addEventListener("pointerleave", () => { tip.style.display = "none"; });
   svg.addEventListener("click", (e) => {
@@ -596,7 +685,7 @@ function renderChart() {
   svg.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     e.preventDefault();
-    const i = days.findIndex((d) => d.trade_date === state.day);
+    const i = days.findIndex((d) => d.trade_date === view().day);
     const j = Math.min(days.length - 1, Math.max(0, i + (e.key === "ArrowRight" ? 1 : -1)));
     selectDay(days[j].trade_date);
     $("#chart svg").focus();
@@ -604,18 +693,21 @@ function renderChart() {
 }
 
 function selectDay(d) {
-  state.day = d;
+  view().day = d;
   renderChart();
   renderDay();
 }
 
 function renderDay() {
-  const day = state.history.days.find((d) => d.trade_date === state.day);
+  const H = state.history, gid = state.gid;
+  const day = H.days.find((d) => d.trade_date === view().day);
   if (!day) { $("#day").innerHTML = `<p class="hint">尚無歷史紀錄。</p>`; return; }
-  const names = state.history.names || {};
-  const items = day.hits.map((c) => `<li><a href="${quoteUrl(c)}" target="_blank" rel="noopener"><b class="num">${esc(c)}</b>${esc(names[c] || "")}</a></li>`).join("");
-  $("#day").innerHTML = `<h3 class="num">${esc(day.trade_date)}（${weekday(day.trade_date)}）· 入選 ${day.count} 檔</h3>
-    ${day.count ? `<ul>${items}</ul>` : `<p class="hint">當日沒有入選股票。</p>`}
+  const g = day.groups[gid];
+  if (!g) { $("#day").innerHTML = `<h3 class="num">${esc(day.trade_date)}（${weekday(day.trade_date)}）</h3><p class="hint">本組當天沒有紀錄。</p>`; return; }
+  const names = H.names || {}, markets = H.markets || {};
+  const items = g.hits.map((c) => `<li><a href="${quoteUrl(c, markets[c])}" target="_blank" rel="noopener"><b class="num">${esc(c)}</b>${esc(names[c] || "")}${markets[c] === "TPEX" ? "・上櫃" : ""}</a></li>`).join("");
+  $("#day").innerHTML = `<h3 class="num">${esc(day.trade_date)}（${weekday(day.trade_date)}）· 入選 ${g.count} 檔</h3>
+    ${g.count ? `<ul>${items}</ul>` : `<p class="hint">當日沒有入選股票。</p>`}
     <p class="hint">點選長條可切換日期。</p>`;
 }
 
@@ -635,21 +727,36 @@ for (const id of ["#hits", "#near"]) {
     if (btn) toggle(btn.parentElement);
   });
 }
+$("#tabs").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-gid]");
+  if (!b || b.dataset.gid === state.gid) return;
+  state.gid = b.dataset.gid;
+  try { localStorage.setItem("macd-group", state.gid); } catch (err) { /* 私密模式等情況 */ }
+  renderGroup();
+});
 document.querySelector(".seg").addEventListener("click", (e) => {
   const b = e.target.closest("[data-sort]");
-  if (b) { state.sort = b.dataset.sort; renderHits(); }
+  if (b) { view().sort = b.dataset.sort; renderHits(); }
 });
 $("#near-filter").addEventListener("click", (e) => {
   const b = e.target.closest("[data-filter]");
-  if (b) { state.filter = b.dataset.filter; state.limit = PAGE; renderNear(); }
+  if (b) { view().filter = b.dataset.filter; view().limit = PAGE; renderNear(); }
 });
 $("#near-more").addEventListener("click", (e) => {
-  if (e.target.closest("#more-btn")) { state.limit = Infinity; renderNear(); }
+  if (e.target.closest("#more-btn")) { view().limit = Infinity; renderNear(); }
+});
+$("#hits-more").addEventListener("click", (e) => {
+  if (e.target.closest("#hits-more-btn")) { view().hitsLimit = Infinity; renderHits(); }
 });
 $("#q").addEventListener("input", (e) => {
-  state.query = e.target.value;
-  state.limit = PAGE;
+  view().query = e.target.value;
+  view().limit = PAGE;
   renderNear();
+});
+$("#hq").addEventListener("input", (e) => {
+  view().hitsQuery = e.target.value;
+  view().hitsLimit = HITS_PAGE;
+  renderHits();
 });
 let resizeTimer;
 window.addEventListener("resize", () => {

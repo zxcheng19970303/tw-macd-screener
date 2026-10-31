@@ -18,7 +18,7 @@ from pathlib import Path
 import yaml
 
 from . import prices, report, rules, universe
-from .main import EXIT_OK, EXIT_SKIP, ROOT, load_config, screen, taipei_now
+from .main import EXIT_OK, EXIT_SKIP, ROOT, load_config, screen, taipei_now, uses_intraday
 
 log = logging.getLogger("screener.whatif")
 
@@ -51,6 +51,7 @@ def apply_overrides(cfg: dict, sets: list[tuple[list[str], object]]) -> dict:
             raise KeyError(f"設定檔沒有 {'.'.join(keys)}")
         node[keys[-1]] = value
     rules.validate_switches(out["switches"])
+    rules.validate_groups(out["groups"])
     return out
 
 
@@ -58,42 +59,35 @@ def _names(items: list[dict]) -> dict[str, str]:
     return {h["code"]: h["name"] for h in items}
 
 
-def summary(day: date, sets: list[tuple[list[str], object]], base: dict, variant: dict) -> str:
+def summary(day: date, sets: list[tuple[list[str], object]], base: dict, variant: dict, metas: list[dict]) -> str:
+    """base／variant 為 screen() 的結果（{名單 id: 結果}）；metas 為 report.group_metas()。"""
     def fmt(v):
         return yaml.safe_dump(v, default_flow_style=True, allow_unicode=True, sort_keys=False).strip().removesuffix("...").strip()
 
     changes = "；".join(f"`{'.'.join(k)} = {fmt(v)}`" for k, v in sets) or "（無）"
-    b_hits, v_hits = _names(base["hits"]), _names(variant["hits"])
-    names = {**_names(base["near_miss"]), **_names(variant["near_miss"]), **b_hits, **v_hits}
-    both = sorted(b_hits.keys() & v_hits.keys())
-    added = sorted(v_hits.keys() - b_hits.keys())
-    removed = sorted(b_hits.keys() - v_hits.keys())
-    label = lambda codes: "、".join(f"{c} {names.get(c, '')}".strip() for c in codes) or "—"
-
-    lines = [
-        f"## 參數試算 {day}",
-        "",
-        f"調整：{changes}",
-        "",
-        "| 項目 | 原設定 | 試算 | 差 |",
-        "| --- | --: | --: | --: |",
-    ]
-    for key, text in (("hits", "入選"), ("near_miss", "差 1 條件")):
-        b, v = len(base[key]), len(variant[key])
-        lines.append(f"| {text} | {b} | {v} | {v - b:+d} |")
-    lines.append(f"| 已評估 | {base['evaluated']} | {variant['evaluated']} | {variant['evaluated'] - base['evaluated']:+d} |")
-    lines += ["", f"### 各條件通過檔數（已評估 {base['evaluated']} 檔）", "", "| 條件 | 原設定 | 試算 | 差 |", "| --- | --: | --: | --: |"]
-    for cid in rules.CONDITION_IDS:
-        b, v = base["passed"][cid], variant["passed"][cid]
-        lines.append(f"| {cid} | {b} | {v} | {v - b:+d} |")
-    lines += [
-        "",
-        "### 入選名單差異",
-        "",
-        f"- 兩者都入選（{len(both)}）：{label(both)}",
-        f"- 試算新增（{len(added)}）：{label(added)}",
-        f"- 試算移除（{len(removed)}）：{label(removed)}",
-    ]
+    lines = [f"## 參數試算 {day}", "", f"調整：{changes}"]
+    for m in metas:
+        b, v = base[m["id"]], variant[m["id"]]
+        b_hits, v_hits = _names(b["hits"]), _names(v["hits"])
+        names = {**_names(b["near_miss"]), **_names(v["near_miss"]), **b_hits, **v_hits}
+        both = sorted(b_hits.keys() & v_hits.keys())
+        added = sorted(v_hits.keys() - b_hits.keys())
+        removed = sorted(b_hits.keys() - v_hits.keys())
+        label = lambda codes: "、".join(f"{c} {names.get(c, '')}".strip() for c in codes) or "—"
+        ids = list(m["conditions_meta"])
+        lines += ["", f"### {m['name']}（{m['label']}）", "", "| 項目 | 原設定 | 試算 | 差 |", "| --- | --: | --: | --: |"]
+        rows = [("入選", len(b["hits"]), len(v["hits"]))]
+        if m["kind"] == "macd":
+            rows.append(("差 1 條件", len(b["near_miss"]), len(v["near_miss"])))
+        rows.append(("已評估", b["evaluated"], v["evaluated"]))
+        rows += [(f"{cid} 通過", b["passed"][cid], v["passed"][cid]) for cid in ids]
+        lines += [f"| {t} | {x} | {y} | {y - x:+d} |" for t, x, y in rows]
+        lines += [
+            "",
+            f"- 兩者都入選（{len(both)}）：{label(both)}",
+            f"- 試算新增（{len(added)}）：{label(added)}",
+            f"- 試算移除（{len(removed)}）：{label(removed)}",
+        ]
     return "\n".join(lines) + "\n"
 
 
@@ -116,10 +110,14 @@ def main(argv: list[str] | None = None) -> int:
         log.info("證交所沒有 %s 的資料：%s", day, e)
         return EXIT_SKIP
     pc = base_cfg["prices"]
-    histories = prices.fetch_history(univ["code"].tolist(), pc["years"], day, pc["batch_size"], pc["retries"], pc["retry_wait_sec"])
-    base = screen(univ, histories, day, base_cfg)
-    variant = screen(univ, histories, day, variant_cfg)
-    text = summary(day, sets, base, variant)
+    codes, markets = univ["code"].tolist(), dict(zip(univ["code"], univ["market"]))
+    histories = prices.fetch_history(codes, pc["years"], day, pc["batch_size"], pc["retries"], pc["retry_wait_sec"], markets)
+    intraday = None
+    if uses_intraday(base_cfg) or uses_intraday(variant_cfg):
+        intraday = prices.fetch_intraday(codes, pc["intraday_days"], day, pc["batch_size"], pc["intraday_retries"], pc["retry_wait_sec"], markets)
+    base = screen(univ, histories, day, base_cfg, intraday)
+    variant = screen(univ, histories, day, variant_cfg, intraday)
+    text = summary(day, sets, base, variant, report.group_metas(variant_cfg))
     print(text)
     report.write_job_summary(text)
     return EXIT_OK

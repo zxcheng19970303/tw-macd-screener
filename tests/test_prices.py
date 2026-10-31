@@ -9,6 +9,7 @@ from screener.prices import (
     OHLCV,
     _split_download,
     data_status,
+    intraday_status,
     last_before,
     official_bar,
     patch_today,
@@ -36,6 +37,22 @@ def _hist(dates, close=100.0, volume=1000.0):
 
 def test_yahoo_symbol():
     assert yahoo_symbol("2330") == "2330.TW"
+    assert yahoo_symbol("2330", "TWSE") == "2330.TW"
+    assert yahoo_symbol("6488", "TPEX") == "6488.TWO"
+
+
+def _intraday(days):
+    idx = pd.DatetimeIndex([f"{d} {h:02d}:00" for d in days for h in range(9, 14)]).tz_localize("Asia/Taipei")
+    vol = [0.0 if t.hour == 9 else 1000.0 for t in idx]  # Yahoo 實測：09:00 那根量為 0
+    return pd.DataFrame({"Open": 1.0, "High": 1.0, "Low": 1.0, "Close": 1.0, "Volume": vol}, index=idx)
+
+
+def test_intraday_status():
+    df = _intraday(["2026-10-29", "2026-10-30"])
+    assert intraday_status(df, TODAY) is None
+    assert intraday_status(_intraday(["2026-10-29"]), TODAY) == "60 分資料落後"
+    assert intraday_status(None, TODAY) == "60 分無資料"
+    assert intraday_status(_intraday(["2026-11-02"]), TODAY) == "60 分無資料"
 
 
 def test_split_group_by_ticker_and_failed_symbol():

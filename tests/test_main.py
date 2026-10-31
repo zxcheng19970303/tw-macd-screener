@@ -1,4 +1,4 @@
-"""main 的結束碼與 demo 輸出格式（不連網）。"""
+"""main 的流程、結束碼與輸出格式（不連網）。"""
 
 import json
 from datetime import date
@@ -13,89 +13,132 @@ DAY = date(2026, 10, 30)
 
 @pytest.fixture
 def demo_data():
-    return demo.demo_dataset(DAY, n=20)
+    names, histories = demo.demo_dataset(DAY, n=20)
+    return names, histories, demo.demo_markets(names), demo.demo_intraday(histories)
 
 
-def _universe(cfg, names, histories, day=DAY):
+def _universe(cfg, names, histories, markets, day=DAY):
     uc = cfg["universe"]
-    return universe.parse_mi_index(demo.mi_index(day, names, histories), uc["code_pattern"], uc["exclude_name_patterns"])
+    return universe.combine(
+        [universe.parse_quotes(demo.quotes(day, names, histories, markets, m), m, uc["code_pattern"], uc["exclude_name_patterns"]) for m in cfg["markets"]]
+    )
 
 
 def test_demo_outputs(tmp_path, cfg):
     assert main.run_demo(cfg, tmp_path, DAY, n_stocks=20, days=3) == main.EXIT_OK
     latest = json.loads((tmp_path / "latest.json").read_text(encoding="utf-8"))
     history = json.loads((tmp_path / "history.json").read_text(encoding="utf-8"))
-    assert latest["trade_date"] == "2026-10-30"
+    assert latest["version"] == 2 and latest["trade_date"] == "2026-10-30"
     assert latest["demo"] is True and history["demo"] is True
-    assert set(latest["stats"]) >= {"universe", "evaluated", "insufficient_data", "hits", "near_miss"}
-    assert latest["stats"]["universe"] == 20  # EXCLUDED 的 ETF、特別股、TDR、無成交股已被過濾
-    assert list(latest["conditions_meta"]) == ["M1", "W1", "W2", "D1", "D2", "D3", "D4", "V1"]
+    assert latest["universe"]["total"] == 20  # 兩個市場的 ETF、特別股、TDR、無成交股已被過濾
+    assert set(latest["universe"]["markets"]) == {"TWSE", "TPEX"}
+    groups = {g["id"]: g for g in latest["groups"]}
+    assert list(groups) == ["g1", "g2", "watch"]
+    assert groups["g1"]["label"] == "60 分／日／週" and groups["g2"]["label"] == "日／週／月"
+    assert "週線" in groups["g1"]["conditions_meta"]["M1"]["label"] and "60 分線" in groups["g1"]["conditions_meta"]["D2"]["label"]
+    assert "月線" in groups["g2"]["conditions_meta"]["M1"]["label"]
+    assert list(groups["watch"]["conditions_meta"]) == ["A1", "A2"]
     assert [d["trade_date"] for d in history["days"]] == ["2026-10-30", "2026-10-29", "2026-10-28"]
-    for h in latest["hits"]:
-        assert all(h["conditions"].values()) and h["is_new"] == (h["streak"] == 1)
-    for n in latest["near_miss"]:
-        assert len(n["failed"]) == 1 and not n["conditions"][n["failed"][0]]
+    assert set(history["days"][0]["groups"]) == {"g1", "g2", "watch"}
+    for g in latest["groups"]:
+        for h in g["hits"]:
+            assert all(h["conditions"].values()) and h["is_new"] == (h["streak"] == 1)
+        for n in g["near_miss"]:
+            assert len(n["failed"]) == 1 and not n["conditions"][n["failed"][0]]
+    assert groups["watch"]["near_miss"] == []
 
 
-def test_screen_counts_insufficient(cfg, demo_data):
-    names, histories = demo_data
-    univ = _universe(cfg, names, histories)
-    result = main.screen(univ, histories, DAY, cfg)
-    reasons = result["insufficient"]
-    assert reasons["未滿 60 個月"] == 1 and reasons["日期落後"] == 1  # 見 demo_dataset 的刻意設定
-    assert result["fetch_failed"] == 1
-    assert result["evaluated"] == 18
-    assert result["patched"] == 0  # demo 的 Yahoo 資料已含當日
+def test_screen_counts_insufficient_per_group(cfg, demo_data):
+    names, histories, markets, intraday = demo_data
+    univ = _universe(cfg, names, histories, markets)
+    r = main.screen(univ, histories, DAY, cfg, intraday)
+    # demo_dataset：第 5 檔上市 3 年、第 7 檔 Yahoo 落後；demo_intraday：第 9 檔沒有 60 分資料
+    assert dict(r["g2"]["insufficient"]) == {"未滿 60 個月": 1, "日期落後": 1}
+    assert dict(r["g1"]["insufficient"]) == {"日期落後": 1, "60 分無資料": 1}  # 上市 3 年已超過 60 週
+    assert dict(r["watch"]["insufficient"]) == {"日期落後": 1}
+    assert (r["g1"]["evaluated"], r["g2"]["evaluated"], r["watch"]["evaluated"]) == (18, 18, 19)
+    assert r["g1"]["intraday_failed"] == 1 and r["g2"]["intraday_failed"] == 0
+    assert r["g2"]["patched"] == 0  # demo 的 Yahoo 日線已含當日
 
 
 def test_screen_patches_today_when_yahoo_lags(cfg, demo_data):
-    # 實測情境：Yahoo 當晚還沒有當日開高低收，只能用證交所官方行情補上
-    names, histories = demo_data
-    univ = _universe(cfg, names, histories)
+    # 實測情境：Yahoo 當晚還沒有當日開高低收，只能用交易所官方行情補上
+    names, histories, markets, intraday = demo_data
+    univ = _universe(cfg, names, histories, markets)
     lagging = {c: df[df.index < pd.Timestamp(DAY)] for c, df in histories.items()}
-    full = main.screen(univ, histories, DAY, cfg)
-    patched = main.screen(univ, lagging, DAY, cfg)
-    assert patched["evaluated"] == full["evaluated"]
-    assert patched["patched"] == full["evaluated"] + full["insufficient"]["未滿 60 個月"]  # 抓價正常的都補上
-    assert patched["insufficient"] == full["insufficient"]
+    full = main.screen(univ, histories, DAY, cfg, intraday)
+    patched = main.screen(univ, lagging, DAY, cfg, intraday)
+    assert patched["g2"]["patched"] == full["g2"]["evaluated"] + full["g2"]["insufficient"]["未滿 60 個月"]
     # 官方行情只到小數兩位，補上的 K 棒與原本只差四捨五入：名單相同、數值誤差 < 1%
-    codes = lambda r: sorted(h["code"] for h in r["hits"] + r["near_miss"])
-    dm = lambda r: [h["values"]["d_ro_dm"] for h in sorted(r["hits"] + r["near_miss"], key=lambda h: h["code"])]
-    assert codes(patched) == codes(full)
-    assert dm(patched) == pytest.approx(dm(full), rel=1e-2)
+    for gid in ("g1", "g2"):
+        assert patched[gid]["evaluated"] == full[gid]["evaluated"]
+        codes = lambda r: sorted(h["code"] for h in r[gid]["hits"] + r[gid]["near_miss"])
+        dm = lambda r: [h["values"]["d_ro_dm"] for h in sorted(r[gid]["hits"] + r[gid]["near_miss"], key=lambda h: h["code"])]
+        assert codes(patched) == codes(full)
+        assert dm(patched) == pytest.approx(dm(full), rel=1e-2)
 
 
-def _patch_live(monkeypatch, cfg, names, histories, day):
-    monkeypatch.setattr(main.universe, "load_universe", lambda markets, c, d: _universe(cfg, names, histories, day))
+def test_intraday_guard_disables_only_60m_group(cfg, demo_data):
+    names, histories, markets, _ = demo_data
+    univ = _universe(cfg, names, histories, markets)
+    r = main.screen(univ, histories, DAY, cfg, {})  # 60 分 K 全部抓不到
+    main.guard_intraday(r, cfg)
+    assert r["g1"]["available"] is False and r["g1"]["hits"] == []
+    assert "60 分 K 抓取失敗" in r["g1"]["unavailable_reason"]
+    assert r["g2"]["available"] is True and r["watch"]["available"] is True
+
+
+def _patch_live(monkeypatch, cfg, names, histories, markets, intraday, day):
+    monkeypatch.setattr(main.universe, "load_universe", lambda m, c, d: _universe(cfg, names, histories, markets, day))
     monkeypatch.setattr(main.prices, "fetch_history", lambda codes, *a, **k: {c: histories[c] for c in codes if c in histories})
+    monkeypatch.setattr(main.prices, "fetch_intraday", lambda codes, *a, **k: {c: intraday[c] for c in codes if c in intraday})
 
 
-def test_live_exit_codes(tmp_path, monkeypatch, cfg, demo_data):
-    names, histories = demo_data
+def test_live_exit_codes_and_history(tmp_path, monkeypatch, cfg, demo_data):
+    names, histories, markets, intraday = demo_data
     out = tmp_path / "data"
 
-    # 證交所回傳的日期不符：非交易日或尚未更新 → 2，不寫檔
-    _patch_live(monkeypatch, cfg, names, histories, date(2026, 10, 29))
+    # 交易所回傳的日期不符：非交易日或尚未更新 → 2，不寫檔
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, date(2026, 10, 29))
     assert main.main(["--date", "2026-10-30", "--out", str(out)]) == main.EXIT_SKIP
     assert not out.exists()
 
-    # 證交所回應沒有資料（假日）→ 2
-    def not_ready(markets, c, d):
+    # 交易所回應沒有資料（假日）→ 2
+    def not_ready(m, c, d):
         raise universe.DataNotReady("很抱歉，沒有符合條件的資料!")
 
     monkeypatch.setattr(main.universe, "load_universe", not_ready)
     assert main.main(["--date", "2026-10-30", "--out", str(out)]) == main.EXIT_SKIP
 
+    # 既有 v1 紀錄（只有日／週／月一份名單）要延續到第 2 組
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, DAY)
+    univ = _universe(cfg, names, histories, markets)
+    g2_hits = sorted(h["code"] for h in main.screen(univ, histories, DAY, cfg, intraday)["g2"]["hits"])
+    out.mkdir()
+    (out / "history.json").write_text(json.dumps({"demo": False, "days": [{"trade_date": "2026-10-29", "hits": g2_hits, "count": len(g2_hits)}]}))
+
     # 正常 → 0
-    _patch_live(monkeypatch, cfg, names, histories, DAY)
     assert main.main(["--date", "2026-10-30", "--out", str(out)]) == main.EXIT_OK
     latest = json.loads((out / "latest.json").read_text(encoding="utf-8"))
+    groups = {g["id"]: g for g in latest["groups"]}
     assert latest["demo"] is False and latest["trade_date"] == "2026-10-30"
+    assert g2_hits and all(h["streak"] == 2 for h in groups["g2"]["hits"])
+    history = json.loads((out / "history.json").read_text(encoding="utf-8"))
+    assert history["version"] == 2 and history["days"][1]["groups"] == {"g2": {"hits": g2_hits, "count": len(g2_hits)}}
 
     # 補跑排程：當日已有正式結果 → 2
     assert main.main(["--date", "2026-10-30", "--out", str(out), "--skip-if-current"]) == main.EXIT_SKIP
 
-    # 抓價大量失敗 → 1，不覆寫既有結果
+    # 60 分 K 全部抓不到：第 1 組停用，其他照常發布，history 不寫第 1 組
+    monkeypatch.setattr(main.prices, "fetch_intraday", lambda codes, *a, **k: {})
+    assert main.main(["--date", "2026-10-30", "--out", str(out)]) == main.EXIT_OK
+    groups = {g["id"]: g for g in json.loads((out / "latest.json").read_text(encoding="utf-8"))["groups"]}
+    assert groups["g1"]["available"] is False and groups["g1"]["warnings"]
+    assert groups["g2"]["available"] is True
+    history = json.loads((out / "history.json").read_text(encoding="utf-8"))
+    assert "g1" not in history["days"][0]["groups"]
+
+    # 日線抓價大量失敗 → 1，不覆寫既有結果
     before = (out / "latest.json").read_text(encoding="utf-8")
     monkeypatch.setattr(main.prices, "fetch_history", lambda codes, *a, **k: {})
     assert main.main(["--date", "2026-10-30", "--out", str(out)]) == main.EXIT_ERROR

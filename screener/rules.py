@@ -1,6 +1,8 @@
 """選股條件（規格書第 2 節）。
 
 所有條件只在這個檔案定義；參數與開關一律從 config.yaml 讀取。
+條件代號沿用講義：M＝上級週期、W＝本級週期、D＝下級週期；兩組週期套用同一套條件，
+第 1 組（60 分／日／週）的 M1 看週線、W1／W2 看日線、D1～D4 看 60 分線。
 """
 
 from __future__ import annotations
@@ -8,12 +10,30 @@ from __future__ import annotations
 import pandas as pd
 
 CONDITION_IDS = ("M1", "W1", "W2", "D1", "D2", "D3", "D4", "V1")
+WATCH_IDS = ("A1", "A2")
 SWITCH_CHOICES = {
     "price_source": ("close", "hlcc4"),
     "htf_bar_mode": ("completed", "current"),
     "volume_rule": ("day_lots", "avg5_lots", "avg5_value"),
     "d2_mode": ("shrink_1d", "shrink_2d"),
 }
+
+
+TIMEFRAMES = ("60m", "D", "W", "M")
+TF_LINE = {"60m": "60 分線", "D": "日線", "W": "週線", "M": "月線"}
+
+
+def validate_groups(groups: list[dict]) -> None:
+    ids = [g.get("id") for g in groups]
+    if not groups or len(set(ids)) != len(ids):
+        raise ValueError(f"groups 不可為空，且 id 不可重複：{ids}")
+    for g in groups:
+        for slot in ("lower", "middle", "upper"):
+            if g.get(slot) not in TIMEFRAMES:
+                raise ValueError(f"groups.{g.get('id')}.{slot} 必須是 {TIMEFRAMES} 之一，目前為 {g.get(slot)!r}")
+        order = [TIMEFRAMES.index(g[s]) for s in ("lower", "middle", "upper")]
+        if not order[0] < order[1] < order[2]:
+            raise ValueError(f"groups.{g['id']} 的週期必須由短到長：下級 < 本級 < 上級")
 
 
 def validate_switches(switches: dict) -> None:
@@ -59,24 +79,28 @@ def _d2(v: dict, mode: str) -> bool:
 
 
 def evaluate(
-    daily: pd.DataFrame, weekly: pd.DataFrame, monthly: pd.DataFrame, today: dict, cfg: dict
+    lower: pd.DataFrame, middle: pd.DataFrame, upper: pd.DataFrame, today: dict, cfg: dict
 ) -> dict:
-    """判斷 8 個條件，回傳 {conditions, selected, values}。"""
+    """判斷 8 個條件，回傳 {conditions, selected, values}。
+
+    lower／middle／upper 為該組的下級／本級／上級週期 K 棒（第 2 組＝日／週／月）。
+    數值欄位名稱沿用 d_／w_／m_ 前綴，分別代表下級／本級／上級。
+    """
     v = {
-        "m_ro_dm": _at(monthly, "ro_dm"),
-        "w_ro_dif": _at(weekly, "ro_dif"),
-        "w_ro_dm": _at(weekly, "ro_dm"),
-        "d_ro_dif": _at(daily, "ro_dif"),
-        "d_ro_macd": _at(daily, "ro_macd"),
-        "d_ro_dm": _at(daily, "ro_dm"),
-        "d_ro_dm_prev": _at(daily, "ro_dm", 1),
-        "d_ro_dm_prev2": _at(daily, "ro_dm", 2),
-        "d_mi_macd": _at(daily, "mi_macd"),
-        "d_mi_dm": _at(daily, "mi_dm"),
-        "d_mi_dm_prev": _at(daily, "mi_dm", 1),
-        "d_bo_dif": _at(daily, "bo_dif"),
-        "d_bo_macd": _at(daily, "bo_macd"),
-        "d_bo_dm": _at(daily, "bo_dm"),
+        "m_ro_dm": _at(upper, "ro_dm"),
+        "w_ro_dif": _at(middle, "ro_dif"),
+        "w_ro_dm": _at(middle, "ro_dm"),
+        "d_ro_dif": _at(lower, "ro_dif"),
+        "d_ro_macd": _at(lower, "ro_macd"),
+        "d_ro_dm": _at(lower, "ro_dm"),
+        "d_ro_dm_prev": _at(lower, "ro_dm", 1),
+        "d_ro_dm_prev2": _at(lower, "ro_dm", 2),
+        "d_mi_macd": _at(lower, "mi_macd"),
+        "d_mi_dm": _at(lower, "mi_dm"),
+        "d_mi_dm_prev": _at(lower, "mi_dm", 1),
+        "d_bo_dif": _at(lower, "bo_dif"),
+        "d_bo_macd": _at(lower, "bo_macd"),
+        "d_bo_dm": _at(lower, "bo_dm"),
     }
     volume, threshold = volume_metric(today, cfg)
     v["volume"] = volume
@@ -94,15 +118,16 @@ def evaluate(
     return {"conditions": c, "selected": all(c.values()), "values": v}
 
 
-def describe(cfg: dict) -> dict:
-    """條件說明與對應數值欄位，寫入 latest.json 供儀表板顯示。"""
+def describe(cfg: dict, group: dict) -> dict:
+    """條件說明與對應數值欄位（標示該組實際週期），寫入 latest.json 供儀表板顯示。"""
     sw = cfg["switches"]
     th = cfg["thresholds"]
+    up, mid, low = (f"{name}（{TF_LINE[group[slot]]}）" for name, slot in (("上級", "upper"), ("本級", "middle"), ("下級", "lower")))
     if sw["d2_mode"] == "shrink_1d":
-        d2 = ("日線 羅 綠柱縮短或翻紅：D-M[1] < 0 且 D-M > D-M[1]", [["D-M[1]", "d_ro_dm_prev"], ["D-M", "d_ro_dm"]])
+        d2 = (f"{low} 羅 綠柱縮短或翻紅：D-M[1] < 0 且 D-M > D-M[1]", [["D-M[1]", "d_ro_dm_prev"], ["D-M", "d_ro_dm"]])
     else:
         d2 = (
-            "日線 羅 綠柱連續 2 日縮短：D-M[2] < D-M[1] < 0 且 D-M > D-M[1]",
+            f"{low} 羅 綠柱連續 2 根縮短：D-M[2] < D-M[1] < 0 且 D-M > D-M[1]",
             [["D-M[2]", "d_ro_dm_prev2"], ["D-M[1]", "d_ro_dm_prev"], ["D-M", "d_ro_dm"]],
         )
     volume_text = {
@@ -111,14 +136,43 @@ def describe(cfg: dict) -> dict:
         "avg5_value": f"5 日均成交金額 > {th['avg5_value'] / 1e8:g} 億元",
     }[sw["volume_rule"]]
     meta = {
-        "M1": ("月線 羅 紅柱：D-M > 0", [["D-M", "m_ro_dm"]]),
-        "W1": ("週線 羅 0 軸上：DIF > 0", [["DIF", "w_ro_dif"]]),
-        "W2": ("週線 羅 D-M > 0", [["D-M", "w_ro_dm"]]),
-        "D1": ("日線 羅 0 軸上：MACD > 0", [["MACD", "d_ro_macd"]]),
+        "M1": (f"{up} 羅 紅柱：D-M > 0", [["D-M", "m_ro_dm"]]),
+        "W1": (f"{mid} 羅 0 軸上：DIF > 0", [["DIF", "w_ro_dif"]]),
+        "W2": (f"{mid} 羅 D-M > 0", [["D-M", "w_ro_dm"]]),
+        "D1": (f"{low} 羅 0 軸上：MACD > 0", [["MACD", "d_ro_macd"]]),
         "D2": d2,
-        "D3": ("日線 蜜 0 軸上：MACD > 0", [["MACD", "d_mi_macd"]]),
-        "D4": ("日線 蜜 D-M > 0 或綠柱縮短：D-M > D-M[1]", [["D-M[1]", "d_mi_dm_prev"], ["D-M", "d_mi_dm"]]),
+        "D3": (f"{low} 蜜 0 軸上：MACD > 0", [["MACD", "d_mi_macd"]]),
+        "D4": (f"{low} 蜜 D-M > 0 或綠柱縮短：D-M > D-M[1]", [["D-M[1]", "d_mi_dm_prev"], ["D-M", "d_mi_dm"]]),
         "V1": (volume_text, [["量", "volume"]]),
+    }
+    return {cid: {"label": label, "values": values} for cid, (label, values) in meta.items()}
+
+
+def evaluate_watchlist(daily: pd.DataFrame, cfg: dict) -> dict:
+    """觀察清單（獨立於 8 個條件）：A1 日線 MACD > 0，不看 DIF；A2 今天剛站上 N 日線。"""
+    wl = cfg["watchlist"]
+    k, ma = wl["macd_set"], f"ma{wl['ma_days']}"
+    v = {
+        "macd": _at(daily, f"{k}_macd"),
+        "dif": _at(daily, f"{k}_dif"),
+        "close": _at(daily, "Close"),
+        "close_prev": _at(daily, "Close", 1),
+        "ma": _at(daily, ma),
+        "ma_prev": _at(daily, ma, 1),
+    }
+    crossed = v["close_prev"] is not None and v["ma_prev"] is not None and v["close_prev"] <= v["ma_prev"] and _gt(v["close"], v["ma"])
+    c = {"A1": _gt(v["macd"], 0), "A2": crossed}
+    return {"conditions": c, "selected": all(c.values()), "values": v}
+
+
+def describe_watchlist(cfg: dict) -> dict:
+    wl = cfg["watchlist"]
+    p = cfg["macd"][wl["macd_set"]]
+    n = wl["ma_days"]
+    names = {"bo": "波", "ro": "羅", "mi": "蜜"}
+    meta = {
+        "A1": (f"日線 {names.get(wl['macd_set'], wl['macd_set'])}（{p['fast']}/{p['slow']}/{p['signal']}）MACD > 0，不看 DIF", [["MACD", "macd"], ["DIF", "dif"]]),
+        "A2": (f"剛站上 {n} 日線：昨收 ≤ {n} 日均線，今收 > {n} 日均線", [["昨收", "close_prev"], ["昨均線", "ma_prev"], ["今收", "close"], ["今均線", "ma"]]),
     }
     return {cid: {"label": label, "values": values} for cid, (label, values) in meta.items()}
 

@@ -25,11 +25,11 @@
 
 | 檔案 | 職責 | 修改時注意 |
 | --- | --- | --- |
-| `universe.py` | 證交所每日收盤行情（MI_INDEX）、股票池過濾、資料日期檢查 | `stat` 非 OK 或日期不符丟 `DataNotReady`（結束碼 2）；不要改回 OpenAPI `STOCK_DAY_ALL`（隔日才更新） |
-| `prices.py` | yfinance 還原權值日線、當日 K 棒補值、落後判斷 | 換資料源只改這裡，維持 `dict[code, DataFrame(Open/High/Low/Close/Volume)]`；Yahoo 當晚常缺當日開高低收 |
-| `indicators.py` | EMA、MACD、週月線轉換 | `resample` 必須與 pandas `W-FRI`／`ME` 一致（`test_matches_pandas_resample`） |
-| `rules.py` | 8 個條件、開關驗證、條件說明 | 條件說明經 `conditions_meta` 輸出給儀表板，前端不重複定義 |
-| `report.py` | latest／history JSON、job summary | `demo` 旗標隔離模擬與正式資料 |
+| `universe.py` | 證交所 MI_INDEX、櫃買中心收盤行情、股票池過濾、資料日期檢查 | 無資料或日期不符丟 `DataNotReady`（結束碼 2）；櫃買中心非交易日回 ok 但表格為空；不要改用 OpenAPI（證交所實測隔日才更新） |
+| `prices.py` | yfinance 日線與 60 分 K、上市 `.TW`／上櫃 `.TWO`、當日 K 棒補值、落後判斷 | 換資料源只改這裡，維持 `dict[code, DataFrame(Open/High/Low/Close/Volume)]`；Yahoo 當晚常缺當日日 K 開高低收；60 分 K 09:00 那根量為 0，不可刪 |
+| `indicators.py` | EMA、MACD、均線、週月線轉換、各週期 K 棒 | `resample` 必須與 pandas `W-FRI`／`ME` 一致（`test_matches_pandas_resample`）；`build_frames` 回傳 {週期: K 棒} |
+| `rules.py` | 8 個條件、觀察清單、組別與開關驗證、條件說明 | 條件代號 M／W／D 代表上級／本級／下級；條件說明經 `conditions_meta` 輸出給儀表板，前端不重複定義 |
+| `report.py` | latest／history JSON（v2，依名單分開）、job summary | `demo` 旗標隔離模擬與正式資料；v1 歷史自動歸到日／週／月那一組 |
 | `demo.py` | 模擬資料 | 只供 `--demo` 與測試使用 |
 | `whatif.py` | 參數試算 | 只比較、不發布；調整只影響選股計算，股票池與抓價範圍沿用原設定 |
 | `main.py` | CLI、流程、結束碼 | 0 成功、2 不發布、1 錯誤 |

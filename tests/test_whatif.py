@@ -25,17 +25,23 @@ def test_bad_overrides(cfg, item, err):
 
 def test_mi_equal_ro_makes_d3_d4_redundant(cfg, monkeypatch, capsys):
     names, histories = demo.demo_dataset(DAY, n=60)
+    markets, intraday = demo.demo_markets(names), demo.demo_intraday(histories)
     uc = cfg["universe"]
-    univ = universe.parse_mi_index(demo.mi_index(DAY, names, histories), uc["code_pattern"], uc["exclude_name_patterns"])
+    univ = universe.combine(
+        [universe.parse_quotes(demo.quotes(DAY, names, histories, markets, m), m, uc["code_pattern"], uc["exclude_name_patterns"]) for m in cfg["markets"]]
+    )
     monkeypatch.setattr(whatif.universe, "load_universe", lambda m, c, d: univ)
     monkeypatch.setattr(whatif.prices, "fetch_history", lambda codes, *a, **k: histories)
+    monkeypatch.setattr(whatif.prices, "fetch_intraday", lambda codes, *a, **k: intraday)
     captured = {}
     real_summary = whatif.summary
-    monkeypatch.setattr(whatif, "summary", lambda d, s, b, v: captured.update(base=b, variant=v) or real_summary(d, s, b, v))
+    monkeypatch.setattr(whatif, "summary", lambda d, s, b, v, m: captured.update(base=b, variant=v) or real_summary(d, s, b, v, m))
 
     assert whatif.main(["--date", "2026-10-30", "--set", f"macd.mi={RO}; macd.bo={RO}"]) == 0
     base, variant = captured["base"], captured["variant"]
-    # 蜜＝羅時 D3 等同 D1、D4 被 D2 涵蓋：入選只會增加，且包含原本全部入選
-    assert {h["code"] for h in base["hits"]} <= {h["code"] for h in variant["hits"]}
-    assert variant["passed"]["D3"] == variant["passed"]["D1"]
-    assert "## 參數試算 2026-10-30" in capsys.readouterr().out
+    # 蜜＝羅時 D3 等同 D1、D4 被 D2 涵蓋：兩組的入選都只會增加，且包含原本全部入選
+    for gid in ("g1", "g2"):
+        assert {h["code"] for h in base[gid]["hits"]} <= {h["code"] for h in variant[gid]["hits"]}
+        assert variant[gid]["passed"]["D3"] == variant[gid]["passed"]["D1"]
+    out = capsys.readouterr().out
+    assert "## 參數試算 2026-10-30" in out and "### 第 1 組（60 分／日／週）" in out and "### 觀察清單" in out

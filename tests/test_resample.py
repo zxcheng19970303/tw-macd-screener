@@ -68,14 +68,27 @@ def test_build_frames_modes_and_truncation(cfg):
     _, histories = demo.demo_dataset(date(2026, 10, 30), n=1)
     df = next(iter(histories.values()))
     wed = pd.Timestamp("2026-10-28")
-    daily, weekly, monthly = build_frames(df, wed, cfg)
-    assert daily.index[-1] == wed  # 不會看到未來資料
-    assert weekly.index[-1] == pd.Timestamp("2026-10-23")
-    assert monthly.index[-1] == pd.Timestamp("2026-09-30")
-    assert {"bo_dm", "ro_dif", "ro_macd", "ro_dm", "mi_macd", "mi_dm"} <= set(daily.columns)
+    frames = build_frames(df, wed, cfg)
+    assert set(frames) == {"D", "W", "M"}  # 沒給 60 分 K 就不產生 60m
+    assert frames["D"].index[-1] == wed  # 不會看到未來資料
+    assert frames["W"].index[-1] == pd.Timestamp("2026-10-23")
+    assert frames["M"].index[-1] == pd.Timestamp("2026-09-30")
+    assert {"bo_dm", "ro_dif", "ro_macd", "ro_dm", "mi_macd", "mi_dm", "ma10"} <= set(frames["D"].columns)
+    assert {"ro_dif", "ro_dm"} <= set(frames["M"].columns) and "mi_dm" not in frames["M"].columns
 
     cfg["switches"]["htf_bar_mode"] = "current"
-    _, weekly, monthly = build_frames(df, wed, cfg)
-    assert weekly.index[-1] == pd.Timestamp("2026-10-30")
-    assert monthly.index[-1] == pd.Timestamp("2026-10-31")
-    assert weekly["Close"].iloc[-1] == df.loc[wed, "Close"]
+    frames = build_frames(df, wed, cfg)
+    assert frames["W"].index[-1] == pd.Timestamp("2026-10-30")
+    assert frames["M"].index[-1] == pd.Timestamp("2026-10-31")
+    assert frames["W"]["Close"].iloc[-1] == df.loc[wed, "Close"]
+
+
+def test_build_frames_with_intraday(cfg):
+    _, histories = demo.demo_dataset(date(2026, 10, 30), n=1)
+    df = next(iter(histories.values()))
+    intra = demo.demo_intraday(histories)[next(iter(histories))]
+    wed = pd.Timestamp("2026-10-28")
+    bars = build_frames(df, wed, cfg, intra)["60m"]
+    assert bars.index[-1] == pd.Timestamp("2026-10-28 13:00")  # 截到交易日當天最後一根
+    assert (bars.index.normalize() == wed).sum() == 5  # 09:00 那根量為 0 也要保留
+    assert {"bo_dm", "ro_dm", "mi_dm"} <= set(bars.columns)

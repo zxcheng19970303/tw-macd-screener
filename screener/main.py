@@ -30,6 +30,7 @@ EXIT_OK, EXIT_ERROR, EXIT_SKIP = 0, 1, 2
 def load_config(path: Path) -> dict:
     cfg = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     rules.validate_switches(cfg["switches"])
+    rules.validate_groups(cfg["groups"])
     return cfg
 
 
@@ -37,58 +38,119 @@ def taipei_now() -> datetime:
     return datetime.now(TPE)
 
 
-def screen(univ: pd.DataFrame, histories: dict[str, pd.DataFrame], trade_date: date, cfg: dict) -> dict:
-    """逐檔計算指標並套用規則，回傳入選、差 1 條件與統計。"""
+def uses_intraday(cfg: dict) -> bool:
+    return any("60m" in (g["lower"], g["middle"], g["upper"]) for g in cfg["groups"])
+
+
+def legacy_group(cfg: dict) -> str | None:
+    """v1 的歷史紀錄（日／週／月）要歸到哪一組。"""
+    return next((g["id"] for g in cfg["groups"] if (g["lower"], g["middle"], g["upper"]) == ("D", "W", "M")), None)
+
+
+def _new_result(n: int) -> dict:
+    return {
+        "universe": n,
+        "available": True,
+        "evaluated": 0,
+        "fetch_failed": 0,
+        "intraday_failed": 0,
+        "patched": 0,
+        "insufficient": Counter(),
+        "passed": Counter(),  # 各條件通過檔數（已評估的股票）
+        "hits": [],
+        "near_miss": [],
+    }
+
+
+def screen(
+    univ: pd.DataFrame,
+    histories: dict[str, pd.DataFrame],
+    trade_date: date,
+    cfg: dict,
+    intraday: dict[str, pd.DataFrame] | None = None,
+) -> dict[str, dict]:
+    """逐檔計算各週期指標（只算一次），再依每一組的下級／本級／上級套用規則。
+
+    回傳 {組別 id: 入選、差 1 條件與統計}。
+    """
     ts = pd.Timestamp(trade_date)
     reference = prices.reference_date(histories, ts)
-    min_months = cfg["universe"]["min_months"]
-    hits, near_miss = [], []
-    insufficient: Counter[str] = Counter()
-    passed: Counter[str] = Counter()  # 各條件通過檔數（已評估的股票）
-    fetch_failed = evaluated = patched = 0
+    min_bars = cfg["universe"]["min_upper_bars"]
+    groups = cfg["groups"]
+    results = {g["id"]: _new_result(len(univ)) for g in groups}
+    wl = cfg.get("watchlist")
+    if wl:
+        results[wl["id"]] = _new_result(len(univ))
+    patched = 0
     for row in univ.itertuples(index=False):
         raw = histories.get(row.code)
         reason = prices.data_status(raw, ts, reference)
         if reason:
-            insufficient[reason] += 1
-            fetch_failed += 1
+            for r in results.values():
+                r["insufficient"][reason] += 1
+                r["fetch_failed"] += 1
             continue
         df = prices.patch_today(raw, prices.official_bar(row), ts)
-        patched += len(df) > len(indicators.clean_daily(raw))
-        daily, weekly, monthly = indicators.build_frames(df, ts, cfg)
-        if len(monthly) < min_months:
-            insufficient[f"未滿 {min_months} 個月"] += 1
-            continue
-        today = {"volume_lots": row.volume_lots, **indicators.volume_averages(daily, row.volume_lots, row.value)}
-        res = rules.evaluate(daily, weekly, monthly, today, cfg)
-        evaluated += 1
-        passed.update(cid for cid, ok in res["conditions"].items() if ok)
-        failed = [cid for cid in rules.CONDITION_IDS if not res["conditions"][cid]]
-        if len(failed) > 1:
-            continue
-        item = {
-            "code": row.code,
-            "name": row.name,
-            "market": row.market,
-            "close": row.close,
-            "volume_lots": round(row.volume_lots),
-            "conditions": res["conditions"],
-            "values": res["values"],
-        }
-        if failed:
-            near_miss.append({**item, "failed": failed})
-        else:
-            hits.append(item)
-    return {
-        "universe": len(univ),
-        "evaluated": evaluated,
-        "fetch_failed": fetch_failed,
-        "patched": patched,
-        "insufficient": insufficient,
-        "passed": passed,
-        "hits": hits,
-        "near_miss": near_miss,
-    }
+        patched += ts not in indicators.clean_daily(raw).index
+        intra_reason = None
+        if intraday is not None:
+            intra_reason = prices.intraday_status(intraday.get(row.code), ts)
+        frames = indicators.build_frames(df, ts, cfg, intraday.get(row.code) if intraday is not None and not intra_reason else None)
+        today = {"volume_lots": row.volume_lots, **indicators.volume_averages(frames["D"], row.volume_lots, row.value)}
+        item = {"code": row.code, "name": row.name, "market": row.market, "close": row.close, "volume_lots": round(row.volume_lots)}
+        if wl:
+            r = results[wl["id"]]
+            if len(frames["D"]) < wl["min_bars"]:
+                r["insufficient"][f"未滿 {wl['min_bars']} 日"] += 1
+            else:
+                res = rules.evaluate_watchlist(frames["D"], cfg)
+                r["evaluated"] += 1
+                r["passed"].update(cid for cid, ok in res["conditions"].items() if ok)
+                if res["selected"]:
+                    r["hits"].append({**item, "conditions": res["conditions"], "values": res["values"]})
+        for g in groups:
+            r = results[g["id"]]
+            slots = (g["lower"], g["middle"], g["upper"])
+            missing = [tf for tf in slots if tf not in frames]
+            if missing:
+                r["insufficient"][intra_reason or "60 分無資料"] += 1
+                r["intraday_failed"] += 1
+                continue
+            if len(frames[g["upper"]]) < min_bars:
+                r["insufficient"][f"未滿 {min_bars} {indicators.TF_UNIT[g['upper']]}"] += 1
+                continue
+            res = rules.evaluate(frames[g["lower"]], frames[g["middle"]], frames[g["upper"]], today, cfg)
+            r["evaluated"] += 1
+            r["passed"].update(cid for cid, ok in res["conditions"].items() if ok)
+            failed = [cid for cid in rules.CONDITION_IDS if not res["conditions"][cid]]
+            if len(failed) > 1:
+                continue
+            entry = {**item, "conditions": res["conditions"], "values": res["values"]}
+            if failed:
+                r["near_miss"].append({**entry, "failed": failed})
+            else:
+                r["hits"].append(entry)
+    for r in results.values():
+        r["patched"] = patched
+    return results
+
+
+def guard_intraday(results: dict[str, dict], cfg: dict) -> None:
+    """60 分 K 抓取失敗比例過高時停用該組：寧可當日不更新，也不發布殘缺的名單。"""
+    limit = cfg["prices"]["max_fail_ratio"]
+    for gid, r in results.items():
+        base = r["universe"] - r["fetch_failed"]
+        ratio = r["intraday_failed"] / base if base else 0
+        if ratio > limit:
+            r["available"] = False
+            r["unavailable_reason"] = f"60 分 K 抓取失敗 {ratio:.0%}（上限 {limit:.0%}），本組今日不更新"
+            r["hits"], r["near_miss"] = [], []
+            log.warning("%s：%s", gid, r["unavailable_reason"])
+
+
+def _publish(results: dict[str, dict], univ: pd.DataFrame, trade_date: date, cfg: dict, history: dict, is_demo: bool):
+    counts = univ["market"].value_counts().to_dict()
+    return report.build_outputs(results, counts, trade_date, cfg, history, is_demo, taipei_now().isoformat(timespec="seconds"))
 
 
 def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) -> int:
@@ -102,33 +164,41 @@ def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) ->
 
     univ = universe.load_universe(cfg["markets"], cfg, expected)
     trade_date = universe.check_trade_date(univ, expected)
-    log.info("股票池 %d 檔，交易日 %s", len(univ), trade_date)
+    markets = dict(zip(univ["code"], univ["market"]))
+    log.info("股票池 %d 檔（%s），交易日 %s", len(univ), univ["market"].value_counts().to_dict(), trade_date)
 
     pc = cfg["prices"]
-    histories = prices.fetch_history(
-        univ["code"].tolist(), pc["years"], trade_date, pc["batch_size"], pc["retries"], pc["retry_wait_sec"]
-    )
-    result = screen(univ, histories, trade_date, cfg)
-    fail_ratio = result["fetch_failed"] / len(univ)
+    codes = univ["code"].tolist()
+    histories = prices.fetch_history(codes, pc["years"], trade_date, pc["batch_size"], pc["retries"], pc["retry_wait_sec"], markets)
+    intraday = None
+    if uses_intraday(cfg):
+        intraday = prices.fetch_intraday(
+            codes, pc["intraday_days"], trade_date, pc["batch_size"], pc["intraday_retries"], pc["retry_wait_sec"], markets
+        )
+    results = screen(univ, histories, trade_date, cfg, intraday)
+    first = next(iter(results.values()))
+    fail_ratio = first["fetch_failed"] / len(univ)
     if fail_ratio > pc["max_fail_ratio"]:
-        raise RuntimeError(f"抓價失敗比例 {fail_ratio:.1%} 超過 {pc['max_fail_ratio']:.0%}，本次不發布")
+        raise RuntimeError(f"日線抓價失敗比例 {fail_ratio:.1%} 超過 {pc['max_fail_ratio']:.0%}，本次不發布")
+    guard_intraday(results, cfg)
 
-    history = report.load_history(out_dir / "history.json", demo=False)
-    latest, history = report.build_outputs(result, trade_date, cfg, history, False, taipei_now().isoformat(timespec="seconds"))
+    history = report.load_history(out_dir / "history.json", demo=False, legacy_group=legacy_group(cfg))
+    latest, history = _publish(results, univ, trade_date, cfg, history, False)
     report.write_history(out_dir, history)
     report.write_latest(out_dir, latest)
 
     elapsed = time.monotonic() - started
-    summary = report.job_summary(latest, result["fetch_failed"], elapsed, result["patched"])
-    report.write_job_summary(summary)
-    log.info("完成：入選 %d、差 1 條件 %d，耗時 %.0f 秒", latest["stats"]["hits"], latest["stats"]["near_miss"], elapsed)
+    report.write_job_summary(report.job_summary(latest, first["fetch_failed"], first["patched"], elapsed))
+    log.info("完成：%s，耗時 %.0f 秒", "、".join(f"{g['name']} 入選 {g['stats']['hits']}" for g in latest["groups"]), elapsed)
     return EXIT_OK
 
 
-def run_demo(cfg: dict, out_dir: Path, trade_date: date, n_stocks: int = 150, days: int | None = None) -> int:
+def run_demo(cfg: dict, out_dir: Path, trade_date: date, n_stocks: int = 120, days: int | None = None) -> int:
     """以模擬資料逐日重跑最近 history_days 個交易日，產出完整的 latest 與 history。"""
     started = time.monotonic()
     names, histories = demo.demo_dataset(trade_date, n=n_stocks)
+    markets = demo.demo_markets(names)
+    intraday = demo.demo_intraday(histories) if uses_intraday(cfg) else None
     dates = pd.bdate_range(end=pd.Timestamp(trade_date), periods=days or cfg["report"]["history_days"])
     uc = cfg["universe"]
     history = report.empty_history(demo=True)
@@ -136,15 +206,22 @@ def run_demo(cfg: dict, out_dir: Path, trade_date: date, n_stocks: int = 150, da
         if i % 10 == 0:
             log.info("demo 回補 %d/%d 日", i, len(dates))
         day = ts.date()
-        univ = universe.parse_mi_index(demo.mi_index(day, names, histories), uc["code_pattern"], uc["exclude_name_patterns"])
+        univ = universe.combine(
+            [
+                universe.parse_quotes(demo.quotes(day, names, histories, markets, m), m, uc["code_pattern"], uc["exclude_name_patterns"])
+                for m in cfg["markets"]
+            ]
+        )
         universe.check_trade_date(univ, day)
-        result = screen(univ, histories, day, cfg)
-        latest, history = report.build_outputs(result, day, cfg, history, True, taipei_now().isoformat(timespec="seconds"))
+        results = screen(univ, histories, day, cfg, intraday)
+        guard_intraday(results, cfg)
+        latest, history = _publish(results, univ, day, cfg, history, True)
     report.write_history(out_dir, history)
     report.write_latest(out_dir, latest)
     elapsed = time.monotonic() - started
-    report.write_job_summary(report.job_summary(latest, result["fetch_failed"], elapsed, result["patched"]))
-    log.info("demo 完成：%s 入選 %d、差 1 條件 %d，耗時 %.0f 秒", trade_date, latest["stats"]["hits"], latest["stats"]["near_miss"], elapsed)
+    first = next(iter(results.values()))
+    report.write_job_summary(report.job_summary(latest, first["fetch_failed"], first["patched"], elapsed))
+    log.info("demo 完成：%s，耗時 %.0f 秒", "、".join(f"{g['name']} 入選 {g['stats']['hits']}" for g in latest["groups"]), elapsed)
     return EXIT_OK
 
 

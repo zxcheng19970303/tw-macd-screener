@@ -8,6 +8,10 @@ import pandas as pd
 OHLCV_AGG = {"Open": "first", "High": "max", "Low": "min", "Close": "last", "Volume": "sum"}
 WEEKLY = "W-FRI"
 MONTHLY = "ME"
+TIMEFRAMES = ("60m", "D", "W", "M")
+TF_LINE = {"60m": "60 分線", "D": "日線", "W": "週線", "M": "月線"}
+TF_UNIT = {"60m": "根 60 分 K", "D": "日", "W": "週", "M": "個月"}
+HTF_RULE = {"W": WEEKLY, "M": MONTHLY}
 
 
 def ema(series: pd.Series, n: int) -> pd.Series:
@@ -43,6 +47,18 @@ def clean_daily(df: pd.DataFrame) -> pd.DataFrame:
     out.index = out.index.normalize()
     out = out[~out.index.duplicated(keep="last")].sort_index()
     return out[out["Close"].notna() & (out["Volume"].fillna(0) > 0)]
+
+
+def clean_intraday(df: pd.DataFrame) -> pd.DataFrame:
+    """60 分 K：轉成台北時間後去掉時區，排序、去重、刪除無收盤價的列。
+
+    不刪量為 0 的列：Yahoo 每天 09:00 那根 60 分 K 的量固定是 0，但價格正常（2026-10-31 實測）。
+    """
+    out = df.copy()
+    idx = pd.DatetimeIndex(out.index)
+    out.index = idx.tz_convert("Asia/Taipei").tz_localize(None) if idx.tz is not None else idx
+    out = out[~out.index.duplicated(keep="last")].sort_index()
+    return out[out["Close"].notna()]
 
 
 def period_label(index: pd.DatetimeIndex, rule: str) -> np.ndarray:
@@ -116,24 +132,46 @@ def _with_macd(df: pd.DataFrame, source: str, sets: dict[str, dict]) -> pd.DataF
     return pd.concat(parts, axis=1)
 
 
-def build_frames(
-    daily: pd.DataFrame, trade_date: pd.Timestamp, cfg: dict
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """計算三週期指標。
+def required_sets(cfg: dict) -> dict[str, list[str]]:
+    """各週期需要計算的 MACD 參數組：下級週期算波、羅、蜜，本級與上級只算羅；日線一定計算（量能用）。"""
+    need: dict[str, set[str]] = {"D": {"ro"}}
+    if cfg.get("watchlist"):
+        need["D"].add(cfg["watchlist"]["macd_set"])
+    for g in cfg["groups"]:
+        need.setdefault(g["lower"], set()).update({"bo", "ro", "mi"})
+        need.setdefault(g["middle"], set()).add("ro")
+        need.setdefault(g["upper"], set()).add("ro")
+    return {tf: [k for k in ("bo", "ro", "mi") if k in sets] for tf, sets in need.items()}
 
-    日線含波、羅、蜜三組 MACD；週線與月線只算羅。
+
+def build_frames(
+    daily: pd.DataFrame, trade_date: pd.Timestamp, cfg: dict, intraday: pd.DataFrame | None = None
+) -> dict[str, pd.DataFrame]:
+    """計算各週期含 MACD 的 K 棒：{"60m", "D", "W", "M"} 中各組用得到的週期。
+
+    週線、月線由日線重新取樣；60 分 K 直接用 intraday（沒有提供時不產生 "60m"）。
     價格先截到 trade_date，確保 --date 與 demo 回補不會看到未來資料。
     """
     sw = cfg["switches"]
-    sets = cfg["macd"]
     d = clean_daily(daily)
     d = d[d.index <= trade_date]
-
-    daily_ind = _with_macd(d, sw["price_source"], sets)
-    htf = []
-    for rule in (WEEKLY, MONTHLY):
-        bars = resample(d, rule)
-        if sw["htf_bar_mode"] == "completed":
-            bars = drop_incomplete(bars, trade_date, rule)
-        htf.append(_with_macd(bars, sw["price_source"], {"ro": sets["ro"]}))
-    return daily_ind, htf[0], htf[1]
+    frames = {}
+    for tf, names in required_sets(cfg).items():
+        if tf == "D":
+            bars = d
+        elif tf in HTF_RULE:
+            bars = resample(d, HTF_RULE[tf])
+            if sw["htf_bar_mode"] == "completed":
+                bars = drop_incomplete(bars, trade_date, HTF_RULE[tf])
+        elif tf == "60m":
+            if intraday is None:
+                continue
+            bars = clean_intraday(intraday)
+            bars = bars[bars.index.normalize() <= trade_date]
+        else:
+            raise ValueError(f"未支援的週期：{tf}")
+        frames[tf] = _with_macd(bars, sw["price_source"], {k: cfg["macd"][k] for k in names})
+    if cfg.get("watchlist"):
+        n = cfg["watchlist"]["ma_days"]
+        frames["D"][f"ma{n}"] = frames["D"]["Close"].rolling(n).mean()  # 簡單移動平均，用收盤價
+    return frames

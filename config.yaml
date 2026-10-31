@@ -1,13 +1,23 @@
 # 猶太操盤術 MACD 選股系統設定檔
 # 規則參數與開關只放這裡；條件邏輯只寫在 screener/rules.py。
 
-markets: [TWSE]            # v1 只支援上市；TPEX 列為 v2
+markets: [TWSE, TPEX]      # 上市＋上櫃
+
+# 兩組週期：同一套條件，M1＝上級、W1／W2＝本級、D1～D4＝下級；V1 一律看當日成交量
+# 週期代號：60m＝60 分、D＝日、W＝週、M＝月
+groups:
+  - {id: g1, name: 第 1 組, lower: 60m, middle: D, upper: W}
+  - {id: g2, name: 第 2 組, lower: D, middle: W, upper: M}
+
+# 觀察清單：獨立於下面 8 個條件，股票池（上市＋上櫃）每一檔都判斷，不設量能門檻
+# A1：日線 MACD > 0（不看 DIF）；A2：剛站上 N 日線（昨收 ≤ N 日均線，今收 > N 日均線）
+watchlist: {id: watch, name: 觀察清單, macd_set: ro, ma_days: 10, min_bars: 60}
 
 # MACD 參數（快線 / 慢線 / 訊號線）
 macd:
-  bo: {fast: 6, slow: 12, signal: 3}     # 波（下級）：v1 僅計算顯示
-  ro: {fast: 10, slow: 20, signal: 10}   # 羅（本級）：選股主軸
-  mi: {fast: 26, slow: 52, signal: 13}   # 蜜（上級）：日線確認
+  bo: {fast: 6, slow: 12, signal: 3}     # 波：只計算顯示，不用於條件
+  ro: {fast: 10, slow: 20, signal: 10}   # 羅：上級、本級、下級週期都用（M1、W1、W2、D1、D2）
+  mi: {fast: 26, slow: 52, signal: 13}   # 蜜：只用在下級週期確認（D3、D4）
 
 # v1 未使用，保留設定
 ma: [3, 10, 30, 100, 300, 900]
@@ -27,9 +37,9 @@ thresholds:
 universe:
   code_pattern: '^[1-9]\d{3}$'     # 4 位數且非 0 開頭
   exclude_name_patterns: ['-DR$']  # 排除 4 位數代號的存託憑證（如 9105 泰金寶-DR）
-  min_months: 60                   # 月線至少 60 根已完成 K 棒
+  min_upper_bars: 60               # 上級週期至少 60 根已完成 K 棒（第 1 組＝60 週、第 2 組＝60 個月）
 
-twse:                       # 證交所每日收盤行情（MI_INDEX）
+exchange:                   # 證交所 MI_INDEX、櫃買中心每日收盤行情
   timeout_sec: 30
   retries: 3
   retry_wait_sec: 30
@@ -39,7 +49,9 @@ prices:
   batch_size: 100
   retries: 3
   retry_wait_sec: 10
-  max_fail_ratio: 0.2       # 抓價失敗（無資料或日期落後）超過此比例即中止，不發布
+  max_fail_ratio: 0.2       # 日線抓價失敗超過此比例即中止；60 分 K 超過此比例則該組當日不更新
+  intraday_days: 180        # 60 分 K 抓近 180 天（Yahoo 上限約 730 天）
+  intraday_retries: 1
 
 report:
   history_days: 60
