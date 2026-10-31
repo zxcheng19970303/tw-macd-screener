@@ -44,6 +44,7 @@ def screen(univ: pd.DataFrame, histories: dict[str, pd.DataFrame], trade_date: d
     min_months = cfg["universe"]["min_months"]
     hits, near_miss = [], []
     insufficient: Counter[str] = Counter()
+    passed: Counter[str] = Counter()  # 各條件通過檔數（已評估的股票）
     fetch_failed = evaluated = patched = 0
     for row in univ.itertuples(index=False):
         raw = histories.get(row.code)
@@ -61,6 +62,7 @@ def screen(univ: pd.DataFrame, histories: dict[str, pd.DataFrame], trade_date: d
         today = {"volume_lots": row.volume_lots, **indicators.volume_averages(daily, row.volume_lots, row.value)}
         res = rules.evaluate(daily, weekly, monthly, today, cfg)
         evaluated += 1
+        passed.update(cid for cid, ok in res["conditions"].items() if ok)
         failed = [cid for cid in rules.CONDITION_IDS if not res["conditions"][cid]]
         if len(failed) > 1:
             continue
@@ -83,6 +85,7 @@ def screen(univ: pd.DataFrame, histories: dict[str, pd.DataFrame], trade_date: d
         "fetch_failed": fetch_failed,
         "patched": patched,
         "insufficient": insufficient,
+        "passed": passed,
         "hits": hits,
         "near_miss": near_miss,
     }

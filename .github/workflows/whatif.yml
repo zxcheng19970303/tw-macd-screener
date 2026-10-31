@@ -1,0 +1,29 @@
+name: whatif
+
+# 參數試算：同一天資料用原設定與調整後設定各跑一次，結果寫在 job summary，不更新儀表板
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "交易日 YYYY-MM-DD"
+        required: true
+      sets:
+        description: "要調整的參數，以分號分隔，例如 macd.mi={fast: 10, slow: 20, signal: 10}; switches.d2_mode=shrink_2d"
+        required: true
+
+jobs:
+  whatif:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: What-if
+        env:
+          INPUT_DATE: ${{ inputs.date }}
+          SETS: ${{ inputs.sets }}
+        run: python -m screener.whatif --date "$INPUT_DATE" --set "$SETS"

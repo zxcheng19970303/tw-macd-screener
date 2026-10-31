@@ -60,6 +60,8 @@ python -m http.server -d docs
 | `--skip-if-current` | 當日已有正式結果就直接結束（補跑排程用） |
 | `--config`、`--out` | 改用其他設定檔或輸出資料夾 |
 
+參數試算（不寫入 `docs/data/`）：`python -m screener.whatif --date 2026-10-30 --set "macd.mi={fast: 10, slow: 20, signal: 10}"`。`--set` 可重複或用分號分隔；GitHub 上可用 Actions → whatif → Run workflow。
+
 結束碼：`0` 成功、`2` 非交易日或資料未更新（不發布）、`1` 錯誤（不發布，GitHub 會寄信通知）。
 
 ## 部署到 GitHub
@@ -105,6 +107,7 @@ python -m http.server -d docs
 | `.github/workflows/daily.yml` | 每日選股排程 |
 | `.github/workflows/tests.yml` | push／PR 時執行 pytest |
 | `.github/workflows/compare.yml` | 手動比對指定個股的三週期數值與條件 |
+| `.github/workflows/whatif.yml` | 參數試算：同一天資料比較原設定與調整後的選股結果，不更新儀表板 |
 
 ## 免責聲明
 

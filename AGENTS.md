@@ -18,6 +18,7 @@
 | 模擬資料（不連網，約 2 分鐘，覆寫 `docs/data/`） | `python -m screener.main --demo` |
 | 正式執行 | `python -m screener.main [--date YYYY-MM-DD]` |
 | 預覽儀表板 | `python -m http.server -d docs`，開 http://localhost:8000 |
+| 參數試算（不寫入 `docs/data/`） | `python -m screener.whatif --date YYYY-MM-DD --set "key.path=值"` |
 
 ## 模組分工
 
@@ -29,6 +30,7 @@
 | `rules.py` | 8 個條件、開關驗證、條件說明 | 條件說明經 `conditions_meta` 輸出給儀表板，前端不重複定義 |
 | `report.py` | latest／history JSON、job summary | `demo` 旗標隔離模擬與正式資料 |
 | `demo.py` | 模擬資料 | 只供 `--demo` 與測試使用 |
+| `whatif.py` | 參數試算 | 只比較、不發布；調整只影響選股計算，股票池與抓價範圍沿用原設定 |
 | `main.py` | CLI、流程、結束碼 | 0 成功、2 不發布、1 錯誤 |
 
 ## 環境
