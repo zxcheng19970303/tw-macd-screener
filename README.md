@@ -2,7 +2,7 @@
 
 每個交易日盤後，自動篩選符合「日線 2 走 3 修正波」月、週、日三週期 MACD 共振條件的上市普通股，並發布到可用手機瀏覽的儀表板。運算在 GitHub Actions、儀表板在 GitHub Pages，零成本、無伺服器。
 
-規格與規則定義見 [`SPEC.md`](SPEC.md)；維護規則見 [`AGENTS.md`](AGENTS.md)。
+規格與規則定義見 [`SPEC.md`](SPEC.md)；程式實際怎麼運作見 [`LOGIC.md`](LOGIC.md)；維護規則見 [`AGENTS.md`](AGENTS.md)。
 
 - 儀表板：<https://zxcheng19970303.github.io/tw-macd-screener/>
 - 執行紀錄：<https://github.com/zxcheng19970303/tw-macd-screener/actions>
@@ -99,6 +99,8 @@ python -m http.server -d docs
 
 | 路徑 | 用途 |
 | --- | --- |
+| `SPEC.md` | 開發規格書（規則正本與修訂紀錄） |
+| `LOGIC.md` | 程式邏輯說明（流程、公式、條件判斷與範例） |
 | `config.yaml` | 參數與開關 |
 | `screener/` | 程式（各模組職責見 `AGENTS.md`） |
 | `tests/` | pytest 單元與流程測試 |
