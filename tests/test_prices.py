@@ -3,12 +3,14 @@
 from types import SimpleNamespace
 
 import numpy as np
+import pytest
 import pandas as pd
 
 from screener.prices import (
     OHLCV,
     _split_download,
     data_status,
+    intraday_coverage,
     intraday_status,
     patch_intraday_close,
     last_before,
@@ -68,6 +70,23 @@ def test_patch_intraday_close_adds_closing_auction():
     out = patch_intraday_close(df, 2400.0, TODAY, 0.03)
     assert out["High"].iloc[-1] == 2400.0  # 收盤高於原最高，最高一併拉高
     assert patch_intraday_close(df, 2600.0, TODAY, 0.03)["Close"].iloc[-1] == 2365.0  # 差距 > 3%：視為還原落差，不改
+
+
+def test_patch_intraday_adds_final_bar_when_no_trades_after_13():
+    df = _intraday(["2026-10-30"])
+    df = df[df.index.hour < 13]  # 冷門股：13:00 後沒有連續交易，Yahoo 沒有這根
+    out = patch_intraday_close(df, 1.01, TODAY, 0.03)
+    assert out.index[-1] == pd.Timestamp("2026-10-30 13:00")
+    assert out.iloc[-1][["Open", "High", "Low", "Close"]].tolist() == [1.01] * 4  # 只有收盤競價一筆成交
+    assert len(patch_intraday_close(df, 1.5, TODAY, 0.03)) == 4  # 差距 > 3%：不補
+
+
+def test_intraday_coverage():
+    full, partial = _intraday(["2026-10-30"]), _intraday(["2026-10-30"])
+    partial = partial[partial.index.hour < 13]
+    assert intraday_coverage({"a": full, "b": full, "c": partial}, TODAY) == pytest.approx(2 / 3)
+    assert intraday_coverage({"a": partial}, TODAY) == 0
+    assert intraday_coverage({"a": _intraday(["2026-10-29"])}, TODAY) is None
 
 
 def test_split_group_by_ticker_and_failed_symbol():

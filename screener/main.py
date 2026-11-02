@@ -86,6 +86,9 @@ def screen(
     if wl:
         results[wl["id"]] = _new_result(len(univ))
     patched = 0
+    # 多數股票都有 13:00 那根，代表 Yahoo 已更新完；這時個股缺 13:00 只是那半小時沒有連續交易
+    coverage = prices.intraday_coverage(intraday, ts) if intraday is not None else None
+    intraday_complete = coverage is not None and coverage >= cfg["prices"]["intraday_min_coverage"]
     for row in univ.itertuples(index=False):
         raw = histories.get(row.code)
         reason = prices.data_status(raw, ts, reference)
@@ -99,6 +102,8 @@ def screen(
         intra_reason, intra = None, None
         if intraday is not None:
             intra_reason = prices.intraday_status(intraday.get(row.code), ts)
+            if intra_reason == "60 分當日未收完" and intraday_complete:
+                intra_reason = None  # 下面以官方收盤價補上最後一根
             if not intra_reason:
                 intra = prices.patch_intraday_close(intraday[row.code], row.close, ts, cfg["prices"]["intraday_close_max_gap"])
         frames = indicators.build_frames(df, ts, cfg, intra)

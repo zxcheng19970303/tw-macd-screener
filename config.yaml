@@ -54,6 +54,7 @@ prices:
   intraday_days: 180        # 60 分 K 抓近 180 天（Yahoo 上限約 730 天）
   intraday_retries: 1
   intraday_close_max_gap: 0.03  # 60 分 K 最後一根改用官方收盤價；差距超過 3% 視為還原權值落差，不改
+  intraday_min_coverage: 0.5     # 當天有 13:00 那根的股票不到一半：Yahoo 60 分 K 還沒更新完，第 1 組整組判為未收完
 
 report:
   history_days: 60

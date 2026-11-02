@@ -143,11 +143,27 @@ def intraday_status(df: pd.DataFrame | None, trade_date: pd.Timestamp) -> str | 
     return None
 
 
-def patch_intraday_close(df: pd.DataFrame, close: float, trade_date: pd.Timestamp, max_gap: float) -> pd.DataFrame:
-    """把交易日最後一根 60 分 K 的收盤改成官方收盤價（必要時一併拉高最高、拉低最低）。
+def intraday_coverage(intraday: dict[str, pd.DataFrame], trade_date: pd.Timestamp) -> float | None:
+    """當天有 60 分 K 的股票中，已有 13:00 那根的比例；用來分辨「Yahoo 整體還沒更新完」與「個股 13:00 後沒成交」。"""
+    with_day = with_last = 0
+    for df in intraday.values():
+        if df is None or df.empty:
+            continue
+        idx = clean_intraday(df).index
+        on_day = idx.normalize() == trade_date
+        if on_day.any():
+            with_day += 1
+            with_last += bool((on_day & (idx.hour == LAST_SESSION_HOUR)).any())
+    return with_last / with_day if with_day else None
 
-    Yahoo 的 13:00 那根不含 13:30 的收盤競價（實測 2330：60 分收 2,365，官方收盤 2,370）。
-    差距超過 max_gap 時不改：多半是 --date 重跑過去日期時，還原權值價與未還原官方價的落差。
+
+def patch_intraday_close(df: pd.DataFrame, close: float, trade_date: pd.Timestamp, max_gap: float) -> pd.DataFrame:
+    """以官方收盤價校正交易日最後一根 60 分 K。
+
+    - 有 13:00 那根：Yahoo 這根不含 13:30 的收盤競價（實測 2330：60 分收 2,365，官方收盤 2,370），
+      把收盤改成官方收盤價，必要時一併拉高最高、拉低最低。
+    - 沒有 13:00 那根：個股 13:00 後沒有連續交易，唯一成交是收盤競價，補一根開高低收都等於官方收盤價的 K 棒。
+    與 Yahoo 最後價格差距超過 max_gap 時不動：多半是 --date 重跑過去日期時，還原權值價與未還原官方價的落差。
     """
     d = clean_intraday(df)
     on_day = d.index[d.index.normalize() == trade_date]
@@ -157,6 +173,12 @@ def patch_intraday_close(df: pd.DataFrame, close: float, trade_date: pd.Timestam
     yahoo_close = d.at[last, "Close"]
     if not yahoo_close or abs(close / yahoo_close - 1) > max_gap:
         return d
+    if last.hour != LAST_SESSION_HOUR:
+        bar = pd.DataFrame(
+            {"Open": close, "High": close, "Low": close, "Close": close, "Volume": 0.0},
+            index=pd.DatetimeIndex([trade_date + pd.Timedelta(hours=LAST_SESSION_HOUR)]),
+        )
+        return pd.concat([d, bar]).sort_index()
     d.at[last, "Close"] = close
     d.at[last, "High"] = max(d.at[last, "High"], close)
     d.at[last, "Low"] = min(d.at[last, "Low"], close)

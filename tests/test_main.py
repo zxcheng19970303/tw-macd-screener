@@ -214,3 +214,20 @@ def test_previous_day_flag(monkeypatch, tmp_path):
     monkeypatch.setattr(main, "taipei_now", lambda: pd.Timestamp("2026-11-02 07:23", tz="Asia/Taipei").to_pydatetime())
     main.main(["--previous-day", "--out", str(tmp_path)])
     assert seen["d"] == date(2026, 10, 30)  # 週一清晨補上週五
+
+
+def test_screen_handles_missing_13_bar(cfg, demo_data):
+    names, histories, markets, intraday = demo_data
+    univ = _universe(cfg, names, histories, markets)
+    drop13 = lambda df: df[~((df.index.normalize().tz_localize(None) == pd.Timestamp(DAY)) & (df.index.hour == 13))]
+    # 只有一檔缺 13:00（冷門股）：用官方收盤價補上，照常評估
+    code = next(iter(intraday))
+    one = {**intraday, code: drop13(intraday[code])}
+    full = main.screen(univ, histories, DAY, cfg, intraday)
+    r = main.screen(univ, histories, DAY, cfg, one)
+    assert r["g1"]["evaluated"] == full["g1"]["evaluated"] and "60 分當日未收完" not in r["g1"]["insufficient"]
+    # 全部都缺 13:00（Yahoo 還沒更新完）：整組判為未收完，交給停用與補跑機制
+    r = main.screen(univ, histories, DAY, cfg, {c: drop13(df) for c, df in intraday.items()})
+    assert r["g1"]["evaluated"] == 0 and r["g1"]["insufficient"]["60 分當日未收完"] > 0
+    main.guard_intraday(r, cfg)
+    assert r["g1"]["available"] is False and r["g2"]["available"] is True
