@@ -145,6 +145,37 @@ def combine(frames: list[pd.DataFrame]) -> pd.DataFrame:
     return df.drop_duplicates("code", keep="first").reset_index(drop=True)
 
 
+def has_quotes(payload: dict) -> bool:
+    """回應是否含當日收盤行情（stat 為 ok 且有資料列）。"""
+    return str(payload.get("stat", "")).lower() == "ok" and any(t.get("data") for t in payload.get("tables", []))
+
+
+def previous_trading_day(day: date, cfg: dict, max_back: int = 10) -> date | None:
+    """往前逐一詢問證交所，找出 day 之前最近一個有收盤行情的日子（不需交易日曆）。
+
+    用來確認 Yahoo 的日線至少更新到這一天：若所有股票一起落後，「多數股票的最後日期」也會跟著落後，單靠眾數察覺不到。
+    """
+    ec = cfg["exchange"]
+    d = pd.Timestamp(day)
+    for _ in range(max_back):
+        d -= pd.offsets.BDay(1)
+        if has_quotes(fetch_quotes("TWSE", d.date(), ec["timeout_sec"], 1, 3)):
+            return d.date()
+        time.sleep(1)  # 證交所限制查詢頻率
+    return None
+
+
+def check_universe_size(universe: pd.DataFrame, previous: dict[str, int], min_ratio: float) -> None:
+    """任一市場股票數明顯少於上次發布：多半是交易所資料還在更新中，先不發布，等下一次排程。"""
+    counts = universe["market"].value_counts().to_dict()
+    for market, prev in previous.items():
+        now = counts.get(market, 0)
+        if prev and now < prev * min_ratio:
+            raise DataNotReady(
+                f"{MARKET_NAMES.get(market, market)}股票數 {now} 少於上次發布的 {prev}（門檻 {min_ratio:.0%}），疑似交易所資料尚未更新完整"
+            )
+
+
 def check_trade_date(universe: pd.DataFrame, expected: date) -> date:
     """交易所資料日期必須等於預期交易日，否則丟出 DataNotReady。"""
     if universe.empty:

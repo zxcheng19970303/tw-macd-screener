@@ -43,6 +43,7 @@ exchange:                   # 證交所 MI_INDEX、櫃買中心每日收盤行�
   timeout_sec: 30
   retries: 3
   retry_wait_sec: 30
+  min_universe_ratio: 0.9   # 任一市場股票數少於上次發布的 90%：疑似交易所資料尚未更新完整，本次不發布
 
 prices:
   years: 8
@@ -52,6 +53,7 @@ prices:
   max_fail_ratio: 0.2       # 日線抓價失敗超過此比例即中止；60 分 K 超過此比例則該組當日不更新
   intraday_days: 180        # 60 分 K 抓近 180 天（Yahoo 上限約 730 天）
   intraday_retries: 1
+  intraday_close_max_gap: 0.03  # 60 分 K 最後一根改用官方收盤價；差距超過 3% 視為還原權值落差，不改
 
 report:
   history_days: 60

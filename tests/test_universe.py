@@ -3,7 +3,8 @@ from datetime import date
 import pandas as pd
 import pytest
 
-from screener.universe import DataNotReady, check_trade_date, combine, parse_quotes
+from screener import universe
+from screener.universe import DataNotReady, check_trade_date, check_universe_size, combine, parse_quotes
 
 TWSE_FIELDS = ["證券代號", "證券名稱", "成交股數", "成交筆數", "成交金額", "開盤價", "最高價", "最低價", "收盤價", "漲跌(+/-)"]
 # 櫃買中心實際欄位名稱帶有空白與 <br>（2026-10-31 實測）
@@ -110,3 +111,25 @@ def test_combine_and_check_trade_date(cfg):
         check_trade_date(mixed, date(2026, 10, 30))
     with pytest.raises(RuntimeError):
         check_trade_date(pd.DataFrame(columns=["trade_date"]), date(2026, 10, 30))
+
+
+def test_previous_trading_day_skips_holidays(cfg, monkeypatch):
+    open_days = {"20261028"}  # 10/29、10/30 假設休市
+    calls = []
+
+    def fake_fetch(market, day, *a):
+        calls.append(day.strftime("%Y%m%d"))
+        return twse([twse_row("2330")], day=day.strftime("%Y%m%d")) if day.strftime("%Y%m%d") in open_days else {"stat": "很抱歉，沒有符合條件的資料!"}
+
+    monkeypatch.setattr(universe, "fetch_quotes", fake_fetch)
+    monkeypatch.setattr(universe.time, "sleep", lambda s: None)
+    assert universe.previous_trading_day(date(2026, 11, 2), cfg) == date(2026, 10, 28)
+    assert calls == ["20261030", "20261029", "20261028"]  # 週末不查
+
+
+def test_check_universe_size(cfg):
+    df = combine([parse(twse([twse_row(str(1101 + i)) for i in range(95)]), "TWSE", cfg), parse(tpex([tpex_row("6488")]), "TPEX", cfg)])
+    check_universe_size(df, {"TWSE": 100, "TPEX": 1}, 0.9)  # 95／100 ≥ 90%：通過
+    check_universe_size(df, {}, 0.9)  # 沒有上次紀錄：不檢查
+    with pytest.raises(DataNotReady):
+        check_universe_size(df, {"TWSE": 120, "TPEX": 1}, 0.9)

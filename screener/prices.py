@@ -124,17 +124,43 @@ def fetch_intraday(
     return _download(symbols, start, end, "60m", batch_size, retries, retry_wait)
 
 
+LAST_SESSION_HOUR = 13  # 台股 60 分 K 最後一根：13:00～13:30，含收盤競價
+
+
 def intraday_status(df: pd.DataFrame | None, trade_date: pd.Timestamp) -> str | None:
-    """60 分 K 必須有交易日當天的 K 棒；Yahoo 沒有官方資料可補，缺了就只能跳過。"""
+    """60 分 K 必須有交易日當天、而且收完（有 13:00 那根）；Yahoo 沒有官方資料可補，缺了就只能跳過。"""
     if df is None or df.empty:
         return "60 分無資料"
-    days = clean_intraday(df).index.normalize()
-    days = days[days <= trade_date]
-    if days.empty:
+    idx = clean_intraday(df).index
+    days = idx.normalize()
+    upto = days[days <= trade_date]
+    if upto.empty:
         return "60 分無資料"
-    if days.max() < trade_date:
+    if upto.max() < trade_date:
         return "60 分資料落後"
+    if not ((days == trade_date) & (idx.hour == LAST_SESSION_HOUR)).any():
+        return "60 分當日未收完"
     return None
+
+
+def patch_intraday_close(df: pd.DataFrame, close: float, trade_date: pd.Timestamp, max_gap: float) -> pd.DataFrame:
+    """把交易日最後一根 60 分 K 的收盤改成官方收盤價（必要時一併拉高最高、拉低最低）。
+
+    Yahoo 的 13:00 那根不含 13:30 的收盤競價（實測 2330：60 分收 2,365，官方收盤 2,370）。
+    差距超過 max_gap 時不改：多半是 --date 重跑過去日期時，還原權值價與未還原官方價的落差。
+    """
+    d = clean_intraday(df)
+    on_day = d.index[d.index.normalize() == trade_date]
+    if on_day.empty:
+        return d
+    last = on_day[-1]
+    yahoo_close = d.at[last, "Close"]
+    if not yahoo_close or abs(close / yahoo_close - 1) > max_gap:
+        return d
+    d.at[last, "Close"] = close
+    d.at[last, "High"] = max(d.at[last, "High"], close)
+    d.at[last, "Low"] = min(d.at[last, "Low"], close)
+    return d
 
 
 def official_bar(row) -> dict:

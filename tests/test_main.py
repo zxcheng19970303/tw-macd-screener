@@ -92,6 +92,11 @@ def _patch_live(monkeypatch, cfg, names, histories, markets, intraday, day):
     monkeypatch.setattr(main.universe, "load_universe", lambda m, c, d: _universe(cfg, names, histories, markets, day))
     monkeypatch.setattr(main.prices, "fetch_history", lambda codes, *a, **k: {c: histories[c] for c in codes if c in histories})
     monkeypatch.setattr(main.prices, "fetch_intraday", lambda codes, *a, **k: {c: intraday[c] for c in codes if c in intraday})
+    monkeypatch.setattr(main.universe, "previous_trading_day", lambda d, c: (pd.Timestamp(d) - pd.offsets.BDay(1)).date())
+
+
+def _read(out, name="latest.json"):
+    return json.loads((out / name).read_text(encoding="utf-8"))
 
 
 def test_live_exit_codes_and_history(tmp_path, monkeypatch, cfg, demo_data):
@@ -150,3 +155,62 @@ def test_demo_date_rolls_back_from_weekend(tmp_path, monkeypatch, cfg):
     monkeypatch.setattr(main, "run_demo", lambda c, out, d: seen.setdefault("d", d) and 0)
     main.main(["--demo", "--date", "2026-11-01", "--out", str(tmp_path)])  # 週日
     assert seen["d"] == pd.Timestamp("2026-10-30").date()
+
+
+def test_screen_flags_stocks_behind_previous_trading_day(cfg, demo_data):
+    # 所有股票一起缺 10/29、10/30：眾數基準跟著落後，只有交易所的前一交易日抓得出來
+    names, histories, markets, intraday = demo_data
+    univ = _universe(cfg, names, histories, markets)
+    lagging = {c: df[df.index < pd.Timestamp("2026-10-29")] for c, df in histories.items()}
+    assert main.screen(univ, lagging, DAY, cfg, intraday)["g2"]["fetch_failed"] == 1  # 舊做法：察覺不到
+    r = main.screen(univ, lagging, DAY, cfg, intraday, previous_day=date(2026, 10, 29))
+    assert r["g2"]["fetch_failed"] == len(univ) and r["g2"]["evaluated"] == 0
+
+
+def test_live_guards(tmp_path, monkeypatch, cfg, demo_data):
+    names, histories, markets, intraday = demo_data
+    out = tmp_path / "data"
+    args = ["--date", "2026-10-30", "--out", str(out)]
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, DAY)
+    assert main.main(args) == main.EXIT_OK
+    published = (out / "latest.json").read_text(encoding="utf-8")
+
+    # Yahoo 日線整體落後（缺前一交易日）→ 2，不發布
+    monkeypatch.setattr(main.prices, "fetch_history", lambda codes, *a, **k: {c: histories[c][histories[c].index < pd.Timestamp("2026-10-29")] for c in codes})
+    assert main.main(args) == main.EXIT_SKIP
+    assert (out / "latest.json").read_text(encoding="utf-8") == published
+
+    # 交易所股票數只有上次的一半（資料更新到一半）→ 2，不發布
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, DAY)
+    half = _universe(cfg, names, histories, markets).iloc[::2].reset_index(drop=True)
+    monkeypatch.setattr(main.universe, "load_universe", lambda m, c, d: half)
+    assert main.main(args) == main.EXIT_SKIP
+    assert (out / "latest.json").read_text(encoding="utf-8") == published
+
+    # 第 1 組停用時，補跑排程不可略過；60 分 K 恢復後補跑會把第 1 組補上
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, DAY)
+    monkeypatch.setattr(main.prices, "fetch_intraday", lambda codes, *a, **k: {})
+    assert main.main(args) == main.EXIT_OK
+    assert {g["id"]: g["available"] for g in _read(out)["groups"]}["g1"] is False
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, DAY)
+    assert main.main([*args, "--skip-if-current"]) == main.EXIT_OK
+    assert all(g["available"] for g in _read(out)["groups"])
+    assert main.main([*args, "--skip-if-current"]) == main.EXIT_SKIP  # 全部可用後才略過
+
+    # 補跑較早的日期：只補歷史紀錄，儀表板仍顯示最新一天
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, date(2026, 10, 29))
+    assert main.main(["--date", "2026-10-29", "--out", str(out)]) == main.EXIT_OK
+    assert _read(out)["trade_date"] == "2026-10-30"
+    assert [d["trade_date"] for d in _read(out, "history.json")["days"]][:2] == ["2026-10-30", "2026-10-29"]
+
+
+def test_previous_day_flag(monkeypatch, tmp_path):
+    seen = {}
+    monkeypatch.setattr(main, "taipei_now", lambda: pd.Timestamp("2026-11-03 07:23", tz="Asia/Taipei").to_pydatetime())
+    monkeypatch.setattr(main, "run_live", lambda c, out, d, skip: seen.setdefault("d", d) and 0)
+    main.main(["--previous-day", "--out", str(tmp_path)])
+    assert seen["d"] == date(2026, 11, 2)  # 週二清晨補週一
+    seen.clear()
+    monkeypatch.setattr(main, "taipei_now", lambda: pd.Timestamp("2026-11-02 07:23", tz="Asia/Taipei").to_pydatetime())
+    main.main(["--previous-day", "--out", str(tmp_path)])
+    assert seen["d"] == date(2026, 10, 30)  # 週一清晨補上週五

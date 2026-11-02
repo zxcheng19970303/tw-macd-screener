@@ -1,9 +1,13 @@
 name: daily-screener
 
+# 排程刻意避開整點：GitHub 在整點負載最高，排程可能延後甚至被丟棄（2026-11-02 兩次整點排程都沒有觸發）
+# 已有當日結果且各名單都可用時，後面幾次會自動略過（--skip-if-current）
 on:
   schedule:
-    - cron: "0 10 * * 1-5"   # 台北 18:00
-    - cron: "0 12 * * 1-5"   # 台北 20:00 補跑：18:00 已成功時會自動略過
+    - cron: "17 10 * * 1-5"   # 台北 18:17
+    - cron: "43 11 * * 1-5"   # 台北 19:43 補跑
+    - cron: "7 13 * * 1-5"    # 台北 21:07 補跑
+    - cron: "23 23 * * 1-5"   # 台北隔天 07:23 補前一交易日（--previous-day）
   workflow_dispatch:
     inputs:
       date:
@@ -23,6 +27,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # 推送前要 rebase 到最新的 main
 
       - uses: actions/setup-python@v6
         with:
@@ -36,10 +42,14 @@ jobs:
         env:
           INPUT_DATE: ${{ inputs.date }}
           EVENT: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
         run: |
           args=()
           [ -n "$INPUT_DATE" ] && args+=(--date "$INPUT_DATE")
-          [ "$EVENT" = "schedule" ] && args+=(--skip-if-current)
+          if [ "$EVENT" = "schedule" ]; then
+            args+=(--skip-if-current)
+            [ "$SCHEDULE" = "23 23 * * 1-5" ] && args+=(--previous-day)
+          fi
           set +e
           python -m screener.main "${args[@]}"
           code=$?
@@ -64,4 +74,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "data: $d screener results"
-          git push
+          # 執行期間 main 可能有新的 commit：先 rebase 再推，失敗重試，避免當天結果遺失
+          for i in 1 2 3; do
+            if git pull --rebase origin main; then
+              git push origin HEAD:main && exit 0
+            else
+              git rebase --abort || true
+            fi
+            echo "推送失敗，第 $i 次重試"
+            sleep $((i * 10))
+          done
+          echo "推送失敗，結果未寫回 repo" >> "$GITHUB_STEP_SUMMARY"
+          exit 1

@@ -10,6 +10,7 @@ from screener.prices import (
     _split_download,
     data_status,
     intraday_status,
+    patch_intraday_close,
     last_before,
     official_bar,
     patch_today,
@@ -53,6 +54,20 @@ def test_intraday_status():
     assert intraday_status(_intraday(["2026-10-29"]), TODAY) == "60 分資料落後"
     assert intraday_status(None, TODAY) == "60 分無資料"
     assert intraday_status(_intraday(["2026-11-02"]), TODAY) == "60 分無資料"
+    partial = _intraday(["2026-10-29", "2026-10-30"])
+    partial = partial[~((partial.index.normalize().tz_localize(None) == TODAY) & (partial.index.hour >= 12))]
+    assert intraday_status(partial, TODAY) == "60 分當日未收完"  # 只更新到 11:00
+
+
+def test_patch_intraday_close_adds_closing_auction():
+    df = _intraday(["2026-10-30"])
+    df.loc[df.index[-1], ["Open", "High", "Low", "Close"]] = [2375.0, 2380.0, 2365.0, 2365.0]
+    out = patch_intraday_close(df, 2370.0, TODAY, 0.03)  # 實測：60 分收 2,365，官方收盤 2,370
+    assert out["Close"].iloc[-1] == 2370.0 and out["High"].iloc[-1] == 2380.0 and out["Low"].iloc[-1] == 2365.0
+    assert out["Close"].iloc[-2] == 1.0  # 只改最後一根
+    out = patch_intraday_close(df, 2400.0, TODAY, 0.03)
+    assert out["High"].iloc[-1] == 2400.0  # 收盤高於原最高，最高一併拉高
+    assert patch_intraday_close(df, 2600.0, TODAY, 0.03)["Close"].iloc[-1] == 2365.0  # 差距 > 3%：視為還原落差，不改
 
 
 def test_split_group_by_ticker_and_failed_symbol():

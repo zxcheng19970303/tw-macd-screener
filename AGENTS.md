@@ -32,9 +32,10 @@
 | `report.py` | latest／history JSON（v2，依名單分開）、job summary | `demo` 旗標隔離模擬與正式資料；v1 歷史自動歸到日／週／月那一組 |
 | `demo.py` | 模擬資料 | 只供 `--demo` 與測試使用 |
 | `whatif.py` | 參數試算 | 只比較、不發布；調整只影響選股計算，股票池與抓價範圍沿用原設定 |
-| `main.py` | CLI、流程、結束碼 | 0 成功、2 不發布、1 錯誤 |
+| `main.py` | CLI、流程、結束碼 | 0 成功、2 不發布（暫時性：資料未就緒）、1 錯誤（會寄信）；補跑舊日期不可覆寫 `latest.json` |
 
 ## 環境
 
 - GitHub Actions 固定 Python 3.12；本機用 3.12 以上皆可
 - 結果由 workflow commit 回 `docs/data/`；手動修改該資料夾會在下次排程被覆寫
+- 排程時間不要設在整點（GitHub 整點負載高，排程可能被丟棄）

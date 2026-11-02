@@ -68,13 +68,17 @@ def screen(
     trade_date: date,
     cfg: dict,
     intraday: dict[str, pd.DataFrame] | None = None,
+    previous_day: date | None = None,
 ) -> dict[str, dict]:
     """逐檔計算各週期指標（只算一次），再依每一組的下級／本級／上級套用規則。
 
+    previous_day 為交易所的前一交易日：日線最後一根早於它就算落後（避免 Yahoo 全面落後時察覺不到）。
     回傳 {組別 id: 入選、差 1 條件與統計}。
     """
     ts = pd.Timestamp(trade_date)
     reference = prices.reference_date(histories, ts)
+    if previous_day is not None:
+        reference = max(filter(None, [reference, pd.Timestamp(previous_day)]))
     min_bars = cfg["universe"]["min_upper_bars"]
     groups = cfg["groups"]
     results = {g["id"]: _new_result(len(univ)) for g in groups}
@@ -92,10 +96,12 @@ def screen(
             continue
         df = prices.patch_today(raw, prices.official_bar(row), ts)
         patched += ts not in indicators.clean_daily(raw).index
-        intra_reason = None
+        intra_reason, intra = None, None
         if intraday is not None:
             intra_reason = prices.intraday_status(intraday.get(row.code), ts)
-        frames = indicators.build_frames(df, ts, cfg, intraday.get(row.code) if intraday is not None and not intra_reason else None)
+            if not intra_reason:
+                intra = prices.patch_intraday_close(intraday[row.code], row.close, ts, cfg["prices"]["intraday_close_max_gap"])
+        frames = indicators.build_frames(df, ts, cfg, intra)
         today = {"volume_lots": row.volume_lots, **indicators.volume_averages(frames["D"], row.volume_lots, row.value)}
         item = {"code": row.code, "name": row.name, "market": row.market, "close": row.close, "volume_lots": round(row.volume_lots)}
         if wl:
@@ -153,29 +159,46 @@ def _publish(results: dict[str, dict], univ: pd.DataFrame, trade_date: date, cfg
     return report.build_outputs(results, counts, trade_date, cfg, history, is_demo, taipei_now().isoformat(timespec="seconds"))
 
 
+def _current_latest(out_dir: Path) -> dict | None:
+    """目前已發布的正式結果；沒有或是示範資料時回傳 None。"""
+    path = out_dir / "latest.json"
+    if not path.exists():
+        return None
+    current = json.loads(path.read_text(encoding="utf-8"))
+    return None if current.get("demo") else current
+
+
 def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) -> int:
     started = time.monotonic()
-    latest_path = out_dir / "latest.json"
-    if skip_if_current and latest_path.exists():
-        current = json.loads(latest_path.read_text(encoding="utf-8"))
-        if not current.get("demo") and current.get("trade_date") == expected.isoformat():
+    current = _current_latest(out_dir)
+    if skip_if_current and current and current.get("trade_date") == expected.isoformat():
+        # 有任何名單當天停用（例如 60 分 K 抓不到）時照常補跑，給它下一次機會
+        if all(g.get("available", True) for g in current.get("groups", [])):
             log.info("%s 已有正式結果，略過補跑", expected)
             return EXIT_SKIP
+        log.info("%s 已發布但有名單停用，重新執行", expected)
 
     univ = universe.load_universe(cfg["markets"], cfg, expected)
     trade_date = universe.check_trade_date(univ, expected)
+    if current:
+        universe.check_universe_size(univ, current.get("universe", {}).get("markets", {}), cfg["exchange"]["min_universe_ratio"])
     markets = dict(zip(univ["code"], univ["market"]))
     log.info("股票池 %d 檔（%s），交易日 %s", len(univ), univ["market"].value_counts().to_dict(), trade_date)
 
     pc = cfg["prices"]
     codes = univ["code"].tolist()
     histories = prices.fetch_history(codes, pc["years"], trade_date, pc["batch_size"], pc["retries"], pc["retry_wait_sec"], markets)
+    previous_day = universe.previous_trading_day(trade_date, cfg)
+    reference = prices.reference_date(histories, pd.Timestamp(trade_date))
+    if previous_day and reference is not None and reference < pd.Timestamp(previous_day):
+        # 整體落後多半是 Yahoo 還沒更新完，交給下一次排程；完全抓不到則由下方失敗比例判定為錯誤
+        raise universe.DataNotReady(f"Yahoo 日線整體只更新到 {reference.date()}，前一交易日是 {previous_day}")
     intraday = None
     if uses_intraday(cfg):
         intraday = prices.fetch_intraday(
             codes, pc["intraday_days"], trade_date, pc["batch_size"], pc["intraday_retries"], pc["retry_wait_sec"], markets
         )
-    results = screen(univ, histories, trade_date, cfg, intraday)
+    results = screen(univ, histories, trade_date, cfg, intraday, previous_day)
     first = next(iter(results.values()))
     fail_ratio = first["fetch_failed"] / len(univ)
     if fail_ratio > pc["max_fail_ratio"]:
@@ -185,7 +208,11 @@ def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) ->
     history = report.load_history(out_dir / "history.json", demo=False, legacy_group=legacy_group(cfg))
     latest, history = _publish(results, univ, trade_date, cfg, history, False)
     report.write_history(out_dir, history)
-    report.write_latest(out_dir, latest)
+    if current and current.get("trade_date", "") > trade_date.isoformat():
+        # 補跑較早的日期：只補歷史紀錄，不把儀表板退回舊的一天
+        log.info("%s 早於目前發布的 %s：只更新歷史紀錄，latest.json 不變", trade_date, current["trade_date"])
+    else:
+        report.write_latest(out_dir, latest)
 
     elapsed = time.monotonic() - started
     report.write_job_summary(report.job_summary(latest, first["fetch_failed"], first["patched"], elapsed))
@@ -231,7 +258,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--date", type=date.fromisoformat, help="預期交易日 YYYY-MM-DD（預設為台北時間今天）")
     p.add_argument("--config", type=Path, default=ROOT / "config.yaml")
     p.add_argument("--out", type=Path, default=ROOT / "docs" / "data")
-    p.add_argument("--skip-if-current", action="store_true", help="latest.json 已是當日正式結果時直接結束（補跑排程用）")
+    p.add_argument("--skip-if-current", action="store_true", help="latest.json 已是當日正式結果且各名單都可用時直接結束（補跑排程用）")
+    p.add_argument("--previous-day", action="store_true", help="預期交易日改為台北今天的前一個平日（隔天清晨補跑用）")
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", stream=sys.stderr)
     logging.getLogger("yfinance").setLevel(logging.CRITICAL)
@@ -242,7 +270,10 @@ def main(argv: list[str] | None = None) -> int:
             d = pd.Timestamp(args.date or taipei_now().date())
             last_bday = d if d.dayofweek < 5 else d - pd.offsets.BDay(1)
             return run_demo(cfg, args.out, last_bday.date())
-        return run_live(cfg, args.out, args.date or taipei_now().date(), args.skip_if_current)
+        expected = args.date or taipei_now().date()
+        if args.previous_day and not args.date:
+            expected = (pd.Timestamp(expected) - pd.offsets.BDay(1)).date()
+        return run_live(cfg, args.out, expected, args.skip_if_current)
     except universe.DataNotReady as e:
         log.info("非交易日或資料未更新：%s", e)
         return EXIT_SKIP
