@@ -364,6 +364,7 @@ function recall(key) {
 
 function fmtVal(key, v) {
   if (v === null || v === undefined) return "—";
+  if (key === "volume_lots") return `${int(v)} 張`;
   if (key === "volume") {
     return state.latest.config.volume_rule.startsWith("avg5_value") ? `${(v / 1e8).toFixed(2)} 億元` : `${int(v)} 張`;
   }
@@ -483,7 +484,7 @@ function renderGroup() {
   }
   const c = L.config;
   const chips = watch
-    ? ["上市＋上櫃全部股票", "不看 8 個條件", "不設量能門檻"]
+    ? ["上市＋上櫃全部股票", "不看 8 個條件", g.conditions_meta.A3 ? g.conditions_meta.A3.label : "不設量能門檻"]
     : [
         `上級 ${g.timeframe_names?.upper ?? ""}`, `本級 ${g.timeframe_names?.middle ?? ""}`, `下級 ${g.timeframe_names?.lower ?? ""}`,
         CFG_TEXT.price_source[c.price_source] || c.price_source, `量 ${c.volume_rule}`, CFG_TEXT.d2_mode[c.d2_mode] || c.d2_mode,
@@ -501,7 +502,7 @@ function renderGroup() {
 
   $("#defs").innerHTML = ids(g).map((id) => `<dt><span class="badge on">${esc(id)}</span></dt><dd>${esc(g.conditions_meta[id].label)}</dd>`).join("");
   $("#tf-note").textContent = watch
-    ? "觀察清單獨立於 8 個條件：上市＋上櫃全部股票都判斷，不設量能門檻。"
+    ? `觀察清單獨立於 8 個條件：上市＋上櫃全部股票都判斷${g.conditions_meta.A3 ? "，" + g.conditions_meta.A3.label : "，不設量能門檻"}。`
     : `本組週期：上級＝${g.timeframe_names?.upper}、本級＝${g.timeframe_names?.middle}、下級＝${g.timeframe_names?.lower}。條件代號沿用講義：M＝上級、W＝本級、D＝下級，V1 一律看當日成交量。`;
   $("#hits-title").textContent = watch ? "觀察清單" : "今日入選";
   $("#near-sec").hidden = watch;

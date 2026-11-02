@@ -132,7 +132,7 @@ def group_metas(cfg: dict) -> list[dict]:
                 "id": wl["id"],
                 "kind": "watch",
                 "name": wl["name"],
-                "label": f"站上 {wl['ma_days']} 日線",
+                "label": f"站上 {wl['ma_days']} 日線・量 > {wl['min_volume_lots']} 張",
                 "conditions_meta": rules.describe_watchlist(cfg),
             }
         )

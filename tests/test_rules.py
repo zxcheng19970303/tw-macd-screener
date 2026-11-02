@@ -160,6 +160,9 @@ def test_validate_groups_rejects_bad_config(groups):
         validate_groups(groups)
 
 
+LIQUID = {"volume_lots": 5000}
+
+
 def _watch(close, ma, macd, dif=-1.0):
     return pd.DataFrame({"Close": close, "ma10": ma, "ro_macd": [0.0] * (len(close) - 1) + [macd], "ro_dif": [0.0] * (len(close) - 1) + [dif]})
 
@@ -175,13 +178,19 @@ def _watch(close, ma, macd, dif=-1.0):
     ],
 )
 def test_watchlist(cfg, close, ma, macd, a1, a2):
-    res = evaluate_watchlist(_watch(close, ma, macd), cfg)
-    assert res["conditions"] == {"A1": a1, "A2": a2}
+    res = evaluate_watchlist(_watch(close, ma, macd), LIQUID, cfg)
+    assert res["conditions"] == {"A1": a1, "A2": a2, "A3": True}
     assert res["selected"] is (a1 and a2)
 
 
 def test_watchlist_ignores_dif(cfg):
-    assert evaluate_watchlist(_watch([99.0, 101.0], [100.0, 100.0], 0.5, dif=-3.0), cfg)["selected"] is True
+    assert evaluate_watchlist(_watch([99.0, 101.0], [100.0, 100.0], 0.5, dif=-3.0), LIQUID, cfg)["selected"] is True
+
+
+@pytest.mark.parametrize("lots, ok", [(201, True), (200, False), (12, False)])  # 嚴格大於 200 張
+def test_watchlist_volume(cfg, lots, ok):
+    res = evaluate_watchlist(_watch([99.0, 101.0], [100.0, 100.0], 0.5), {"volume_lots": lots}, cfg)
+    assert res["conditions"]["A3"] is ok and res["selected"] is ok
 
 
 def test_validate_switches(cfg):

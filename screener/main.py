@@ -114,7 +114,7 @@ def screen(
             if len(frames["D"]) < wl["min_bars"]:
                 r["insufficient"][f"未滿 {wl['min_bars']} 日"] += 1
             else:
-                res = rules.evaluate_watchlist(frames["D"], cfg)
+                res = rules.evaluate_watchlist(frames["D"], today, cfg)
                 r["evaluated"] += 1
                 r["passed"].update(cid for cid, ok in res["conditions"].items() if ok)
                 if res["selected"]:

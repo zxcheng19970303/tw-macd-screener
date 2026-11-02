@@ -76,7 +76,7 @@ def main(argv: list[str] | None = None) -> None:
             print(f"{m['name']}（{m['label']}）：{marks}  → {'入選' if res['selected'] else '未入選'}")
         if cfg.get("watchlist"):
             wl = cfg["watchlist"]
-            res = rules.evaluate_watchlist(frames["D"], cfg)
+            res = rules.evaluate_watchlist(frames["D"], today, cfg)
             marks = "  ".join(f"{cid}{'✓' if ok else '✗'}" for cid, ok in res["conditions"].items())
             v = res["values"]
             print(

@@ -10,7 +10,7 @@ from __future__ import annotations
 import pandas as pd
 
 CONDITION_IDS = ("M1", "W1", "W2", "D1", "D2", "D3", "D4", "V1")
-WATCH_IDS = ("A1", "A2")
+WATCH_IDS = ("A1", "A2", "A3")
 SWITCH_CHOICES = {
     "price_source": ("close", "hlcc4"),
     "htf_bar_mode": ("completed", "current"),
@@ -148,8 +148,8 @@ def describe(cfg: dict, group: dict) -> dict:
     return {cid: {"label": label, "values": values} for cid, (label, values) in meta.items()}
 
 
-def evaluate_watchlist(daily: pd.DataFrame, cfg: dict) -> dict:
-    """觀察清單（獨立於 8 個條件）：A1 日線 MACD > 0，不看 DIF；A2 今天剛站上 N 日線。"""
+def evaluate_watchlist(daily: pd.DataFrame, today: dict, cfg: dict) -> dict:
+    """觀察清單（獨立於 8 個條件）：A1 日線 MACD > 0，不看 DIF；A2 今天剛站上 N 日線；A3 當日成交量 > 門檻張數。"""
     wl = cfg["watchlist"]
     k, ma = wl["macd_set"], f"ma{wl['ma_days']}"
     v = {
@@ -159,9 +159,10 @@ def evaluate_watchlist(daily: pd.DataFrame, cfg: dict) -> dict:
         "close_prev": _at(daily, "Close", 1),
         "ma": _at(daily, ma),
         "ma_prev": _at(daily, ma, 1),
+        "volume_lots": today.get("volume_lots"),
     }
     crossed = v["close_prev"] is not None and v["ma_prev"] is not None and v["close_prev"] <= v["ma_prev"] and _gt(v["close"], v["ma"])
-    c = {"A1": _gt(v["macd"], 0), "A2": crossed}
+    c = {"A1": _gt(v["macd"], 0), "A2": crossed, "A3": _gt(v["volume_lots"], wl["min_volume_lots"])}
     return {"conditions": c, "selected": all(c.values()), "values": v}
 
 
@@ -173,6 +174,7 @@ def describe_watchlist(cfg: dict) -> dict:
     meta = {
         "A1": (f"日線 {names.get(wl['macd_set'], wl['macd_set'])}（{p['fast']}/{p['slow']}/{p['signal']}）MACD > 0，不看 DIF", [["MACD", "macd"], ["DIF", "dif"]]),
         "A2": (f"剛站上 {n} 日線：昨收 ≤ {n} 日均線，今收 > {n} 日均線", [["昨收", "close_prev"], ["昨均線", "ma_prev"], ["今收", "close"], ["今均線", "ma"]]),
+        "A3": (f"當日成交量 > {wl['min_volume_lots']:,} 張", [["量", "volume_lots"]]),
     }
     return {cid: {"label": label, "values": values} for cid, (label, values) in meta.items()}
 

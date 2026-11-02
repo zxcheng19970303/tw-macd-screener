@@ -33,7 +33,7 @@
 | D4 | 下級 蜜 D-M > 0，或綠柱縮短 | 60 分線 | 日線 |
 | V1 | 當日成交量 > 300 張 | 日成交量 | 日成交量 |
 
-**觀察清單**（獨立於上面 8 個條件，全股票池、不設量能門檻）：A1 日線羅 MACD > 0（不看 DIF），且 A2 今天剛站上 10 日線（昨收 ≤ 10 日均線、今收 > 10 日均線）。
+**觀察清單**（獨立於上面 8 個條件，全股票池）：A1 日線羅 MACD > 0（不看 DIF）、A2 今天剛站上 10 日線（昨收 ≤ 10 日均線、今收 > 10 日均線），且 A3 當日成交量 > 200 張。
 
 開關（`config.yaml` 的 `switches`）：`price_source`（close／hlcc4）、`htf_bar_mode`（completed／current）、`volume_rule`（day_lots／avg5_lots／avg5_value）、`d2_mode`（shrink_1d／shrink_2d）。
 

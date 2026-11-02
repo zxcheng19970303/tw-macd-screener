@@ -9,9 +9,9 @@ groups:
   - {id: g1, name: 第 1 組, lower: 60m, middle: D, upper: W}
   - {id: g2, name: 第 2 組, lower: D, middle: W, upper: M}
 
-# 觀察清單：獨立於下面 8 個條件，股票池（上市＋上櫃）每一檔都判斷，不設量能門檻
-# A1：日線 MACD > 0（不看 DIF）；A2：剛站上 N 日線（昨收 ≤ N 日均線，今收 > N 日均線）
-watchlist: {id: watch, name: 觀察清單, macd_set: ro, ma_days: 10, min_bars: 60}
+# 觀察清單：獨立於下面 8 個條件，股票池（上市＋上櫃）每一檔都判斷
+# A1：日線 MACD > 0（不看 DIF）；A2：剛站上 N 日線（昨收 ≤ N 日均線，今收 > N 日均線）；A3：當日成交量 > min_volume_lots 張
+watchlist: {id: watch, name: 觀察清單, macd_set: ro, ma_days: 10, min_bars: 60, min_volume_lots: 200}
 
 # MACD 參數（快線 / 慢線 / 訊號線）
 macd:

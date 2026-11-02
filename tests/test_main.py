@@ -37,7 +37,8 @@ def test_demo_outputs(tmp_path, cfg):
     assert groups["g1"]["label"] == "60 分／日／週" and groups["g2"]["label"] == "日／週／月"
     assert "週線" in groups["g1"]["conditions_meta"]["M1"]["label"] and "60 分線" in groups["g1"]["conditions_meta"]["D2"]["label"]
     assert "月線" in groups["g2"]["conditions_meta"]["M1"]["label"]
-    assert list(groups["watch"]["conditions_meta"]) == ["A1", "A2"]
+    assert list(groups["watch"]["conditions_meta"]) == ["A1", "A2", "A3"]
+    assert all(h["volume_lots"] > 200 for h in groups["watch"]["hits"])
     assert [d["trade_date"] for d in history["days"]] == ["2026-10-30", "2026-10-29", "2026-10-28"]
     assert set(history["days"][0]["groups"]) == {"g1", "g2", "watch"}
     for g in latest["groups"]:
