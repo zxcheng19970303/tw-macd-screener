@@ -1,18 +1,25 @@
 name: daily-screener
 
-# 排程刻意避開整點：GitHub 在整點負載最高，排程可能延後甚至被丟棄（2026-11-02 兩次整點排程都沒有觸發）
-# 已有當日結果且各名單都可用時，後面幾次會自動略過（--skip-if-current）
+# 主要觸發：外部定時服務（cron-job.org）呼叫 workflow_dispatch 並帶 scheduled=true，準時到分鐘（設定見 README）。
+# 以下 GitHub 排程只是備援：GitHub 排程是盡力而為，台北傍晚（UTC 10～13 點，全球最忙）常延後數小時或被丟棄
+# （2026-11-02、11-03 傍晚的排程全部沒有觸發）。因此備援時段多放在離峰，並且一律避開整點。
+# 排程與 scheduled=true 都會：自動判斷日期（台北平日 17:00 後處理當天，否則前一個平日）、當日已完成則略過。
 on:
   schedule:
     - cron: "17 10 * * 1-5"   # 台北 18:17
-    - cron: "43 11 * * 1-5"   # 台北 19:43 補跑
-    - cron: "7 13 * * 1-5"    # 台北 21:07 補跑
-    - cron: "23 23 * * 1-5"   # 台北隔天 07:23 補前一交易日（--previous-day）
+    - cron: "37 15 * * 1-5"   # 台北 23:37
+    - cron: "13 18 * * 1-5"   # 台北隔天 02:13（處理前一交易日）
+    - cron: "41 21 * * 1-5"   # 台北隔天 05:41（處理前一交易日）
+    - cron: "23 23 * * 1-5"   # 台北隔天 07:23（處理前一交易日）
   workflow_dispatch:
     inputs:
       date:
         description: "預期交易日 YYYY-MM-DD（留空＝台北今天；證交所資料必須是這一天）"
         required: false
+      scheduled:
+        description: "外部排程呼叫時填 true：自動判斷日期，當日已完成則略過"
+        required: false
+        default: "false"
 
 permissions:
   contents: write
@@ -42,14 +49,15 @@ jobs:
         env:
           INPUT_DATE: ${{ inputs.date }}
           EVENT: ${{ github.event_name }}
-          SCHEDULE: ${{ github.event.schedule }}
+          SCHEDULED: ${{ inputs.scheduled }}
         run: |
           args=()
           [ -n "$INPUT_DATE" ] && args+=(--date "$INPUT_DATE")
-          if [ "$EVENT" = "schedule" ]; then
+          if [ "$EVENT" = "schedule" ] || [ "$SCHEDULED" = "true" ]; then
             args+=(--skip-if-current)
-            [ "$SCHEDULE" = "23 23 * * 1-5" ] && args+=(--previous-day)
+            [ -z "$INPUT_DATE" ] && args+=(--auto-date)
           fi
+          echo "觸發：$EVENT，參數：${args[*]:-（無）}" >> "$GITHUB_STEP_SUMMARY"
           set +e
           python -m screener.main "${args[@]}"
           code=$?

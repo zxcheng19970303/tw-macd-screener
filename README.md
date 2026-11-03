@@ -77,14 +77,51 @@ python -m http.server -d docs
 3. Actions → daily-screener → Run workflow 手動執行一次。非交易日或 18:00 前執行會得到「不發布」，屬正常；週末想測試可在 `date` 填上一個交易日（如週五）
 4. 開啟儀表板網址，確認橫幅不再顯示「示範資料」
 
-排程：平日台北 18:17 執行，19:43、21:07 補跑，隔天 07:23 再補前一交易日；已有當日結果且各名單都可用時自動略過。排程刻意避開整點（整點時 GitHub 可能直接丟棄排程），實際仍常延遲 5–30 分鐘。
+## 自動執行
+
+| 觸發方式 | 時間（台北） | 角色 |
+| --- | --- | --- |
+| cron-job.org 呼叫 GitHub API | 平日 18:17、19:43、21:07 | **主要**：準時到分鐘 |
+| GitHub 內建排程 | 平日 18:17、23:37，隔天 02:13、05:41、07:23 | 備援：GitHub 排程常延後數小時或被丟棄（11/2、11/3 傍晚全部沒觸發） |
+
+兩種觸發都會自動判斷日期（台北平日 17:00 以後處理當天，其他時間處理前一個平日），且當日已有完整結果時直接略過，所以多次觸發不會重複發布。
+
+### 設定 cron-job.org（一次性，約 10 分鐘）
+
+**1. 建立 GitHub 權杖（只能觸發這個 repo 的 workflow）**
+
+GitHub 右上角頭像 → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token：
+
+| 欄位 | 填寫 |
+| --- | --- |
+| Token name | `tw-macd-screener cron` |
+| Expiration | 最長可選的期限（到期前要換新，建議在行事曆設提醒） |
+| Repository access | Only select repositories → `tw-macd-screener` |
+| Permissions → Repository permissions | **Actions：Read and write**（其他維持 No access；Metadata 會自動設為 Read-only） |
+
+產生後複製權杖（只會顯示一次）。權杖只貼在 cron-job.org，不要放進 repo 或對話裡。
+
+**2. 在 cron-job.org 建立排程**
+
+註冊 <https://cron-job.org>（免費）→ Create cronjob：
+
+| 欄位 | 填寫 |
+| --- | --- |
+| Title | `tw-macd-screener daily` |
+| URL | `https://api.github.com/repos/zxcheng19970303/tw-macd-screener/actions/workflows/daily.yml/dispatches` |
+| Execution schedule | Custom：星期一～五；小時 18、19、21；分鐘 17、43、07 各建一個排程（或建三個 cronjob）；時區選 `Asia/Taipei` |
+| Advanced → Request method | `POST` |
+| Advanced → Headers | `Accept: application/vnd.github+json`<br>`Authorization: Bearer <你的權杖>`<br>`X-GitHub-Api-Version: 2022-11-28`<br>`Content-Type: application/json` |
+| Advanced → Request body | `{"ref":"main","inputs":{"scheduled":"true"}}` |
+
+存檔後按 **Test run**：回應 `204` 即成功，GitHub Actions 頁會出現一筆 daily-screener 執行（非交易時段會顯示「本次不發布」，屬正常）。回應 `401`／`403` 多半是權杖貼錯或權限沒給 Actions 寫入。
 
 ### 疑難排解
 
 | 狀況 | 處理 |
 | --- | --- |
 | 某次執行顯示「本次不發布」 | 非交易日、交易所或 Yahoo 尚未更新完整時屬正常，後面的補跑排程會接手；連假或颱風假也會如此 |
-| 晚上沒有更新 | 到 Actions 頁確認排程是否有觸發；GitHub 偶爾會丟棄排程，可手動 Run workflow（填日期）補跑 |
+| 晚上沒有更新 | 到 cron-job.org 看執行紀錄是否回 204、Actions 頁是否有對應執行；可手動 Run workflow（填日期）補跑。權杖過期時 cron-job.org 會回 401，需換新權杖 |
 | 抓價失敗比例超過 20% | 多半是 Yahoo 暫時限流，隔一段時間手動重跑；持續發生時評估改用 FinMind（只需改 `prices.py`） |
 | 儀表板第 1 組顯示「本組未更新」 | 當晚 Yahoo 的 60 分 K 抓取失敗超過 20%，第 2 組與觀察清單仍照常發布；可隔一段時間手動重跑當天 |
 | Pages 沒有更新 | 確認 Actions 有產生 `data: YYYY-MM-DD screener results` commit，再看 Actions 頁的 pages-build-deployment 是否成功 |

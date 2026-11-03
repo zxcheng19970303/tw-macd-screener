@@ -25,6 +25,7 @@ log = logging.getLogger("screener")
 ROOT = Path(__file__).resolve().parent.parent
 TPE = ZoneInfo("Asia/Taipei")
 EXIT_OK, EXIT_ERROR, EXIT_SKIP = 0, 1, 2
+READY_HOUR = 17  # 台北 17:00 以後交易所與 Yahoo 的當日資料通常都已齊全
 
 
 def load_config(path: Path) -> dict:
@@ -36,6 +37,21 @@ def load_config(path: Path) -> dict:
 
 def taipei_now() -> datetime:
     return datetime.now(TPE)
+
+
+def previous_weekday(d: date) -> date:
+    return (pd.Timestamp(d) - pd.offsets.BDay(1)).date()
+
+
+def auto_trade_date(now: datetime) -> date:
+    """排程用：平日 17:00 以後處理當天，其他時間處理前一個平日。
+
+    GitHub 排程常延後數小時才觸發；不論何時觸發，都會處理最近一個應該已有資料的交易日。
+    """
+    today = now.date()
+    if now.weekday() < 5 and now.hour >= READY_HOUR:
+        return today
+    return previous_weekday(today)
 
 
 def uses_intraday(cfg: dict) -> bool:
@@ -265,6 +281,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", type=Path, default=ROOT / "docs" / "data")
     p.add_argument("--skip-if-current", action="store_true", help="latest.json 已是當日正式結果且各名單都可用時直接結束（補跑排程用）")
     p.add_argument("--previous-day", action="store_true", help="預期交易日改為台北今天的前一個平日（隔天清晨補跑用）")
+    p.add_argument("--auto-date", action="store_true", help="排程用：台北平日 17:00 以後處理當天，其他時間處理前一個平日")
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", stream=sys.stderr)
     logging.getLogger("yfinance").setLevel(logging.CRITICAL)
@@ -276,8 +293,10 @@ def main(argv: list[str] | None = None) -> int:
             last_bday = d if d.dayofweek < 5 else d - pd.offsets.BDay(1)
             return run_demo(cfg, args.out, last_bday.date())
         expected = args.date or taipei_now().date()
-        if args.previous_day and not args.date:
-            expected = (pd.Timestamp(expected) - pd.offsets.BDay(1)).date()
+        if not args.date and args.auto_date:
+            expected = auto_trade_date(taipei_now())
+        elif not args.date and args.previous_day:
+            expected = previous_weekday(expected)
         return run_live(cfg, args.out, expected, args.skip_if_current)
     except universe.DataNotReady as e:
         log.info("非交易日或資料未更新：%s", e)

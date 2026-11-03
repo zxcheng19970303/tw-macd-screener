@@ -38,4 +38,5 @@
 
 - GitHub Actions 固定 Python 3.12；本機用 3.12 以上皆可
 - 結果由 workflow commit 回 `docs/data/`；手動修改該資料夾會在下次排程被覆寫
-- 排程時間不要設在整點（GitHub 整點負載高，排程可能被丟棄）
+- 主要由 cron-job.org 呼叫 `workflow_dispatch`（`scheduled=true`）觸發；GitHub 排程只是備援，時間不要設在整點或台北傍晚尖峰
+- `daily.yml` 的 `scheduled` 輸入與 `--auto-date` 是外部排程的介面，改名或移除前要同步更新 cron-job.org 設定

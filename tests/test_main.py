@@ -232,3 +232,28 @@ def test_screen_handles_missing_13_bar(cfg, demo_data):
     assert r["g1"]["evaluated"] == 0 and r["g1"]["insufficient"]["60 分當日未收完"] > 0
     main.guard_intraday(r, cfg)
     assert r["g1"]["available"] is False and r["g2"]["available"] is True
+
+
+@pytest.mark.parametrize(
+    "now, expected",
+    [
+        ("2026-11-03 18:17", date(2026, 11, 3)),  # 平日傍晚：當天
+        ("2026-11-03 23:37", date(2026, 11, 3)),
+        ("2026-11-04 02:13", date(2026, 11, 3)),  # 排程拖到半夜：前一個交易日
+        ("2026-11-03 11:57", date(2026, 11, 2)),  # 拖到隔天中午（11/3 實際發生）：前一個交易日
+        ("2026-11-07 07:23", date(2026, 11, 6)),  # 週六清晨：週五
+        ("2026-11-08 20:00", date(2026, 11, 6)),  # 週日晚上：週五
+    ],
+)
+def test_auto_trade_date(now, expected):
+    assert main.auto_trade_date(pd.Timestamp(now, tz="Asia/Taipei").to_pydatetime()) == expected
+
+
+def test_auto_date_flag(monkeypatch, tmp_path):
+    seen = {}
+    monkeypatch.setattr(main, "taipei_now", lambda: pd.Timestamp("2026-11-04 02:13", tz="Asia/Taipei").to_pydatetime())
+    monkeypatch.setattr(main, "run_live", lambda c, out, d, skip: seen.update(d=d, skip=skip) or 0)
+    main.main(["--auto-date", "--skip-if-current", "--out", str(tmp_path)])
+    assert seen == {"d": date(2026, 11, 3), "skip": True}
+    main.main(["--auto-date", "--date", "2026-10-30", "--out", str(tmp_path)])
+    assert seen["d"] == date(2026, 10, 30)  # 有指定日期時以指定為準
