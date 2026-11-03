@@ -1,6 +1,6 @@
 name: daily-screener
 
-# 主要觸發：外部定時服務（cron-job.org）呼叫 workflow_dispatch 並帶 scheduled=true，準時到分鐘（設定見 README）。
+# 主要觸發：外部定時服務（cron-job.org）於台北平日 18:17、19:17、21:17 呼叫 workflow_dispatch 並帶 scheduled=true（設定見 README）。
 # 以下 GitHub 排程只是備援：GitHub 排程是盡力而為，台北傍晚（UTC 10～13 點，全球最忙）常延後數小時或被丟棄
 # （2026-11-02、11-03 傍晚的排程全部沒有觸發）。因此備援時段多放在離峰，並且一律避開整點。
 # 排程與 scheduled=true 都會：自動判斷日期（台北平日 17:00 後處理當天，否則前一個平日）、當日已完成則略過。

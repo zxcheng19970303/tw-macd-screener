@@ -81,7 +81,7 @@ python -m http.server -d docs
 
 | 觸發方式 | 時間（台北） | 角色 |
 | --- | --- | --- |
-| cron-job.org 呼叫 GitHub API | 平日 18:17、19:43、21:07 | **主要**：準時到分鐘 |
+| cron-job.org 呼叫 GitHub API | 平日 18:17、19:17、21:17 | **主要**：準時到分鐘 |
 | GitHub 內建排程 | 平日 18:17、23:37，隔天 02:13、05:41、07:23 | 備援：GitHub 排程常延後數小時或被丟棄（11/2、11/3 傍晚全部沒觸發） |
 
 兩種觸發都會自動判斷日期（台北平日 17:00 以後處理當天，其他時間處理前一個平日），且當日已有完整結果時直接略過，所以多次觸發不會重複發布。
@@ -109,7 +109,7 @@ GitHub 右上角頭像 → Settings → Developer settings → Personal access t
 | --- | --- |
 | Title | `tw-macd-screener daily` |
 | URL | `https://api.github.com/repos/zxcheng19970303/tw-macd-screener/actions/workflows/daily.yml/dispatches` |
-| Execution schedule | Custom：星期一～五；小時 18、19、21；分鐘 17、43、07 各建一個排程（或建三個 cronjob）；時區選 `Asia/Taipei` |
+| Execution schedule | Custom：Days of week 選一～五；Hours 選 18、19、21；Minutes 只選 17（＝18:17、19:17、21:17）；時區選 `Asia/Taipei` |
 | Advanced → Request method | `POST` |
 | Advanced → Headers | `Accept: application/vnd.github+json`<br>`Authorization: Bearer <你的權杖>`<br>`X-GitHub-Api-Version: 2022-11-28`<br>`Content-Type: application/json` |
 | Advanced → Request body | `{"ref":"main","inputs":{"scheduled":"true"}}` |
