@@ -16,6 +16,7 @@
 - 2026-10-31：儀表板改版為暗色毛玻璃風格，差 1 條件加入搜尋與分頁（詳見 `SPEC.md` 第 14 節）。
 - 2026-10-31：v1.1。股票池加入上櫃；同一套條件套用兩組週期（第 1 組 60 分／日／週、第 2 組 日／週／月）；新增獨立的觀察清單（詳見 `SPEC.md` 第 14 節、`LOGIC.md`）。
 - 2026-11-03：v1.1.1。11/2 兩次整點排程沒有觸發，排程改為避開整點並加開補跑；修正 7 項資料防護問題（詳見 `SPEC.md` 第 14 節）。
+- 2026-11-19：v1.2。儀表板依 GoStock 設計稿改版（側欄＋大盤卡、今日入選卡片、大盤走勢圖、右側名單、全名單搜尋），新增加權／櫃買指數與個股漲跌幅（詳見 `SPEC.md` 第 14 節）。
 - 下一步：完成 M3 上線驗收（見下方清單），觀察連續 5 個交易日自動更新。
 
 ## 選股條件
@@ -145,10 +146,10 @@ GitHub 右上角頭像 → Settings → Developer settings → Personal access t
 | `SPEC.md` | 開發規格書（規則正本與修訂紀錄） |
 | `LOGIC.md` | 程式邏輯說明（流程、公式、條件判斷與範例） |
 | `config.yaml` | 參數與開關 |
-| `screener/` | 程式（各模組職責見 `AGENTS.md`） |
+| `screener/` | 程式（各模組職責見 `AGENTS.md`；`market.py` 產生大盤指數） |
 | `tests/` | pytest 單元與流程測試 |
-| `docs/index.html` | 儀表板（暗色毛玻璃風格，原生 JavaScript，無外部字型與追蹤） |
-| `docs/data/` | `latest.json`、`history.json`（由 workflow 自動更新） |
+| `docs/index.html` | 儀表板（暗色毛玻璃風格，原生 JavaScript 與手寫 SVG 圖表，無外部套件、字型與追蹤） |
+| `docs/data/` | `latest.json`、`history.json`、`market.json`（大盤指數）；由 workflow 自動更新 |
 | `.github/workflows/daily.yml` | 每日選股排程 |
 | `.github/workflows/tests.yml` | push／PR 時執行 pytest |
 | `.github/workflows/compare.yml` | 手動比對指定個股的三週期數值與條件 |
