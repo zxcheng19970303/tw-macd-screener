@@ -1,7 +1,7 @@
 {
  "version": 2,
- "trade_date": "2026-11-17",
- "generated_at": "2026-11-17T19:20:51+08:00",
+ "trade_date": "2026-11-18",
+ "generated_at": "2026-11-18T19:21:12+08:00",
  "demo": false,
  "config": {
   "price_source": "close",
@@ -10,10 +10,10 @@
   "d2_mode": "shrink_1d"
  },
  "universe": {
-  "total": 1952,
+  "total": 1957,
   "markets": {
-   "TWSE": 1085,
-   "TPEX": 867
+   "TWSE": 1086,
+   "TPEX": 871
   }
  },
  "groups": [
@@ -116,25 +116,25 @@
    },
    "available": true,
    "stats": {
-    "universe": 1952,
-    "evaluated": 1922,
-    "insufficient_data": 30,
-    "hits": 6,
-    "near_miss": 70,
+    "universe": 1957,
+    "evaluated": 1919,
+    "insufficient_data": 38,
+    "hits": 12,
+    "near_miss": 48,
     "insufficient_reasons": {
-     "日期落後": 10,
+     "日期落後": 20,
      "未滿 60 週": 16,
-     "60 分資料落後": 4
+     "60 分資料落後": 2
     }
    },
    "warnings": [],
    "hits": [
     {
-     "code": "2480",
-     "name": "敦陽科",
+     "code": "2355",
+     "name": "敬鵬",
      "market": "TWSE",
-     "close": 184.5,
-     "volume_lots": 692,
+     "close": 58.6,
+     "volume_lots": 60364,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -146,21 +146,57 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 1.9391,
-      "w_ro_dif": 2.4773,
-      "w_ro_dm": 0.9754,
-      "d_ro_dif": 0.6855,
-      "d_ro_macd": 2.0473,
-      "d_ro_dm": -1.3618,
-      "d_ro_dm_prev": -1.3942,
-      "d_ro_dm_prev2": -1.5367,
-      "d_mi_macd": 2.6029,
-      "d_mi_dm": 0.1908,
-      "d_mi_dm_prev": 0.3344,
-      "d_bo_dif": -0.7334,
-      "d_bo_macd": -0.641,
-      "d_bo_dm": -0.0923,
-      "volume": 691.982
+      "m_ro_dm": 1.9638,
+      "w_ro_dif": 2.6126,
+      "w_ro_dm": 0.5878,
+      "d_ro_dif": -0.3767,
+      "d_ro_macd": 0.0449,
+      "d_ro_dm": -0.4216,
+      "d_ro_dm_prev": -0.6365,
+      "d_ro_dm_prev2": -0.8483,
+      "d_mi_macd": 2.1039,
+      "d_mi_dm": -0.4658,
+      "d_mi_dm_prev": -0.5009,
+      "d_bo_dif": -0.3916,
+      "d_bo_macd": -0.6408,
+      "d_bo_dm": 0.2491,
+      "volume": 60364.145
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "2466",
+     "name": "冠西電",
+     "market": "TWSE",
+     "close": 436.5,
+     "volume_lots": 458,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 27.3928,
+      "w_ro_dif": 45.3488,
+      "w_ro_dm": 3.6254,
+      "d_ro_dif": 9.6121,
+      "d_ro_macd": 9.7717,
+      "d_ro_dm": -0.1596,
+      "d_ro_dm_prev": -0.1809,
+      "d_ro_dm_prev2": -0.3102,
+      "d_mi_macd": 25.5052,
+      "d_mi_dm": 0.0601,
+      "d_mi_dm_prev": 0.0847,
+      "d_bo_dif": 5.6809,
+      "d_bo_macd": 5.8103,
+      "d_bo_dm": -0.1293,
+      "volume": 457.911
      },
      "streak": 1,
      "is_new": true
@@ -169,8 +205,8 @@
      "code": "2610",
      "name": "華航",
      "market": "TWSE",
-     "close": 23.1,
-     "volume_lots": 41002,
+     "close": 22.9,
+     "volume_lots": 38631,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -183,102 +219,30 @@
      },
      "values": {
       "m_ro_dm": 0.1389,
-      "w_ro_dif": 0.634,
-      "w_ro_dm": 0.1995,
-      "d_ro_dif": 0.0686,
-      "d_ro_macd": 0.121,
-      "d_ro_dm": -0.0524,
-      "d_ro_dm_prev": -0.0697,
-      "d_ro_dm_prev2": -0.0767,
-      "d_mi_macd": 0.5304,
-      "d_mi_dm": -0.0525,
-      "d_mi_dm_prev": -0.0536,
-      "d_bo_dif": 0.0097,
-      "d_bo_macd": -0.0026,
-      "d_bo_dm": 0.0123,
-      "volume": 41002.201
+      "w_ro_dif": 0.6176,
+      "w_ro_dm": 0.1498,
+      "d_ro_dif": -0.0062,
+      "d_ro_macd": 0.0436,
+      "d_ro_dm": -0.0498,
+      "d_ro_dm_prev": -0.0675,
+      "d_ro_dm_prev2": -0.0735,
+      "d_mi_macd": 0.4653,
+      "d_mi_dm": -0.0813,
+      "d_mi_dm_prev": -0.0837,
+      "d_bo_dif": -0.0359,
+      "d_bo_macd": -0.0453,
+      "d_bo_dm": 0.0094,
+      "volume": 38630.918
      },
-     "streak": 1,
-     "is_new": true
+     "streak": 2,
+     "is_new": false
     },
     {
-     "code": "2618",
-     "name": "長榮航",
-     "market": "TWSE",
-     "close": 48.1,
-     "volume_lots": 32855,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.1521,
-      "w_ro_dif": 1.2314,
-      "w_ro_dm": 0.4216,
-      "d_ro_dif": 0.3447,
-      "d_ro_macd": 0.4361,
-      "d_ro_dm": -0.0914,
-      "d_ro_dm_prev": -0.109,
-      "d_ro_dm_prev2": -0.1202,
-      "d_mi_macd": 1.0112,
-      "d_mi_dm": 0.0057,
-      "d_mi_dm_prev": 0.0103,
-      "d_bo_dif": 0.1356,
-      "d_bo_macd": 0.1295,
-      "d_bo_dm": 0.0061,
-      "volume": 32855.114
-     },
-     "streak": 1,
-     "is_new": true
-    },
-    {
-     "code": "2929",
-     "name": "淘帝-KY",
-     "market": "TWSE",
-     "close": 5.75,
-     "volume_lots": 348,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.0353,
-      "w_ro_dif": 0.0086,
-      "w_ro_dm": 0.0254,
-      "d_ro_dif": 0.0013,
-      "d_ro_macd": 0.0018,
-      "d_ro_dm": -0.0005,
-      "d_ro_dm_prev": -0.0069,
-      "d_ro_dm_prev2": -0.0015,
-      "d_mi_macd": 0.0149,
-      "d_mi_dm": -0.0014,
-      "d_mi_dm_prev": -0.0035,
-      "d_bo_dif": 0.0016,
-      "d_bo_macd": -0.0008,
-      "d_bo_dm": 0.0024,
-      "volume": 348.422
-     },
-     "streak": 1,
-     "is_new": true
-    },
-    {
-     "code": "3293",
-     "name": "鈊象",
+     "code": "3285",
+     "name": "微端",
      "market": "TPEX",
-     "close": 790.0,
-     "volume_lots": 2184,
+     "close": 49.9,
+     "volume_lots": 571,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -290,31 +254,31 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 3.063,
-      "w_ro_dif": 0.1649,
-      "w_ro_dm": 0.4108,
-      "d_ro_dif": 3.5524,
-      "d_ro_macd": 4.3647,
-      "d_ro_dm": -0.8123,
-      "d_ro_dm_prev": -1.0778,
-      "d_ro_dm_prev2": -0.8115,
-      "d_mi_macd": 1.2015,
-      "d_mi_dm": 1.856,
-      "d_mi_dm_prev": 1.9019,
-      "d_bo_dif": 1.4269,
-      "d_bo_macd": 1.3392,
-      "d_bo_dm": 0.0877,
-      "volume": 2184.0
+      "m_ro_dm": 0.2175,
+      "w_ro_dif": 2.0058,
+      "w_ro_dm": 0.7195,
+      "d_ro_dif": -0.1718,
+      "d_ro_macd": 0.3816,
+      "d_ro_dm": -0.5534,
+      "d_ro_dm_prev": -0.7828,
+      "d_ro_dm_prev2": -1.0004,
+      "d_mi_macd": 1.5495,
+      "d_mi_dm": -0.2543,
+      "d_mi_dm_prev": -0.2792,
+      "d_bo_dif": -0.4782,
+      "d_bo_macd": -0.673,
+      "d_bo_dm": 0.1948,
+      "volume": 571.0
      },
      "streak": 1,
      "is_new": true
     },
     {
-     "code": "8171",
-     "name": "天宇",
-     "market": "TPEX",
-     "close": 20.8,
-     "volume_lots": 316,
+     "code": "3715",
+     "name": "定穎投控",
+     "market": "TWSE",
+     "close": 140.0,
+     "volume_lots": 18010,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -326,21 +290,273 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 0.2014,
-      "w_ro_dif": 0.0569,
-      "w_ro_dm": 0.3434,
-      "d_ro_dif": 0.2767,
-      "d_ro_macd": 0.5117,
-      "d_ro_dm": -0.235,
-      "d_ro_dm_prev": -0.2375,
-      "d_ro_dm_prev2": -0.1957,
-      "d_mi_macd": 0.2776,
-      "d_mi_dm": 0.1417,
-      "d_mi_dm_prev": 0.1692,
-      "d_bo_dif": -0.0706,
-      "d_bo_macd": -0.0156,
-      "d_bo_dm": -0.055,
-      "volume": 316.0
+      "m_ro_dm": 1.5805,
+      "w_ro_dif": 2.4824,
+      "w_ro_dm": 2.6245,
+      "d_ro_dif": 1.0196,
+      "d_ro_macd": 0.6312,
+      "d_ro_dm": 0.3884,
+      "d_ro_dm_prev": -0.1103,
+      "d_ro_dm_prev2": -0.9352,
+      "d_mi_macd": 3.3651,
+      "d_mi_dm": -0.0374,
+      "d_mi_dm_prev": -0.2326,
+      "d_bo_dif": 1.4991,
+      "d_bo_macd": 0.559,
+      "d_bo_dm": 0.9401,
+      "volume": 18010.258
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "4155",
+     "name": "訊映",
+     "market": "TWSE",
+     "close": 17.95,
+     "volume_lots": 2175,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.2606,
+      "w_ro_dif": 0.454,
+      "w_ro_dm": 0.0344,
+      "d_ro_dif": 0.0925,
+      "d_ro_macd": 0.1545,
+      "d_ro_dm": -0.062,
+      "d_ro_dm_prev": -0.0692,
+      "d_ro_dm_prev2": -0.0604,
+      "d_mi_macd": 0.2328,
+      "d_mi_dm": 0.013,
+      "d_mi_dm_prev": 0.0172,
+      "d_bo_dif": -0.0109,
+      "d_bo_macd": 0.0007,
+      "d_bo_dm": -0.0116,
+      "volume": 2175.353
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "6108",
+     "name": "競國",
+     "market": "TWSE",
+     "close": 42.5,
+     "volume_lots": 4298,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.1759,
+      "w_ro_dif": 3.1181,
+      "w_ro_dm": 1.1352,
+      "d_ro_dif": 1.0138,
+      "d_ro_macd": 1.2648,
+      "d_ro_dm": -0.2509,
+      "d_ro_dm_prev": -0.2793,
+      "d_ro_dm_prev2": -0.3229,
+      "d_mi_macd": 2.6518,
+      "d_mi_dm": 0.0907,
+      "d_mi_dm_prev": 0.1136,
+      "d_bo_dif": 0.4285,
+      "d_bo_macd": 0.4148,
+      "d_bo_dm": 0.0137,
+      "volume": 4297.946
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "6614",
+     "name": "資拓宏宇",
+     "market": "TWSE",
+     "close": 38.7,
+     "volume_lots": 974,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.2289,
+      "w_ro_dif": 0.8556,
+      "w_ro_dm": 0.8133,
+      "d_ro_dif": 0.6707,
+      "d_ro_macd": 1.0271,
+      "d_ro_dm": -0.3564,
+      "d_ro_dm_prev": -0.4007,
+      "d_ro_dm_prev2": -0.3364,
+      "d_mi_macd": 0.9941,
+      "d_mi_dm": 0.2394,
+      "d_mi_dm_prev": 0.2686,
+      "d_bo_dif": 0.0806,
+      "d_bo_macd": 0.1079,
+      "d_bo_dm": -0.0273,
+      "volume": 973.661
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "7584",
+     "name": "樂意",
+     "market": "TPEX",
+     "close": 40.45,
+     "volume_lots": 308,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.1391,
+      "w_ro_dif": 2.4703,
+      "w_ro_dm": 1.2628,
+      "d_ro_dif": 1.4825,
+      "d_ro_macd": 1.6913,
+      "d_ro_dm": -0.2089,
+      "d_ro_dm_prev": -0.2306,
+      "d_ro_dm_prev2": -0.2722,
+      "d_mi_macd": 2.2877,
+      "d_mi_dm": 0.3886,
+      "d_mi_dm_prev": 0.4155,
+      "d_bo_dif": 0.7248,
+      "d_bo_macd": 0.6908,
+      "d_bo_dm": 0.034,
+      "volume": 308.0
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "7799",
+     "name": "禾榮科",
+     "market": "TWSE",
+     "close": 476.0,
+     "volume_lots": 818,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.7026,
+      "w_ro_dif": 6.1218,
+      "w_ro_dm": 9.8849,
+      "d_ro_dif": 5.6278,
+      "d_ro_macd": 8.6367,
+      "d_ro_dm": -3.0088,
+      "d_ro_dm_prev": -3.05,
+      "d_ro_dm_prev2": -2.5003,
+      "d_mi_macd": 12.0768,
+      "d_mi_dm": 1.3939,
+      "d_mi_dm_prev": 1.7548,
+      "d_bo_dif": 0.6174,
+      "d_bo_macd": 1.2725,
+      "d_bo_dm": -0.6551,
+      "volume": 818.151
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "8089",
+     "name": "康全電訊",
+     "market": "TPEX",
+     "close": 35.9,
+     "volume_lots": 2172,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.9548,
+      "w_ro_dif": 2.7074,
+      "w_ro_dm": 0.4463,
+      "d_ro_dif": 0.446,
+      "d_ro_macd": 0.3728,
+      "d_ro_dm": 0.0732,
+      "d_ro_dm_prev": -0.0239,
+      "d_ro_dm_prev2": -0.1903,
+      "d_mi_macd": 1.7378,
+      "d_mi_dm": -0.0962,
+      "d_mi_dm_prev": -0.1362,
+      "d_bo_dif": 0.4562,
+      "d_bo_macd": 0.2623,
+      "d_bo_dm": 0.194,
+      "volume": 2172.0
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "9935",
+     "name": "慶豐富",
+     "market": "TWSE",
+     "close": 20.3,
+     "volume_lots": 354,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.024,
+      "w_ro_dif": 0.4282,
+      "w_ro_dm": 0.2256,
+      "d_ro_dif": 0.1547,
+      "d_ro_macd": 0.2068,
+      "d_ro_dm": -0.0521,
+      "d_ro_dm_prev": -0.0581,
+      "d_ro_dm_prev2": -0.0673,
+      "d_mi_macd": 0.4252,
+      "d_mi_dm": 0.0133,
+      "d_mi_dm_prev": 0.0177,
+      "d_bo_dif": 0.0552,
+      "d_bo_macd": 0.0514,
+      "d_bo_dm": 0.0038,
+      "volume": 354.293
      },
      "streak": 1,
      "is_new": true
@@ -348,492 +564,11 @@
    ],
    "near_miss": [
     {
-     "code": "1416",
-     "name": "廣豐",
+     "code": "1216",
+     "name": "統一",
      "market": "TWSE",
-     "close": 17.55,
-     "volume_lots": 5774,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.6466,
-      "w_ro_dif": 1.4324,
-      "w_ro_dm": 0.2473,
-      "d_ro_dif": -0.2222,
-      "d_ro_macd": 0.0709,
-      "d_ro_dm": -0.2931,
-      "d_ro_dm_prev": -0.3078,
-      "d_ro_dm_prev2": -0.3039,
-      "d_mi_macd": 1.1133,
-      "d_mi_dm": -0.2676,
-      "d_mi_dm_prev": -0.2474,
-      "d_bo_dif": -0.3829,
-      "d_bo_macd": -0.3429,
-      "d_bo_dm": -0.04,
-      "volume": 5773.965
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "1476",
-     "name": "儒鴻",
-     "market": "TWSE",
-     "close": 385.0,
-     "volume_lots": 3867,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 9.7995,
-      "w_ro_dif": 17.0215,
-      "w_ro_dm": 5.1511,
-      "d_ro_dif": 5.7531,
-      "d_ro_macd": 6.8849,
-      "d_ro_dm": -1.1318,
-      "d_ro_dm_prev": -0.9752,
-      "d_ro_dm_prev2": -0.8433,
-      "d_mi_macd": 12.8485,
-      "d_mi_dm": 0.7307,
-      "d_mi_dm_prev": 0.9287,
-      "d_bo_dif": 2.3168,
-      "d_bo_macd": 2.6605,
-      "d_bo_dm": -0.3437,
-      "volume": 3866.585
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "1477",
-     "name": "聚陽",
-     "market": "TWSE",
-     "close": 226.5,
-     "volume_lots": 3068,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 4.3985,
-      "w_ro_dif": 4.7793,
-      "w_ro_dm": 1.4857,
-      "d_ro_dif": 2.1976,
-      "d_ro_macd": 2.3947,
-      "d_ro_dm": -0.1971,
-      "d_ro_dm_prev": -0.1641,
-      "d_ro_dm_prev2": -0.0916,
-      "d_mi_macd": 3.5003,
-      "d_mi_dm": 0.4967,
-      "d_mi_dm_prev": 0.542,
-      "d_bo_dif": 1.0758,
-      "d_bo_macd": 1.1464,
-      "d_bo_dm": -0.0706,
-      "volume": 3068.114
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "1802",
-     "name": "台玻",
-     "market": "TWSE",
-     "close": 69.0,
-     "volume_lots": 153809,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.6214,
-      "w_ro_dif": 3.0885,
-      "w_ro_dm": 0.8942,
-      "d_ro_dif": -1.7406,
-      "d_ro_macd": 0.2881,
-      "d_ro_dm": -2.0287,
-      "d_ro_dm_prev": -2.1861,
-      "d_ro_dm_prev2": -2.2416,
-      "d_mi_macd": 3.3078,
-      "d_mi_dm": -1.0715,
-      "d_mi_dm_prev": -0.9318,
-      "d_bo_dif": -2.7045,
-      "d_bo_macd": -2.5775,
-      "d_bo_dm": -0.127,
-      "volume": 153808.798
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "2321",
-     "name": "東訊",
-     "market": "TWSE",
-     "close": 31.0,
-     "volume_lots": 25,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": false
-     },
-     "values": {
-      "m_ro_dm": 0.499,
-      "w_ro_dif": 0.8696,
-      "w_ro_dm": 0.024,
-      "d_ro_dif": 0.2159,
-      "d_ro_macd": 0.229,
-      "d_ro_dm": -0.0131,
-      "d_ro_dm_prev": -0.0738,
-      "d_ro_dm_prev2": -0.1836,
-      "d_mi_macd": 0.9158,
-      "d_mi_dm": -0.0444,
-      "d_mi_dm_prev": -0.0627,
-      "d_bo_dif": 0.179,
-      "d_bo_macd": 0.0849,
-      "d_bo_dm": 0.094,
-      "volume": 25.036
-     },
-     "failed": [
-      "V1"
-     ]
-    },
-    {
-     "code": "2355",
-     "name": "敬鵬",
-     "market": "TWSE",
-     "close": 56.5,
-     "volume_lots": 39655,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.9638,
-      "w_ro_dif": 2.6581,
-      "w_ro_dm": 0.7639,
-      "d_ro_dif": -0.2093,
-      "d_ro_macd": 1.0186,
-      "d_ro_dm": -1.2279,
-      "d_ro_dm_prev": -1.2579,
-      "d_ro_dm_prev2": -1.2921,
-      "d_mi_macd": 2.5204,
-      "d_mi_dm": -0.3186,
-      "d_mi_dm_prev": -0.204,
-      "d_bo_dif": -1.1815,
-      "d_bo_macd": -1.0486,
-      "d_bo_dm": -0.1329,
-      "volume": 39655.153
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "2429",
-     "name": "銘旺科",
-     "market": "TWSE",
-     "close": 32.0,
-     "volume_lots": 392,
-     "conditions": {
-      "M1": true,
-      "W1": false,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.9525,
-      "w_ro_dif": -0.2434,
-      "w_ro_dm": 0.1476,
-      "d_ro_dif": 0.2368,
-      "d_ro_macd": 0.3391,
-      "d_ro_dm": -0.1023,
-      "d_ro_dm_prev": -0.1285,
-      "d_ro_dm_prev2": -0.0969,
-      "d_mi_macd": 0.0073,
-      "d_mi_dm": 0.1512,
-      "d_mi_dm_prev": 0.1573,
-      "d_bo_dif": 0.043,
-      "d_bo_macd": 0.0562,
-      "d_bo_dm": -0.0132,
-      "volume": 391.865
-     },
-     "failed": [
-      "W1"
-     ]
-    },
-    {
-     "code": "2453",
-     "name": "凌群",
-     "market": "TWSE",
-     "close": 59.1,
-     "volume_lots": 2251,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.5616,
-      "w_ro_dif": 1.5603,
-      "w_ro_dm": 0.6948,
-      "d_ro_dif": 0.2003,
-      "d_ro_macd": 0.5632,
-      "d_ro_dm": -0.3629,
-      "d_ro_dm_prev": -0.4257,
-      "d_ro_dm_prev2": -0.4895,
-      "d_mi_macd": 1.4411,
-      "d_mi_dm": -0.0885,
-      "d_mi_dm_prev": -0.0724,
-      "d_bo_dif": -0.1699,
-      "d_bo_macd": -0.1954,
-      "d_bo_dm": 0.0256,
-      "volume": 2250.583
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "2465",
-     "name": "麗臺",
-     "market": "TWSE",
-     "close": 146.0,
-     "volume_lots": 30884,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 5.1885,
-      "w_ro_dif": 13.9546,
-      "w_ro_dm": 3.1797,
-      "d_ro_dif": -0.1911,
-      "d_ro_macd": 2.2649,
-      "d_ro_dm": -2.456,
-      "d_ro_dm_prev": -2.5261,
-      "d_ro_dm_prev2": -2.4514,
-      "d_mi_macd": 10.9059,
-      "d_mi_dm": -1.6619,
-      "d_mi_dm_prev": -1.4575,
-      "d_bo_dif": -2.0731,
-      "d_bo_macd": -1.8175,
-      "d_bo_dm": -0.2555,
-      "volume": 30884.174
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "2466",
-     "name": "冠西電",
-     "market": "TWSE",
-     "close": 435.5,
-     "volume_lots": 640,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 27.3928,
-      "w_ro_dif": 44.689,
-      "w_ro_dm": 3.7712,
-      "d_ro_dif": 10.5767,
-      "d_ro_macd": 9.7044,
-      "d_ro_dm": 0.8723,
-      "d_ro_dm_prev": 0.3557,
-      "d_ro_dm_prev2": -0.4049,
-      "d_mi_macd": 25.3363,
-      "d_mi_dm": 0.5018,
-      "d_mi_dm_prev": 0.2706,
-      "d_bo_dif": 8.0149,
-      "d_bo_macd": 6.8437,
-      "d_bo_dm": 1.1713,
-      "volume": 640.11
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "2471",
-     "name": "資通",
-     "market": "TWSE",
-     "close": 70.4,
-     "volume_lots": 2285,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.4021,
-      "w_ro_dif": 4.8867,
-      "w_ro_dm": 2.5694,
-      "d_ro_dif": 2.1552,
-      "d_ro_macd": 3.3209,
-      "d_ro_dm": -1.1657,
-      "d_ro_dm_prev": -1.0448,
-      "d_ro_dm_prev2": -0.8229,
-      "d_mi_macd": 4.5831,
-      "d_mi_dm": 0.4629,
-      "d_mi_dm_prev": 0.6397,
-      "d_bo_dif": 0.0721,
-      "d_bo_macd": 0.4814,
-      "d_bo_dm": -0.4093,
-      "volume": 2284.822
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "2548",
-     "name": "華固",
-     "market": "TWSE",
-     "close": 94.7,
-     "volume_lots": 1614,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.218,
-      "w_ro_dif": 0.7525,
-      "w_ro_dm": 0.4526,
-      "d_ro_dif": 0.2328,
-      "d_ro_macd": 0.4146,
-      "d_ro_dm": -0.1818,
-      "d_ro_dm_prev": -0.1606,
-      "d_ro_dm_prev2": -0.085,
-      "d_mi_macd": 0.8021,
-      "d_mi_dm": 0.0064,
-      "d_mi_dm_prev": 0.0338,
-      "d_bo_dif": -0.0382,
-      "d_bo_macd": 0.0317,
-      "d_bo_dm": -0.0699,
-      "volume": 1613.86
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "2816",
-     "name": "旺旺保",
-     "market": "TWSE",
-     "close": 42.55,
-     "volume_lots": 399,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.0743,
-      "w_ro_dif": 0.2776,
-      "w_ro_dm": 0.2126,
-      "d_ro_dif": 0.2573,
-      "d_ro_macd": 0.5003,
-      "d_ro_dm": -0.243,
-      "d_ro_dm_prev": -0.2073,
-      "d_ro_dm_prev2": -0.187,
-      "d_mi_macd": 0.4287,
-      "d_mi_dm": 0.1043,
-      "d_mi_dm_prev": 0.1453,
-      "d_bo_dif": -0.0844,
-      "d_bo_macd": -0.0142,
-      "d_bo_dm": -0.0702,
-      "volume": 399.236
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "2886",
-     "name": "兆豐金",
-     "market": "TWSE",
-     "close": 54.7,
-     "volume_lots": 33236,
+     "close": 78.8,
+     "volume_lots": 11826,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -845,1437 +580,31 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 0.2354,
-      "w_ro_dif": 0.5642,
-      "w_ro_dm": -0.0454,
-      "d_ro_dif": 0.1141,
-      "d_ro_macd": 0.2113,
-      "d_ro_dm": -0.0972,
-      "d_ro_dm_prev": -0.1,
-      "d_ro_dm_prev2": -0.135,
-      "d_mi_macd": 0.3004,
-      "d_mi_dm": 0.0194,
-      "d_mi_dm_prev": 0.029,
-      "d_bo_dif": -0.0213,
-      "d_bo_macd": -0.0155,
-      "d_bo_dm": -0.0058,
-      "volume": 33235.996
+      "m_ro_dm": 0.1732,
+      "w_ro_dif": 0.1447,
+      "w_ro_dm": -0.1139,
+      "d_ro_dif": 0.193,
+      "d_ro_macd": 0.3141,
+      "d_ro_dm": -0.1212,
+      "d_ro_dm_prev": -0.1262,
+      "d_ro_dm_prev2": -0.1063,
+      "d_mi_macd": 0.0008,
+      "d_mi_dm": 0.1223,
+      "d_mi_dm_prev": 0.1359,
+      "d_bo_dif": -0.0084,
+      "d_bo_macd": 0.0171,
+      "d_bo_dm": -0.0256,
+      "volume": 11826.351
      },
      "failed": [
       "W2"
      ]
     },
     {
-     "code": "2891",
-     "name": "中信金",
+     "code": "1232",
+     "name": "大統益",
      "market": "TWSE",
-     "close": 77.5,
-     "volume_lots": 61152,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.4951,
-      "w_ro_dif": 1.2164,
-      "w_ro_dm": 0.1142,
-      "d_ro_dif": 0.5888,
-      "d_ro_macd": 0.78,
-      "d_ro_dm": -0.1912,
-      "d_ro_dm_prev": -0.1019,
-      "d_ro_dm_prev2": -0.0686,
-      "d_mi_macd": 0.9589,
-      "d_mi_dm": 0.1565,
-      "d_mi_dm_prev": 0.2116,
-      "d_bo_dif": 0.1492,
-      "d_bo_macd": 0.2502,
-      "d_bo_dm": -0.101,
-      "volume": 61151.653
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "2923",
-     "name": "鼎固-KY",
-     "market": "TWSE",
-     "close": 31.6,
-     "volume_lots": 562,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.0358,
-      "w_ro_dif": 0.5757,
-      "w_ro_dm": 0.0392,
-      "d_ro_dif": 1.2471,
-      "d_ro_macd": 0.683,
-      "d_ro_dm": 0.5641,
-      "d_ro_dm_prev": 0.6491,
-      "d_ro_dm_prev2": 0.7105,
-      "d_mi_macd": 0.0234,
-      "d_mi_dm": 0.4997,
-      "d_mi_dm_prev": 0.4794,
-      "d_bo_dif": 1.1733,
-      "d_bo_macd": 1.1896,
-      "d_bo_dm": -0.0163,
-      "volume": 561.9
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "3029",
-     "name": "零壹",
-     "market": "TWSE",
-     "close": 123.0,
-     "volume_lots": 6863,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.2788,
-      "w_ro_dif": 2.2818,
-      "w_ro_dm": 0.7159,
-      "d_ro_dif": -1.4477,
-      "d_ro_macd": 0.3458,
-      "d_ro_dm": -1.7936,
-      "d_ro_dm_prev": -1.8774,
-      "d_ro_dm_prev2": -2.0183,
-      "d_mi_macd": 2.6341,
-      "d_mi_dm": -0.8438,
-      "d_mi_dm_prev": -0.6988,
-      "d_bo_dif": -2.3497,
-      "d_bo_macd": -2.2261,
-      "d_bo_dm": -0.1236,
-      "volume": 6863.375
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "3054",
-     "name": "立萬利",
-     "market": "TWSE",
-     "close": 63.5,
-     "volume_lots": 520,
-     "conditions": {
-      "M1": false,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": -0.0268,
-      "w_ro_dif": 1.1493,
-      "w_ro_dm": 0.8418,
-      "d_ro_dif": 1.0601,
-      "d_ro_macd": 1.0476,
-      "d_ro_dm": 0.0125,
-      "d_ro_dm_prev": -0.0678,
-      "d_ro_dm_prev2": 0.0862,
-      "d_mi_macd": 1.0218,
-      "d_mi_dm": 0.3508,
-      "d_mi_dm_prev": 0.3305,
-      "d_bo_dif": 0.6032,
-      "d_bo_macd": 0.6204,
-      "d_bo_dm": -0.0172,
-      "volume": 520.045
-     },
-     "failed": [
-      "M1"
-     ]
-    },
-    {
-     "code": "3285",
-     "name": "微端",
-     "market": "TPEX",
-     "close": 49.9,
-     "volume_lots": 1365,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.2175,
-      "w_ro_dif": 2.0224,
-      "w_ro_dm": 0.896,
-      "d_ro_dif": 0.7486,
-      "d_ro_macd": 1.3354,
-      "d_ro_dm": -0.5868,
-      "d_ro_dm_prev": -0.5059,
-      "d_ro_dm_prev2": -0.3611,
-      "d_mi_macd": 1.7238,
-      "d_mi_dm": 0.1641,
-      "d_mi_dm_prev": 0.2572,
-      "d_bo_dif": -0.1771,
-      "d_bo_macd": 0.0582,
-      "d_bo_dm": -0.2353,
-      "volume": 1365.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "3379",
-     "name": "彬台",
-     "market": "TPEX",
-     "close": 32.0,
-     "volume_lots": 2052,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.1498,
-      "w_ro_dif": 1.3982,
-      "w_ro_dm": 0.168,
-      "d_ro_dif": -0.4646,
-      "d_ro_macd": 0.0252,
-      "d_ro_dm": -0.4898,
-      "d_ro_dm_prev": -0.5315,
-      "d_ro_dm_prev2": -0.5262,
-      "d_mi_macd": 0.9183,
-      "d_mi_dm": -0.3241,
-      "d_mi_dm_prev": -0.2952,
-      "d_bo_dif": -0.7019,
-      "d_bo_macd": -0.654,
-      "d_bo_dm": -0.0479,
-      "volume": 2052.0
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "3491",
-     "name": "昇達科",
-     "market": "TPEX",
-     "close": 1445.0,
-     "volume_lots": 4384,
-     "conditions": {
-      "M1": false,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": -25.14,
-      "w_ro_dif": 8.3984,
-      "w_ro_dm": 32.3725,
-      "d_ro_dif": 6.7436,
-      "d_ro_macd": 15.7509,
-      "d_ro_dm": -9.0073,
-      "d_ro_dm_prev": -13.1808,
-      "d_ro_dm_prev2": -17.9811,
-      "d_mi_macd": 34.7443,
-      "d_mi_dm": -0.058,
-      "d_mi_dm_prev": -0.4086,
-      "d_bo_dif": -0.7501,
-      "d_bo_macd": -5.04,
-      "d_bo_dm": 4.2898,
-      "volume": 4384.0
-     },
-     "failed": [
-      "M1"
-     ]
-    },
-    {
-     "code": "3701",
-     "name": "大眾控",
-     "market": "TWSE",
-     "close": 57.5,
-     "volume_lots": 9033,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.1472,
-      "w_ro_dif": 1.985,
-      "w_ro_dm": 0.5545,
-      "d_ro_dif": -1.3779,
-      "d_ro_macd": 0.2377,
-      "d_ro_dm": -1.6157,
-      "d_ro_dm_prev": -1.7555,
-      "d_ro_dm_prev2": -1.8108,
-      "d_mi_macd": 2.3281,
-      "d_mi_dm": -0.7787,
-      "d_mi_dm_prev": -0.6698,
-      "d_bo_dif": -2.137,
-      "d_bo_macd": -2.056,
-      "d_bo_dm": -0.0811,
-      "volume": 9033.05
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "3703",
-     "name": "欣陸",
-     "market": "TWSE",
-     "close": 22.75,
-     "volume_lots": 1508,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.3197,
-      "w_ro_dif": 0.6743,
-      "w_ro_dm": 0.1163,
-      "d_ro_dif": -0.0635,
-      "d_ro_macd": 0.0493,
-      "d_ro_dm": -0.1128,
-      "d_ro_dm_prev": -0.12,
-      "d_ro_dm_prev2": -0.1156,
-      "d_mi_macd": 0.5253,
-      "d_mi_dm": -0.1084,
-      "d_mi_dm_prev": -0.101,
-      "d_bo_dif": -0.1287,
-      "d_bo_macd": -0.1174,
-      "d_bo_dm": -0.0112,
-      "volume": 1507.67
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "3715",
-     "name": "定穎投控",
-     "market": "TWSE",
-     "close": 127.5,
-     "volume_lots": 17128,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.5805,
-      "w_ro_dif": 1.6105,
-      "w_ro_dm": 2.3358,
-      "d_ro_dif": -0.4827,
-      "d_ro_macd": 1.8272,
-      "d_ro_dm": -2.3099,
-      "d_ro_dm_prev": -2.4012,
-      "d_ro_dm_prev2": -2.5387,
-      "d_mi_macd": 3.7484,
-      "d_mi_dm": -0.3774,
-      "d_mi_dm_prev": -0.1612,
-      "d_bo_dif": -2.1852,
-      "d_bo_macd": -1.9892,
-      "d_bo_dm": -0.196,
-      "volume": 17127.538
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "4105",
-     "name": "東洋",
-     "market": "TPEX",
-     "close": 83.0,
-     "volume_lots": 870,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.392,
-      "w_ro_dif": 0.7508,
-      "w_ro_dm": 0.2755,
-      "d_ro_dif": 0.0714,
-      "d_ro_macd": 0.248,
-      "d_ro_dm": -0.1766,
-      "d_ro_dm_prev": -0.2026,
-      "d_ro_dm_prev2": -0.2085,
-      "d_mi_macd": 0.6918,
-      "d_mi_dm": -0.051,
-      "d_mi_dm_prev": -0.0414,
-      "d_bo_dif": -0.0926,
-      "d_bo_macd": -0.098,
-      "d_bo_dm": 0.0054,
-      "volume": 870.0
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "4147",
-     "name": "中裕",
-     "market": "TPEX",
-     "close": 63.7,
-     "volume_lots": 1364,
-     "conditions": {
-      "M1": false,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": -0.3269,
-      "w_ro_dif": 0.7534,
-      "w_ro_dm": 0.8822,
-      "d_ro_dif": 0.52,
-      "d_ro_macd": 0.749,
-      "d_ro_dm": -0.2291,
-      "d_ro_dm_prev": -0.2367,
-      "d_ro_dm_prev2": -0.2557,
-      "d_mi_macd": 1.2082,
-      "d_mi_dm": 0.1034,
-      "d_mi_dm_prev": 0.13,
-      "d_bo_dif": 0.1185,
-      "d_bo_macd": 0.1429,
-      "d_bo_dm": -0.0244,
-      "volume": 1364.0
-     },
-     "failed": [
-      "M1"
-     ]
-    },
-    {
-     "code": "4155",
-     "name": "訊映",
-     "market": "TWSE",
-     "close": 18.55,
-     "volume_lots": 3656,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.2606,
-      "w_ro_dif": 0.4522,
-      "w_ro_dm": 0.0403,
-      "d_ro_dif": 0.3229,
-      "d_ro_macd": 0.2029,
-      "d_ro_dm": 0.12,
-      "d_ro_dm_prev": 0.1422,
-      "d_ro_dm_prev2": 0.137,
-      "d_mi_macd": 0.2053,
-      "d_mi_dm": 0.1014,
-      "d_mi_dm_prev": 0.099,
-      "d_bo_dif": 0.2935,
-      "d_bo_macd": 0.2867,
-      "d_bo_dm": 0.0068,
-      "volume": 3656.311
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "4174",
-     "name": "浩鼎",
-     "market": "TPEX",
-     "close": 78.4,
-     "volume_lots": 313,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 3.5752,
-      "w_ro_dif": 5.5943,
-      "w_ro_dm": 2.6073,
-      "d_ro_dif": 4.9523,
-      "d_ro_macd": 4.4053,
-      "d_ro_dm": 0.547,
-      "d_ro_dm_prev": 0.7426,
-      "d_ro_dm_prev2": 0.8901,
-      "d_mi_macd": 4.5868,
-      "d_mi_dm": 1.5855,
-      "d_mi_dm_prev": 1.6388,
-      "d_bo_dif": 3.3297,
-      "d_bo_macd": 3.466,
-      "d_bo_dm": -0.1363,
-      "volume": 313.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "4183",
-     "name": "福永生技",
-     "market": "TPEX",
-     "close": 14.5,
-     "volume_lots": 24,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": false
-     },
-     "values": {
-      "m_ro_dm": 0.1259,
-      "w_ro_dif": 0.0959,
-      "w_ro_dm": 0.0008,
-      "d_ro_dif": 0.0499,
-      "d_ro_macd": 0.0434,
-      "d_ro_dm": 0.0065,
-      "d_ro_dm_prev": -0.0002,
-      "d_ro_dm_prev2": -0.0122,
-      "d_mi_macd": 0.0989,
-      "d_mi_dm": 0.0071,
-      "d_mi_dm_prev": 0.0045,
-      "d_bo_dif": 0.0428,
-      "d_bo_macd": 0.0298,
-      "d_bo_dm": 0.013,
-      "volume": 24.0
-     },
-     "failed": [
-      "V1"
-     ]
-    },
-    {
-     "code": "4430",
-     "name": "耀億",
-     "market": "TPEX",
-     "close": 21.85,
-     "volume_lots": 60,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": false
-     },
-     "values": {
-      "m_ro_dm": 0.4411,
-      "w_ro_dif": 0.5122,
-      "w_ro_dm": 0.0338,
-      "d_ro_dif": 0.0028,
-      "d_ro_macd": 0.0666,
-      "d_ro_dm": -0.0638,
-      "d_ro_dm_prev": -0.0861,
-      "d_ro_dm_prev2": -0.0868,
-      "d_mi_macd": 0.3686,
-      "d_mi_dm": -0.0494,
-      "d_mi_dm_prev": -0.0507,
-      "d_bo_dif": -0.0327,
-      "d_bo_macd": -0.0475,
-      "d_bo_dm": 0.0147,
-      "volume": 60.0
-     },
-     "failed": [
-      "V1"
-     ]
-    },
-    {
-     "code": "4743",
-     "name": "合一",
-     "market": "TPEX",
-     "close": 46.25,
-     "volume_lots": 2847,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.6723,
-      "w_ro_dif": 0.1345,
-      "w_ro_dm": 0.1901,
-      "d_ro_dif": -0.2256,
-      "d_ro_macd": 0.2052,
-      "d_ro_dm": -0.4308,
-      "d_ro_dm_prev": -0.4368,
-      "d_ro_dm_prev2": -0.462,
-      "d_mi_macd": 0.3929,
-      "d_mi_dm": -0.0964,
-      "d_mi_dm_prev": -0.0547,
-      "d_bo_dif": -0.5195,
-      "d_bo_macd": -0.4702,
-      "d_bo_dm": -0.0493,
-      "volume": 2847.0
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "5206",
-     "name": "坤悅",
-     "market": "TPEX",
-     "close": 25.55,
-     "volume_lots": 447,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.274,
-      "w_ro_dif": 0.5005,
-      "w_ro_dm": 0.3386,
-      "d_ro_dif": 0.5435,
-      "d_ro_macd": 0.5409,
-      "d_ro_dm": 0.0026,
-      "d_ro_dm_prev": 0.0422,
-      "d_ro_dm_prev2": 0.0555,
-      "d_mi_macd": 0.4929,
-      "d_mi_dm": 0.186,
-      "d_mi_dm_prev": 0.2043,
-      "d_bo_dif": 0.3036,
-      "d_bo_macd": 0.3427,
-      "d_bo_dm": -0.0391,
-      "volume": 447.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "5209",
-     "name": "新鼎",
-     "market": "TPEX",
-     "close": 218.5,
-     "volume_lots": 558,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 5.6432,
-      "w_ro_dif": 8.3983,
-      "w_ro_dm": 1.4861,
-      "d_ro_dif": 1.036,
-      "d_ro_macd": 2.555,
-      "d_ro_dm": -1.519,
-      "d_ro_dm_prev": -1.5495,
-      "d_ro_dm_prev2": -1.6858,
-      "d_mi_macd": 6.1776,
-      "d_mi_dm": -0.3035,
-      "d_mi_dm_prev": -0.1539,
-      "d_bo_dif": -0.5473,
-      "d_bo_macd": -0.5276,
-      "d_bo_dm": -0.0197,
-      "volume": 558.0
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "5212",
-     "name": "凌網",
-     "market": "TPEX",
-     "close": 51.1,
-     "volume_lots": 546,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.3379,
-      "w_ro_dif": 0.9869,
-      "w_ro_dm": 0.5214,
-      "d_ro_dif": 0.4074,
-      "d_ro_macd": 0.8694,
-      "d_ro_dm": -0.4619,
-      "d_ro_dm_prev": -0.3788,
-      "d_ro_dm_prev2": -0.226,
-      "d_mi_macd": 0.9541,
-      "d_mi_dm": 0.1098,
-      "d_mi_dm_prev": 0.1888,
-      "d_bo_dif": -0.2793,
-      "d_bo_macd": -0.0429,
-      "d_bo_dm": -0.2363,
-      "volume": 546.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "5263",
-     "name": "智崴",
-     "market": "TPEX",
-     "close": 90.0,
-     "volume_lots": 383,
-     "conditions": {
-      "M1": false,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": -0.8123,
-      "w_ro_dif": 0.462,
-      "w_ro_dm": 1.5372,
-      "d_ro_dif": 0.8375,
-      "d_ro_macd": 1.4133,
-      "d_ro_dm": -0.5758,
-      "d_ro_dm_prev": -0.7227,
-      "d_ro_dm_prev2": -0.7642,
-      "d_mi_macd": 1.4162,
-      "d_mi_dm": 0.3174,
-      "d_mi_dm_prev": 0.3388,
-      "d_bo_dif": 0.0154,
-      "d_bo_macd": -0.0228,
-      "d_bo_dm": 0.0382,
-      "volume": 383.0
-     },
-     "failed": [
-      "M1"
-     ]
-    },
-    {
-     "code": "5278",
-     "name": "尚凡*",
-     "market": "TPEX",
-     "close": 24.6,
-     "volume_lots": 147,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": false
-     },
-     "values": {
-      "m_ro_dm": 0.1625,
-      "w_ro_dif": 0.201,
-      "w_ro_dm": 0.0724,
-      "d_ro_dif": 0.022,
-      "d_ro_macd": 0.0251,
-      "d_ro_dm": -0.0031,
-      "d_ro_dm_prev": -0.0385,
-      "d_ro_dm_prev2": -0.0468,
-      "d_mi_macd": 0.1202,
-      "d_mi_dm": -0.0082,
-      "d_mi_dm_prev": -0.02,
-      "d_bo_dif": 0.0262,
-      "d_bo_macd": -0.0069,
-      "d_bo_dm": 0.0331,
-      "volume": 147.0
-     },
-     "failed": [
-      "V1"
-     ]
-    },
-    {
-     "code": "6108",
-     "name": "競國",
-     "market": "TWSE",
-     "close": 41.45,
-     "volume_lots": 5779,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.1759,
-      "w_ro_dif": 2.8546,
-      "w_ro_dm": 1.124,
-      "d_ro_dif": 1.3303,
-      "d_ro_macd": 1.6284,
-      "d_ro_dm": -0.2981,
-      "d_ro_dm_prev": -0.2351,
-      "d_ro_dm_prev2": -0.1936,
-      "d_mi_macd": 2.5367,
-      "d_mi_dm": 0.2829,
-      "d_mi_dm_prev": 0.3468,
-      "d_bo_dif": 0.5417,
-      "d_bo_macd": 0.6203,
-      "d_bo_dm": -0.0786,
-      "volume": 5778.7
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6140",
-     "name": "訊達",
-     "market": "TPEX",
-     "close": 31.4,
-     "volume_lots": 3199,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.3194,
-      "w_ro_dif": 2.5542,
-      "w_ro_dm": 1.0525,
-      "d_ro_dif": 0.9295,
-      "d_ro_macd": 1.5037,
-      "d_ro_dm": -0.5742,
-      "d_ro_dm_prev": -0.5297,
-      "d_ro_dm_prev2": -0.4407,
-      "d_mi_macd": 2.2287,
-      "d_mi_dm": 0.164,
-      "d_mi_dm_prev": 0.2442,
-      "d_bo_dif": -0.0238,
-      "d_bo_macd": 0.1513,
-      "d_bo_dm": -0.1751,
-      "volume": 3199.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6148",
-     "name": "驊宏資",
-     "market": "TPEX",
-     "close": 57.6,
-     "volume_lots": 16248,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.266,
-      "w_ro_dif": 4.7072,
-      "w_ro_dm": 1.7528,
-      "d_ro_dif": 1.3493,
-      "d_ro_macd": 2.2825,
-      "d_ro_dm": -0.9332,
-      "d_ro_dm_prev": -0.8601,
-      "d_ro_dm_prev2": -0.7105,
-      "d_mi_macd": 3.9624,
-      "d_mi_dm": 0.1217,
-      "d_mi_dm_prev": 0.2496,
-      "d_bo_dif": -0.133,
-      "d_bo_macd": 0.1624,
-      "d_bo_dm": -0.2954,
-      "volume": 16248.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6150",
-     "name": "撼訊",
-     "market": "TPEX",
-     "close": 80.1,
-     "volume_lots": 6327,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.4369,
-      "w_ro_dif": 2.9503,
-      "w_ro_dm": 1.361,
-      "d_ro_dif": 1.3192,
-      "d_ro_macd": 1.6366,
-      "d_ro_dm": -0.3174,
-      "d_ro_dm_prev": -0.2677,
-      "d_ro_dm_prev2": -0.2686,
-      "d_mi_macd": 2.6844,
-      "d_mi_dm": 0.2609,
-      "d_mi_dm_prev": 0.3226,
-      "d_bo_dif": 0.5413,
-      "d_bo_macd": 0.5951,
-      "d_bo_dm": -0.0539,
-      "volume": 6327.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6170",
-     "name": "統振",
-     "market": "TPEX",
-     "close": 50.8,
-     "volume_lots": 455,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.2493,
-      "w_ro_dif": 0.263,
-      "w_ro_dm": 0.0868,
-      "d_ro_dif": 0.1652,
-      "d_ro_macd": 0.2472,
-      "d_ro_dm": -0.082,
-      "d_ro_dm_prev": -0.0793,
-      "d_ro_dm_prev2": -0.0848,
-      "d_mi_macd": 0.2626,
-      "d_mi_dm": 0.0539,
-      "d_mi_dm_prev": 0.0651,
-      "d_bo_dif": 0.0265,
-      "d_bo_macd": 0.03,
-      "d_bo_dm": -0.0035,
-      "volume": 455.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6180",
-     "name": "橘子",
-     "market": "TPEX",
-     "close": 40.3,
-     "volume_lots": 310,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": false,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.0868,
-      "w_ro_dif": 0.1455,
-      "w_ro_dm": 0.1692,
-      "d_ro_dif": -0.0972,
-      "d_ro_macd": -0.0325,
-      "d_ro_dm": -0.0647,
-      "d_ro_dm_prev": -0.103,
-      "d_ro_dm_prev2": -0.1319,
-      "d_mi_macd": 0.2608,
-      "d_mi_dm": -0.0801,
-      "d_mi_dm_prev": -0.0876,
-      "d_bo_dif": -0.0927,
-      "d_bo_macd": -0.127,
-      "d_bo_dm": 0.0343,
-      "volume": 310.0
-     },
-     "failed": [
-      "D1"
-     ]
-    },
-    {
-     "code": "6199",
-     "name": "天品",
-     "market": "TPEX",
-     "close": 170.0,
-     "volume_lots": 9540,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": false,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 6.4226,
-      "w_ro_dif": 6.4466,
-      "w_ro_dm": -0.9459,
-      "d_ro_dif": 0.5158,
-      "d_ro_macd": 0.6243,
-      "d_ro_dm": -0.1084,
-      "d_ro_dm_prev": -0.1279,
-      "d_ro_dm_prev2": -0.1038,
-      "d_mi_macd": 2.7,
-      "d_mi_dm": -0.2649,
-      "d_mi_dm_prev": -0.2683,
-      "d_bo_dif": 0.2207,
-      "d_bo_macd": 0.2319,
-      "d_bo_dm": -0.0112,
-      "volume": 9540.0
-     },
-     "failed": [
-      "W2"
-     ]
-    },
-    {
-     "code": "6470",
-     "name": "宇智",
-     "market": "TPEX",
-     "close": 46.2,
-     "volume_lots": 20,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": false
-     },
-     "values": {
-      "m_ro_dm": 0.4126,
-      "w_ro_dif": 0.4332,
-      "w_ro_dm": 0.094,
-      "d_ro_dif": -0.0531,
-      "d_ro_macd": 0.1258,
-      "d_ro_dm": -0.1789,
-      "d_ro_dm_prev": -0.2421,
-      "d_ro_dm_prev2": -0.2262,
-      "d_mi_macd": 0.4247,
-      "d_mi_dm": -0.064,
-      "d_mi_dm_prev": -0.0676,
-      "d_bo_dif": -0.1661,
-      "d_bo_macd": -0.1908,
-      "d_bo_dm": 0.0247,
-      "volume": 20.0
-     },
-     "failed": [
-      "V1"
-     ]
-    },
-    {
-     "code": "6535",
-     "name": "順藥",
-     "market": "TPEX",
-     "close": 87.4,
-     "volume_lots": 844,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.7984,
-      "w_ro_dif": 2.9151,
-      "w_ro_dm": 2.65,
-      "d_ro_dif": 2.2129,
-      "d_ro_macd": 3.0473,
-      "d_ro_dm": -0.8344,
-      "d_ro_dm_prev": -0.6788,
-      "d_ro_dm_prev2": -0.417,
-      "d_mi_macd": 3.6986,
-      "d_mi_dm": 0.6117,
-      "d_mi_dm_prev": 0.7706,
-      "d_bo_dif": 0.4041,
-      "d_bo_macd": 0.8004,
-      "d_bo_dm": -0.3963,
-      "volume": 844.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6589",
-     "name": "台康生技",
-     "market": "TWSE",
-     "close": 53.0,
-     "volume_lots": 1008,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.5748,
-      "w_ro_dif": 1.0011,
-      "w_ro_dm": 0.6477,
-      "d_ro_dif": 0.1442,
-      "d_ro_macd": 0.5095,
-      "d_ro_dm": -0.3653,
-      "d_ro_dm_prev": -0.3742,
-      "d_ro_dm_prev2": -0.3765,
-      "d_mi_macd": 1.2077,
-      "d_mi_dm": -0.069,
-      "d_mi_dm_prev": -0.0332,
-      "d_bo_dif": -0.2191,
-      "d_bo_macd": -0.1806,
-      "d_bo_dm": -0.0385,
-      "volume": 1008.098
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "6609",
-     "name": "瀧澤科",
-     "market": "TPEX",
-     "close": 52.3,
-     "volume_lots": 3579,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.5888,
-      "w_ro_dif": 3.2473,
-      "w_ro_dm": 0.8203,
-      "d_ro_dif": -0.3846,
-      "d_ro_macd": 0.505,
-      "d_ro_dm": -0.8896,
-      "d_ro_dm_prev": -0.955,
-      "d_ro_dm_prev2": -1.0528,
-      "d_mi_macd": 2.7908,
-      "d_mi_dm": -0.5295,
-      "d_mi_dm_prev": -0.4672,
-      "d_bo_dif": -0.9143,
-      "d_bo_macd": -0.898,
-      "d_bo_dm": -0.0163,
-      "volume": 3579.0
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "6614",
-     "name": "資拓宏宇",
-     "market": "TWSE",
-     "close": 40.0,
-     "volume_lots": 3971,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.2289,
-      "w_ro_dif": 0.6831,
-      "w_ro_dm": 0.8216,
-      "d_ro_dif": 1.2311,
-      "d_ro_macd": 1.4162,
-      "d_ro_dm": -0.1851,
-      "d_ro_dm_prev": -0.0415,
-      "d_ro_dm_prev2": 0.1072,
-      "d_mi_macd": 0.7166,
-      "d_mi_dm": 0.5244,
-      "d_mi_dm_prev": 0.6052,
-      "d_bo_dif": 0.4415,
-      "d_bo_macd": 0.659,
-      "d_bo_dm": -0.2175,
-      "volume": 3970.972
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6689",
-     "name": "伊雲谷",
-     "market": "TWSE",
-     "close": 74.4,
-     "volume_lots": 4428,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.9044,
-      "w_ro_dif": 2.1748,
-      "w_ro_dm": 0.0977,
-      "d_ro_dif": -0.6811,
-      "d_ro_macd": 0.6732,
-      "d_ro_dm": -1.3543,
-      "d_ro_dm_prev": -1.3609,
-      "d_ro_dm_prev2": -1.3384,
-      "d_mi_macd": 1.7593,
-      "d_mi_dm": -0.4297,
-      "d_mi_dm_prev": -0.3012,
-      "d_bo_dif": -1.696,
-      "d_bo_macd": -1.4442,
-      "d_bo_dm": -0.2518,
-      "volume": 4427.686
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "6690",
-     "name": "安碁資訊",
-     "market": "TPEX",
-     "close": 210.0,
-     "volume_lots": 1479,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 3.1734,
-      "w_ro_dif": 7.2988,
-      "w_ro_dm": 3.1675,
-      "d_ro_dif": 3.0967,
-      "d_ro_macd": 5.6327,
-      "d_ro_dm": -2.5359,
-      "d_ro_dm_prev": -2.2412,
-      "d_ro_dm_prev2": -1.6723,
-      "d_mi_macd": 6.3811,
-      "d_mi_dm": 0.8325,
-      "d_mi_dm_prev": 1.217,
-      "d_bo_dif": -0.9072,
-      "d_bo_macd": 0.0875,
-      "d_bo_dm": -0.9947,
-      "volume": 1479.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6697",
-     "name": "東捷資訊",
-     "market": "TPEX",
-     "close": 79.8,
-     "volume_lots": 2492,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 3.6537,
-      "w_ro_dif": 8.3999,
-      "w_ro_dm": 2.6542,
-      "d_ro_dif": 2.4135,
-      "d_ro_macd": 3.8712,
-      "d_ro_dm": -1.4578,
-      "d_ro_dm_prev": -1.3412,
-      "d_ro_dm_prev2": -1.1109,
-      "d_mi_macd": 6.3962,
-      "d_mi_dm": 0.2831,
-      "d_mi_dm_prev": 0.4834,
-      "d_bo_dif": -0.0319,
-      "d_bo_macd": 0.4186,
-      "d_bo_dm": -0.4504,
-      "volume": 2492.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6708",
-     "name": "天擎",
-     "market": "TPEX",
-     "close": 83.8,
-     "volume_lots": 1095,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 4.2256,
-      "w_ro_dif": 6.8266,
-      "w_ro_dm": 1.3245,
-      "d_ro_dif": -0.1904,
-      "d_ro_macd": 1.3705,
-      "d_ro_dm": -1.5609,
-      "d_ro_dm_prev": -1.585,
-      "d_ro_dm_prev2": -1.5042,
-      "d_mi_macd": 5.2106,
-      "d_mi_dm": -0.78,
-      "d_mi_dm_prev": -0.64,
-      "d_bo_dif": -1.5251,
-      "d_bo_macd": -1.2453,
-      "d_bo_dm": -0.2798,
-      "volume": 1095.0
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "6843",
-     "name": "進典",
-     "market": "TPEX",
-     "close": 39.4,
+     "close": 166.0,
      "volume_lots": 148,
      "conditions": {
       "M1": true,
@@ -2288,69 +617,106 @@
       "V1": false
      },
      "values": {
-      "m_ro_dm": 0.3543,
-      "w_ro_dif": 0.3102,
-      "w_ro_dm": 0.1813,
-      "d_ro_dif": -0.0384,
-      "d_ro_macd": 0.0036,
-      "d_ro_dm": -0.0421,
-      "d_ro_dm_prev": -0.1308,
-      "d_ro_dm_prev2": -0.1942,
-      "d_mi_macd": 0.3271,
-      "d_mi_dm": -0.0611,
-      "d_mi_dm_prev": -0.0874,
-      "d_bo_dif": 0.0045,
-      "d_bo_macd": -0.1124,
-      "d_bo_dm": 0.1169,
-      "volume": 148.0
+      "m_ro_dm": 0.328,
+      "w_ro_dif": 1.9318,
+      "w_ro_dm": 0.4004,
+      "d_ro_dif": 0.7391,
+      "d_ro_macd": 0.9741,
+      "d_ro_dm": -0.235,
+      "d_ro_dm_prev": -0.2547,
+      "d_ro_dm_prev2": -0.227,
+      "d_mi_macd": 1.3053,
+      "d_mi_dm": 0.1692,
+      "d_mi_dm_prev": 0.1906,
+      "d_bo_dif": 0.21,
+      "d_bo_macd": 0.2499,
+      "d_bo_dm": -0.0399,
+      "volume": 147.807
      },
      "failed": [
       "V1"
      ]
     },
     {
-     "code": "6865",
-     "name": "偉康科技",
-     "market": "TPEX",
-     "close": 37.35,
-     "volume_lots": 463,
+     "code": "1235",
+     "name": "興泰",
+     "market": "TWSE",
+     "close": 34.45,
+     "volume_lots": 23,
      "conditions": {
       "M1": true,
       "W1": true,
       "W2": true,
       "D1": true,
-      "D2": false,
+      "D2": true,
       "D3": true,
       "D4": true,
-      "V1": true
+      "V1": false
      },
      "values": {
-      "m_ro_dm": 1.5872,
-      "w_ro_dif": 2.2214,
-      "w_ro_dm": 0.7169,
-      "d_ro_dif": 0.927,
-      "d_ro_macd": 1.4156,
-      "d_ro_dm": -0.4887,
-      "d_ro_dm_prev": -0.4154,
-      "d_ro_dm_prev2": -0.2881,
-      "d_mi_macd": 1.6546,
-      "d_mi_dm": 0.234,
-      "d_mi_dm_prev": 0.3142,
-      "d_bo_dif": -0.0015,
-      "d_bo_macd": 0.2095,
-      "d_bo_dm": -0.211,
-      "volume": 463.0
+      "m_ro_dm": 0.1462,
+      "w_ro_dif": 0.4024,
+      "w_ro_dm": 0.2342,
+      "d_ro_dif": 0.3059,
+      "d_ro_macd": 0.2982,
+      "d_ro_dm": 0.0077,
+      "d_ro_dm_prev": -0.0144,
+      "d_ro_dm_prev2": -0.0155,
+      "d_mi_macd": 0.3228,
+      "d_mi_dm": 0.0987,
+      "d_mi_dm_prev": 0.0931,
+      "d_bo_dif": 0.1914,
+      "d_bo_macd": 0.176,
+      "d_bo_dm": 0.0154,
+      "volume": 23.123
      },
      "failed": [
-      "D2"
+      "V1"
      ]
     },
     {
-     "code": "6870",
-     "name": "騰雲",
+     "code": "1236",
+     "name": "宏亞",
+     "market": "TWSE",
+     "close": 27.05,
+     "volume_lots": 30,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.1175,
+      "w_ro_dif": 0.246,
+      "w_ro_dm": 0.007,
+      "d_ro_dif": 0.0238,
+      "d_ro_macd": 0.0318,
+      "d_ro_dm": -0.008,
+      "d_ro_dm_prev": -0.0101,
+      "d_ro_dm_prev2": -0.0134,
+      "d_mi_macd": 0.1322,
+      "d_mi_dm": -0.0126,
+      "d_mi_dm_prev": -0.0128,
+      "d_bo_dif": 0.0091,
+      "d_bo_macd": 0.0063,
+      "d_bo_dm": 0.0028,
+      "volume": 30.339
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "2221",
+     "name": "大甲",
      "market": "TPEX",
-     "close": 441.0,
-     "volume_lots": 911,
+     "close": 144.5,
+     "volume_lots": 8188,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -2362,32 +728,476 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 14.5239,
-      "w_ro_dif": 29.538,
-      "w_ro_dm": 1.5732,
-      "d_ro_dif": -9.6869,
-      "d_ro_macd": -3.4377,
-      "d_ro_dm": -6.2492,
-      "d_ro_dm_prev": -8.5553,
-      "d_ro_dm_prev2": -11.3307,
-      "d_mi_macd": 19.4113,
-      "d_mi_dm": -7.2748,
-      "d_mi_dm_prev": -7.5608,
-      "d_bo_dif": -9.5445,
-      "d_bo_macd": -11.7891,
-      "d_bo_dm": 2.2446,
-      "volume": 911.0
+      "m_ro_dm": 1.5428,
+      "w_ro_dif": 1.6721,
+      "w_ro_dm": 0.077,
+      "d_ro_dif": -2.2854,
+      "d_ro_macd": -1.5373,
+      "d_ro_dm": -0.7482,
+      "d_ro_dm_prev": -0.9524,
+      "d_ro_dm_prev2": -1.1025,
+      "d_mi_macd": 1.1739,
+      "d_mi_dm": -1.2289,
+      "d_mi_dm_prev": -1.2471,
+      "d_bo_dif": -1.8665,
+      "d_bo_macd": -2.0013,
+      "d_bo_dm": 0.1348,
+      "volume": 8188.0
      },
      "failed": [
       "D1"
      ]
     },
     {
-     "code": "6890",
-     "name": "來億-KY",
+     "code": "2323",
+     "name": "中環",
      "market": "TWSE",
-     "close": 157.0,
+     "close": 12.05,
+     "volume_lots": 28062,
+     "conditions": {
+      "M1": false,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": -0.0409,
+      "w_ro_dif": 0.099,
+      "w_ro_dm": 0.1819,
+      "d_ro_dif": 0.2646,
+      "d_ro_macd": 0.3007,
+      "d_ro_dm": -0.0362,
+      "d_ro_dm_prev": -0.046,
+      "d_ro_dm_prev2": -0.0531,
+      "d_mi_macd": 0.1584,
+      "d_mi_dm": 0.1176,
+      "d_mi_dm_prev": 0.1212,
+      "d_bo_dif": 0.1229,
+      "d_bo_macd": 0.1183,
+      "d_bo_dm": 0.0046,
+      "volume": 28062.054
+     },
+     "failed": [
+      "M1"
+     ]
+    },
+    {
+     "code": "2453",
+     "name": "凌群",
+     "market": "TWSE",
+     "close": 57.1,
+     "volume_lots": 1688,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.5616,
+      "w_ro_dif": 1.388,
+      "w_ro_dm": 0.4275,
+      "d_ro_dif": -0.2876,
+      "d_ro_macd": 0.1076,
+      "d_ro_dm": -0.3952,
+      "d_ro_dm_prev": -0.4057,
+      "d_ro_dm_prev2": -0.3748,
+      "d_mi_macd": 1.2512,
+      "d_mi_dm": -0.2976,
+      "d_mi_dm_prev": -0.265,
+      "d_bo_dif": -0.4871,
+      "d_bo_macd": -0.4423,
+      "d_bo_dm": -0.0448,
+      "volume": 1687.539
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2468",
+     "name": "華經",
+     "market": "TWSE",
+     "close": 66.2,
+     "volume_lots": 21335,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 3.4389,
+      "w_ro_dif": 5.4748,
+      "w_ro_dm": 0.555,
+      "d_ro_dif": -1.1881,
+      "d_ro_macd": 0.5166,
+      "d_ro_dm": -1.7047,
+      "d_ro_dm_prev": -1.7642,
+      "d_ro_dm_prev2": -1.7047,
+      "d_mi_macd": 3.9392,
+      "d_mi_dm": -1.0251,
+      "d_mi_dm_prev": -0.8893,
+      "d_bo_dif": -2.1702,
+      "d_bo_macd": -1.9712,
+      "d_bo_dm": -0.199,
+      "volume": 21335.301
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2471",
+     "name": "資通",
+     "market": "TWSE",
+     "close": 63.4,
+     "volume_lots": 4112,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.4021,
+      "w_ro_dif": 4.4127,
+      "w_ro_dm": 1.7144,
+      "d_ro_dif": -0.6846,
+      "d_ro_macd": 1.1853,
+      "d_ro_dm": -1.8698,
+      "d_ro_dm_prev": -2.0011,
+      "d_ro_dm_prev2": -2.0524,
+      "d_mi_macd": 4.26,
+      "d_mi_dm": -0.76,
+      "d_mi_dm_prev": -0.622,
+      "d_bo_dif": -1.9813,
+      "d_bo_macd": -1.851,
+      "d_bo_dm": -0.1303,
+      "volume": 4112.058
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2480",
+     "name": "敦陽科",
+     "market": "TWSE",
+     "close": 182.0,
+     "volume_lots": 417,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.9391,
+      "w_ro_dif": 2.2421,
+      "w_ro_dm": 0.6056,
+      "d_ro_dif": -0.4258,
+      "d_ro_macd": 0.6405,
+      "d_ro_dm": -1.0663,
+      "d_ro_dm_prev": -1.1195,
+      "d_ro_dm_prev2": -1.1728,
+      "d_mi_macd": 2.4202,
+      "d_mi_dm": -0.3899,
+      "d_mi_dm_prev": -0.296,
+      "d_bo_dif": -1.0457,
+      "d_bo_macd": -1.0063,
+      "d_bo_dm": -0.0394,
+      "volume": 417.431
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2516",
+     "name": "新建",
+     "market": "TWSE",
+     "close": 16.75,
+     "volume_lots": 375,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.2371,
+      "w_ro_dif": 0.335,
+      "w_ro_dm": 0.0176,
+      "d_ro_dif": 0.0078,
+      "d_ro_macd": 0.0545,
+      "d_ro_dm": -0.0467,
+      "d_ro_dm_prev": -0.0492,
+      "d_ro_dm_prev2": -0.0439,
+      "d_mi_macd": 0.2347,
+      "d_mi_dm": -0.032,
+      "d_mi_dm_prev": -0.0286,
+      "d_bo_dif": -0.035,
+      "d_bo_macd": -0.0283,
+      "d_bo_dm": -0.0067,
+      "volume": 374.895
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2548",
+     "name": "華固",
+     "market": "TWSE",
+     "close": 93.8,
+     "volume_lots": 922,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.218,
+      "w_ro_dif": 0.6751,
+      "w_ro_dm": 0.307,
+      "d_ro_dif": -0.211,
+      "d_ro_macd": 0.059,
+      "d_ro_dm": -0.27,
+      "d_ro_dm_prev": -0.323,
+      "d_ro_dm_prev2": -0.3454,
+      "d_mi_macd": 0.687,
+      "d_mi_dm": -0.1794,
+      "d_mi_dm_prev": -0.1727,
+      "d_bo_dif": -0.3389,
+      "d_bo_macd": -0.3532,
+      "d_bo_dm": 0.0143,
+      "volume": 922.225
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2597",
+     "name": "潤弘",
+     "market": "TWSE",
+     "close": 176.0,
+     "volume_lots": 455,
+     "conditions": {
+      "M1": false,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": -0.1747,
+      "w_ro_dif": 1.7356,
+      "w_ro_dm": 1.2597,
+      "d_ro_dif": 0.9339,
+      "d_ro_macd": 1.7236,
+      "d_ro_dm": -0.7897,
+      "d_ro_dm_prev": -0.9178,
+      "d_ro_dm_prev2": -0.9637,
+      "d_mi_macd": 2.257,
+      "d_mi_dm": 0.2438,
+      "d_mi_dm_prev": 0.2926,
+      "d_bo_dif": -0.0918,
+      "d_bo_macd": -0.1234,
+      "d_bo_dm": 0.0317,
+      "volume": 454.901
+     },
+     "failed": [
+      "M1"
+     ]
+    },
+    {
+     "code": "2607",
+     "name": "榮運",
+     "market": "TWSE",
+     "close": 57.8,
+     "volume_lots": 650,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": false,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.5444,
+      "w_ro_dif": 0.3983,
+      "w_ro_dm": -0.0757,
+      "d_ro_dif": -0.1024,
+      "d_ro_macd": 0.0199,
+      "d_ro_dm": -0.1223,
+      "d_ro_dm_prev": -0.1582,
+      "d_ro_dm_prev2": -0.1792,
+      "d_mi_macd": 0.2614,
+      "d_mi_dm": -0.0745,
+      "d_mi_dm_prev": -0.0754,
+      "d_bo_dif": -0.1487,
+      "d_bo_macd": -0.1721,
+      "d_bo_dm": 0.0234,
+      "volume": 650.119
+     },
+     "failed": [
+      "W2"
+     ]
+    },
+    {
+     "code": "2618",
+     "name": "長榮航",
+     "market": "TWSE",
+     "close": 46.8,
+     "volume_lots": 32296,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.1521,
+      "w_ro_dif": 1.158,
+      "w_ro_dm": 0.285,
+      "d_ro_dif": -0.1044,
+      "d_ro_macd": 0.1418,
+      "d_ro_dm": -0.2462,
+      "d_ro_dm_prev": -0.2935,
+      "d_ro_dm_prev2": -0.2996,
+      "d_mi_macd": 0.9025,
+      "d_mi_dm": -0.1747,
+      "d_mi_dm_prev": -0.1687,
+      "d_bo_dif": -0.2629,
+      "d_bo_macd": -0.2627,
+      "d_bo_dm": -0.0002,
+      "volume": 32295.656
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2816",
+     "name": "旺旺保",
+     "market": "TWSE",
+     "close": 41.6,
      "volume_lots": 396,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.0743,
+      "w_ro_dif": 0.2233,
+      "w_ro_dm": 0.1295,
+      "d_ro_dif": -0.1771,
+      "d_ro_macd": 0.1363,
+      "d_ro_dm": -0.3134,
+      "d_ro_dm_prev": -0.3294,
+      "d_ro_dm_prev2": -0.3566,
+      "d_mi_macd": 0.4042,
+      "d_mi_dm": -0.0935,
+      "d_mi_dm_prev": -0.0671,
+      "d_bo_dif": -0.3632,
+      "d_bo_macd": -0.3441,
+      "d_bo_dm": -0.0192,
+      "volume": 395.551
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "2852",
+     "name": "第一保",
+     "market": "TWSE",
+     "close": 28.95,
+     "volume_lots": 641,
+     "conditions": {
+      "M1": false,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": -0.0499,
+      "w_ro_dif": 0.2573,
+      "w_ro_dm": 0.1688,
+      "d_ro_dif": 0.0912,
+      "d_ro_macd": 0.1512,
+      "d_ro_dm": -0.06,
+      "d_ro_dm_prev": -0.0649,
+      "d_ro_dm_prev2": -0.0703,
+      "d_mi_macd": 0.3075,
+      "d_mi_dm": 0.0052,
+      "d_mi_dm_prev": 0.0106,
+      "d_bo_dif": 0.0087,
+      "d_bo_macd": 0.0107,
+      "d_bo_dm": -0.002,
+      "volume": 640.677
+     },
+     "failed": [
+      "M1"
+     ]
+    },
+    {
+     "code": "2923",
+     "name": "鼎固-KY",
+     "market": "TWSE",
+     "close": 31.8,
+     "volume_lots": 403,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -2399,24 +1209,912 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 0.8198,
-      "w_ro_dif": 2.0891,
-      "w_ro_dm": 2.5054,
-      "d_ro_dif": 3.1152,
-      "d_ro_macd": 4.0879,
-      "d_ro_dm": -0.9726,
-      "d_ro_dm_prev": -0.6134,
-      "d_ro_dm_prev2": -0.0588,
-      "d_mi_macd": 2.7906,
-      "d_mi_dm": 1.2322,
-      "d_mi_dm_prev": 1.4849,
-      "d_bo_dif": 0.574,
-      "d_bo_macd": 1.3017,
-      "d_bo_dm": -0.7276,
-      "volume": 396.215
+      "m_ro_dm": 0.0358,
+      "w_ro_dif": 0.8352,
+      "w_ro_dm": 0.2444,
+      "d_ro_dif": 1.3507,
+      "d_ro_macd": 1.1323,
+      "d_ro_dm": 0.2184,
+      "d_ro_dm_prev": 0.3982,
+      "d_ro_dm_prev2": 0.4891,
+      "d_mi_macd": 0.482,
+      "d_mi_dm": 0.5376,
+      "d_mi_dm_prev": 0.5879,
+      "d_bo_dif": 0.8958,
+      "d_bo_macd": 1.0411,
+      "d_bo_dm": -0.1453,
+      "volume": 403.004
      },
      "failed": [
       "D2"
+     ]
+    },
+    {
+     "code": "2929",
+     "name": "淘帝-KY",
+     "market": "TWSE",
+     "close": 5.75,
+     "volume_lots": 190,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.0353,
+      "w_ro_dif": 0.0135,
+      "w_ro_dm": 0.0248,
+      "d_ro_dif": 0.0029,
+      "d_ro_macd": 0.0007,
+      "d_ro_dm": 0.0022,
+      "d_ro_dm_prev": -0.003,
+      "d_ro_dm_prev2": -0.002,
+      "d_mi_macd": 0.0132,
+      "d_mi_dm": -0.001,
+      "d_mi_dm_prev": -0.003,
+      "d_bo_dif": 0.0049,
+      "d_bo_macd": 0.0011,
+      "d_bo_dm": 0.0038,
+      "volume": 190.257
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "3004",
+     "name": "豐達科",
+     "market": "TWSE",
+     "close": 129.5,
+     "volume_lots": 477,
+     "conditions": {
+      "M1": false,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": -0.1794,
+      "w_ro_dif": 1.478,
+      "w_ro_dm": 0.6279,
+      "d_ro_dif": 0.7554,
+      "d_ro_macd": 0.6229,
+      "d_ro_dm": 0.1325,
+      "d_ro_dm_prev": -0.0027,
+      "d_ro_dm_prev2": -0.064,
+      "d_mi_macd": 0.8948,
+      "d_mi_dm": 0.1965,
+      "d_mi_dm_prev": 0.1413,
+      "d_bo_dif": 0.6073,
+      "d_bo_macd": 0.4656,
+      "d_bo_dm": 0.1417,
+      "volume": 476.775
+     },
+     "failed": [
+      "M1"
+     ]
+    },
+    {
+     "code": "3293",
+     "name": "鈊象",
+     "market": "TPEX",
+     "close": 799.0,
+     "volume_lots": 2693,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 3.063,
+      "w_ro_dif": 2.001,
+      "w_ro_dm": 1.8384,
+      "d_ro_dif": 5.0134,
+      "d_ro_macd": 4.6105,
+      "d_ro_dm": 0.403,
+      "d_ro_dm_prev": 0.3742,
+      "d_ro_dm_prev2": 0.6508,
+      "d_mi_macd": 2.909,
+      "d_mi_dm": 2.0781,
+      "d_mi_dm_prev": 2.0905,
+      "d_bo_dif": 3.4452,
+      "d_bo_macd": 3.3706,
+      "d_bo_dm": 0.0746,
+      "volume": 2693.0
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
+     "code": "3617",
+     "name": "碩天",
+     "market": "TWSE",
+     "close": 262.0,
+     "volume_lots": 1126,
+     "conditions": {
+      "M1": false,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": -0.7809,
+      "w_ro_dif": 4.4328,
+      "w_ro_dm": 2.6785,
+      "d_ro_dif": -1.04,
+      "d_ro_macd": 0.1033,
+      "d_ro_dm": -1.1432,
+      "d_ro_dm_prev": -1.6613,
+      "d_ro_dm_prev2": -2.2398,
+      "d_mi_macd": 5.5139,
+      "d_mi_dm": -1.2117,
+      "d_mi_dm_prev": -1.2809,
+      "d_bo_dif": -1.1539,
+      "d_bo_macd": -1.7099,
+      "d_bo_dm": 0.5561,
+      "volume": 1126.294
+     },
+     "failed": [
+      "M1"
+     ]
+    },
+    {
+     "code": "3701",
+     "name": "大眾控",
+     "market": "TWSE",
+     "close": 63.2,
+     "volume_lots": 13010,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": false,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 2.1472,
+      "w_ro_dif": 2.0639,
+      "w_ro_dm": 0.5182,
+      "d_ro_dif": -0.6826,
+      "d_ro_macd": -0.6799,
+      "d_ro_dm": -0.0028,
+      "d_ro_dm_prev": -0.3767,
+      "d_ro_dm_prev2": -0.94,
+      "d_mi_macd": 1.6544,
+      "d_mi_dm": -0.5963,
+      "d_mi_dm_prev": -0.7309,
+      "d_bo_dif": -0.0678,
+      "d_bo_macd": -0.6312,
+      "d_bo_dm": 0.5634,
+      "volume": 13010.285
+     },
+     "failed": [
+      "D1"
+     ]
+    },
+    {
+     "code": "3703",
+     "name": "欣陸",
+     "market": "TWSE",
+     "close": 22.7,
+     "volume_lots": 1411,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": false,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.3197,
+      "w_ro_dif": 0.6222,
+      "w_ro_dm": 0.0526,
+      "d_ro_dif": -0.1445,
+      "d_ro_macd": -0.076,
+      "d_ro_dm": -0.0685,
+      "d_ro_dm_prev": -0.1036,
+      "d_ro_dm_prev2": -0.1203,
+      "d_mi_macd": 0.4097,
+      "d_mi_dm": -0.1379,
+      "d_mi_dm_prev": -0.1457,
+      "d_bo_dif": -0.1254,
+      "d_bo_macd": -0.1525,
+      "d_bo_dm": 0.0271,
+      "volume": 1410.963
+     },
+     "failed": [
+      "D1"
+     ]
+    },
+    {
+     "code": "4105",
+     "name": "東洋",
+     "market": "TPEX",
+     "close": 82.4,
+     "volume_lots": 544,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.392,
+      "w_ro_dif": 0.6963,
+      "w_ro_dm": 0.1808,
+      "d_ro_dif": -0.0912,
+      "d_ro_macd": 0.056,
+      "d_ro_dm": -0.1472,
+      "d_ro_dm_prev": -0.1554,
+      "d_ro_dm_prev2": -0.167,
+      "d_mi_macd": 0.605,
+      "d_mi_dm": -0.1255,
+      "d_mi_dm_prev": -0.1147,
+      "d_bo_dif": -0.1628,
+      "d_bo_macd": -0.1571,
+      "d_bo_dm": -0.0057,
+      "volume": 544.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "4116",
+     "name": "明基醫",
+     "market": "TPEX",
+     "close": 42.7,
+     "volume_lots": 204,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.2144,
+      "w_ro_dif": 0.3122,
+      "w_ro_dm": 0.0265,
+      "d_ro_dif": 0.2458,
+      "d_ro_macd": 0.2678,
+      "d_ro_dm": -0.022,
+      "d_ro_dm_prev": -0.0304,
+      "d_ro_dm_prev2": -0.0124,
+      "d_mi_macd": 0.1379,
+      "d_mi_dm": 0.1025,
+      "d_mi_dm_prev": 0.1041,
+      "d_bo_dif": 0.1179,
+      "d_bo_macd": 0.1233,
+      "d_bo_dm": -0.0053,
+      "volume": 204.0
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "4174",
+     "name": "浩鼎",
+     "market": "TPEX",
+     "close": 77.5,
+     "volume_lots": 2762,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 3.5752,
+      "w_ro_dif": 6.4622,
+      "w_ro_dm": 2.8434,
+      "d_ro_dif": 3.7594,
+      "d_ro_macd": 4.263,
+      "d_ro_dm": -0.5036,
+      "d_ro_dm_prev": -0.3272,
+      "d_ro_dm_prev2": -0.1052,
+      "d_mi_macd": 5.6205,
+      "d_mi_dm": 0.9823,
+      "d_mi_dm_prev": 1.1248,
+      "d_bo_dif": 1.6581,
+      "d_bo_macd": 1.9789,
+      "d_bo_dm": -0.3208,
+      "volume": 2762.0
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
+     "code": "4430",
+     "name": "耀億",
+     "market": "TPEX",
+     "close": 21.85,
+     "volume_lots": 38,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.4411,
+      "w_ro_dif": 0.4854,
+      "w_ro_dm": 0.0057,
+      "d_ro_dif": 0.006,
+      "d_ro_macd": 0.0226,
+      "d_ro_dm": -0.0166,
+      "d_ro_dm_prev": -0.0282,
+      "d_ro_dm_prev2": -0.0275,
+      "d_mi_macd": 0.3227,
+      "d_mi_dm": -0.0513,
+      "d_mi_dm_prev": -0.0541,
+      "d_bo_dif": 0.002,
+      "d_bo_macd": -0.007,
+      "d_bo_dm": 0.0091,
+      "volume": 38.0
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "4432",
+     "name": "銘旺實",
+     "market": "TPEX",
+     "close": 15.9,
+     "volume_lots": 29,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.0013,
+      "w_ro_dif": 0.1152,
+      "w_ro_dm": 0.0802,
+      "d_ro_dif": 0.0524,
+      "d_ro_macd": 0.0759,
+      "d_ro_dm": -0.0236,
+      "d_ro_dm_prev": -0.0312,
+      "d_ro_dm_prev2": -0.0426,
+      "d_mi_macd": 0.1276,
+      "d_mi_dm": 0.0091,
+      "d_mi_dm_prev": 0.0094,
+      "d_bo_dif": 0.0146,
+      "d_bo_macd": 0.008,
+      "d_bo_dm": 0.0066,
+      "volume": 29.0
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "4702",
+     "name": "中美實",
+     "market": "TPEX",
+     "close": 9.95,
+     "volume_lots": 71,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.016,
+      "w_ro_dif": 0.1576,
+      "w_ro_dm": 0.11,
+      "d_ro_dif": 0.0614,
+      "d_ro_macd": 0.0948,
+      "d_ro_dm": -0.0334,
+      "d_ro_dm_prev": -0.0377,
+      "d_ro_dm_prev2": -0.0387,
+      "d_mi_macd": 0.1709,
+      "d_mi_dm": 0.0079,
+      "d_mi_dm_prev": 0.0104,
+      "d_bo_dif": 0.0104,
+      "d_bo_macd": 0.0107,
+      "d_bo_dm": -0.0004,
+      "volume": 71.0
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "4755",
+     "name": "三福化",
+     "market": "TWSE",
+     "close": 124.0,
+     "volume_lots": 991,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": false,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.3299,
+      "w_ro_dif": 0.8739,
+      "w_ro_dm": 0.132,
+      "d_ro_dif": -0.9489,
+      "d_ro_macd": -0.706,
+      "d_ro_dm": -0.2429,
+      "d_ro_dm_prev": -0.3782,
+      "d_ro_dm_prev2": -0.4895,
+      "d_mi_macd": 0.8338,
+      "d_mi_dm": -0.5671,
+      "d_mi_dm_prev": -0.5978,
+      "d_bo_dif": -0.6057,
+      "d_bo_macd": -0.78,
+      "d_bo_dm": 0.1743,
+      "volume": 990.658
+     },
+     "failed": [
+      "D1"
+     ]
+    },
+    {
+     "code": "4977",
+     "name": "眾達-KY",
+     "market": "TWSE",
+     "close": 197.0,
+     "volume_lots": 31332,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.952,
+      "w_ro_dif": 2.5037,
+      "w_ro_dm": 1.0885,
+      "d_ro_dif": 3.0254,
+      "d_ro_macd": 0.6608,
+      "d_ro_dm": 2.3646,
+      "d_ro_dm_prev": 1.9038,
+      "d_ro_dm_prev2": 0.9468,
+      "d_mi_macd": 0.7756,
+      "d_mi_dm": 0.9753,
+      "d_mi_dm_prev": 0.596,
+      "d_bo_dif": 4.212,
+      "d_bo_macd": 3.1421,
+      "d_bo_dm": 1.0699,
+      "volume": 31331.647
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
+     "code": "5206",
+     "name": "坤悅",
+     "market": "TPEX",
+     "close": 25.0,
+     "volume_lots": 471,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.274,
+      "w_ro_dif": 0.5431,
+      "w_ro_dm": 0.3119,
+      "d_ro_dif": 0.2265,
+      "d_ro_macd": 0.3936,
+      "d_ro_dm": -0.1671,
+      "d_ro_dm_prev": -0.166,
+      "d_ro_dm_prev2": -0.1457,
+      "d_mi_macd": 0.5711,
+      "d_mi_dm": 0.0444,
+      "d_mi_dm_prev": 0.064,
+      "d_bo_dif": -0.0224,
+      "d_bo_macd": 0.0129,
+      "d_bo_dm": -0.0353,
+      "volume": 471.0
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
+     "code": "5209",
+     "name": "新鼎",
+     "market": "TPEX",
+     "close": 214.5,
+     "volume_lots": 307,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 5.6432,
+      "w_ro_dif": 7.8008,
+      "w_ro_dm": 0.727,
+      "d_ro_dif": -0.5706,
+      "d_ro_macd": 0.9312,
+      "d_ro_dm": -1.5018,
+      "d_ro_dm_prev": -1.5705,
+      "d_ro_dm_prev2": -1.4373,
+      "d_mi_macd": 5.5808,
+      "d_mi_dm": -1.0211,
+      "d_mi_dm_prev": -0.9037,
+      "d_bo_dif": -1.5355,
+      "d_bo_macd": -1.3432,
+      "d_bo_dm": -0.1923,
+      "volume": 307.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "5230",
+     "name": "雷笛克光學",
+     "market": "TPEX",
+     "close": 32.35,
+     "volume_lots": 8792,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.2072,
+      "w_ro_dif": 2.1065,
+      "w_ro_dm": 0.3283,
+      "d_ro_dif": -0.251,
+      "d_ro_macd": 0.1399,
+      "d_ro_dm": -0.391,
+      "d_ro_dm_prev": -0.4184,
+      "d_ro_dm_prev2": -0.409,
+      "d_mi_macd": 1.625,
+      "d_mi_dm": -0.3515,
+      "d_mi_dm_prev": -0.3261,
+      "d_bo_dif": -0.471,
+      "d_bo_macd": -0.4219,
+      "d_bo_dm": -0.0491,
+      "volume": 8792.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "5516",
+     "name": "雙喜",
+     "market": "TPEX",
+     "close": 13.0,
+     "volume_lots": 6,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.1556,
+      "w_ro_dif": 0.1066,
+      "w_ro_dm": 0.0104,
+      "d_ro_dif": 0.0257,
+      "d_ro_macd": 0.0362,
+      "d_ro_dm": -0.0105,
+      "d_ro_dm_prev": -0.0163,
+      "d_ro_dm_prev2": -0.025,
+      "d_mi_macd": 0.1115,
+      "d_mi_dm": -0.0063,
+      "d_mi_dm_prev": -0.0073,
+      "d_bo_dif": 0.0092,
+      "d_bo_macd": 0.0027,
+      "d_bo_dm": 0.0064,
+      "volume": 6.0
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "5521",
+     "name": "工信",
+     "market": "TWSE",
+     "close": 11.2,
+     "volume_lots": 2232,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": false,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.2451,
+      "w_ro_dif": 0.0102,
+      "w_ro_dm": -0.0162,
+      "d_ro_dif": -0.0059,
+      "d_ro_macd": 0.0036,
+      "d_ro_dm": -0.0095,
+      "d_ro_dm_prev": -0.0183,
+      "d_ro_dm_prev2": -0.0254,
+      "d_mi_macd": 0.0065,
+      "d_mi_dm": -0.0015,
+      "d_mi_dm_prev": -0.0036,
+      "d_bo_dif": -0.0081,
+      "d_bo_macd": -0.017,
+      "d_bo_dm": 0.0089,
+      "volume": 2231.77
+     },
+     "failed": [
+      "W2"
+     ]
+    },
+    {
+     "code": "6140",
+     "name": "訊達",
+     "market": "TPEX",
+     "close": 30.1,
+     "volume_lots": 1844,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.3194,
+      "w_ro_dif": 2.4826,
+      "w_ro_dm": 0.8025,
+      "d_ro_dif": -0.0409,
+      "d_ro_macd": 0.6243,
+      "d_ro_dm": -0.6652,
+      "d_ro_dm_prev": -0.7872,
+      "d_ro_dm_prev2": -0.7865,
+      "d_mi_macd": 2.0917,
+      "d_mi_dm": -0.2717,
+      "d_mi_dm_prev": -0.2479,
+      "d_bo_dif": -0.5452,
+      "d_bo_macd": -0.5749,
+      "d_bo_dm": 0.0297,
+      "volume": 1844.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "6148",
+     "name": "驊宏資",
+     "market": "TPEX",
+     "close": 51.9,
+     "volume_lots": 8877,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 2.266,
+      "w_ro_dif": 4.208,
+      "w_ro_dm": 1.0257,
+      "d_ro_dif": -0.8315,
+      "d_ro_macd": 0.6116,
+      "d_ro_dm": -1.443,
+      "d_ro_dm_prev": -1.556,
+      "d_ro_dm_prev2": -1.6067,
+      "d_mi_macd": 3.527,
+      "d_mi_dm": -0.7945,
+      "d_mi_dm_prev": -0.6973,
+      "d_bo_dif": -1.6988,
+      "d_bo_macd": -1.6109,
+      "d_bo_dm": -0.0879,
+      "volume": 8877.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "6150",
+     "name": "撼訊",
+     "market": "TPEX",
+     "close": 79.0,
+     "volume_lots": 3214,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.4369,
+      "w_ro_dif": 3.0107,
+      "w_ro_dm": 1.1629,
+      "d_ro_dif": 0.5653,
+      "d_ro_macd": 1.0713,
+      "d_ro_dm": -0.506,
+      "d_ro_dm_prev": -0.524,
+      "d_ro_dm_prev2": -0.4932,
+      "d_mi_macd": 2.6991,
+      "d_mi_dm": -0.0961,
+      "d_mi_dm_prev": -0.047,
+      "d_bo_dif": -0.0773,
+      "d_bo_macd": -0.0153,
+      "d_bo_dm": -0.062,
+      "volume": 3214.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "6690",
+     "name": "安碁資訊",
+     "market": "TPEX",
+     "close": 190.5,
+     "volume_lots": 1965,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 3.1734,
+      "w_ro_dif": 5.6186,
+      "w_ro_dm": 1.2169,
+      "d_ro_dif": -3.8371,
+      "d_ro_macd": 0.5279,
+      "d_ro_dm": -4.365,
+      "d_ro_dm_prev": -4.7021,
+      "d_ro_dm_prev2": -4.8756,
+      "d_mi_macd": 5.3376,
+      "d_mi_dm": -2.0686,
+      "d_mi_dm_prev": -1.7696,
+      "d_bo_dif": -5.9668,
+      "d_bo_macd": -5.7301,
+      "d_bo_dm": -0.2366,
+      "volume": 1965.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "6697",
+     "name": "東捷資訊",
+     "market": "TPEX",
+     "close": 71.9,
+     "volume_lots": 481,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 3.6537,
+      "w_ro_dif": 7.6853,
+      "w_ro_dm": 1.587,
+      "d_ro_dif": -0.8119,
+      "d_ro_macd": 1.3601,
+      "d_ro_dm": -2.172,
+      "d_ro_dm_prev": -2.333,
+      "d_ro_dm_prev2": -2.4054,
+      "d_mi_macd": 5.8379,
+      "d_mi_dm": -1.0827,
+      "d_mi_dm_prev": -0.9315,
+      "d_bo_dif": -2.2929,
+      "d_bo_macd": -2.1559,
+      "d_bo_dm": -0.137,
+      "volume": 481.0
+     },
+     "failed": [
+      "D4"
      ]
     },
     {
@@ -2424,7 +2122,7 @@
      "name": "大武山",
      "market": "TWSE",
      "close": 41.0,
-     "volume_lots": 24,
+     "volume_lots": 20,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -2437,216 +2135,31 @@
      },
      "values": {
       "m_ro_dm": 0.3772,
-      "w_ro_dif": 0.4056,
-      "w_ro_dm": 0.0973,
-      "d_ro_dif": 0.045,
-      "d_ro_macd": 0.1483,
-      "d_ro_dm": -0.1033,
-      "d_ro_dm_prev": -0.1503,
-      "d_ro_dm_prev2": -0.0762,
-      "d_mi_macd": 0.3773,
-      "d_mi_dm": -0.0279,
-      "d_mi_dm_prev": -0.0339,
-      "d_bo_dif": -0.0593,
-      "d_bo_macd": -0.0624,
-      "d_bo_dm": 0.0031,
-      "volume": 23.863
+      "w_ro_dif": 0.4127,
+      "w_ro_dm": 0.0855,
+      "d_ro_dif": 0.0487,
+      "d_ro_macd": 0.0729,
+      "d_ro_dm": -0.0242,
+      "d_ro_dm_prev": -0.0495,
+      "d_ro_dm_prev2": -0.0531,
+      "d_mi_macd": 0.3436,
+      "d_mi_dm": -0.0333,
+      "d_mi_dm_prev": -0.0399,
+      "d_bo_dif": 0.0267,
+      "d_bo_macd": 0.0016,
+      "d_bo_dm": 0.0251,
+      "volume": 20.15
      },
      "failed": [
       "V1"
      ]
     },
     {
-     "code": "7584",
-     "name": "樂意",
-     "market": "TPEX",
-     "close": 37.0,
-     "volume_lots": 734,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.1391,
-      "w_ro_dif": 2.0998,
-      "w_ro_dm": 1.1729,
-      "d_ro_dif": 1.781,
-      "d_ro_macd": 2.0534,
-      "d_ro_dm": -0.2724,
-      "d_ro_dm_prev": 0.0205,
-      "d_ro_dm_prev2": 0.1368,
-      "d_mi_macd": 1.9338,
-      "d_mi_dm": 0.5984,
-      "d_mi_dm_prev": 0.7435,
-      "d_bo_dif": 0.6727,
-      "d_bo_macd": 1.0091,
-      "d_bo_dm": -0.3364,
-      "volume": 734.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "7765",
-     "name": "中華資安",
-     "market": "TWSE",
-     "close": 287.0,
-     "volume_lots": 3501,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 3.8493,
-      "w_ro_dif": 10.173,
-      "w_ro_dm": 5.9663,
-      "d_ro_dif": 7.865,
-      "d_ro_macd": 8.7861,
-      "d_ro_dm": -0.9211,
-      "d_ro_dm_prev": -0.8749,
-      "d_ro_dm_prev2": -0.6865,
-      "d_mi_macd": 8.8127,
-      "d_mi_dm": 2.5309,
-      "d_mi_dm_prev": 2.7049,
-      "d_bo_dif": 3.4964,
-      "d_bo_macd": 3.8315,
-      "d_bo_dm": -0.3351,
-      "volume": 3501.251
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
      "code": "7767",
      "name": "仁大資訊",
      "market": "TPEX",
-     "close": 59.1,
-     "volume_lots": 1034,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.0403,
-      "w_ro_dif": 3.0803,
-      "w_ro_dm": 1.2653,
-      "d_ro_dif": 1.1897,
-      "d_ro_macd": 1.9828,
-      "d_ro_dm": -0.7931,
-      "d_ro_dm_prev": -0.7011,
-      "d_ro_dm_prev2": -0.5285,
-      "d_mi_macd": 2.5398,
-      "d_mi_dm": 0.2629,
-      "d_mi_dm_prev": 0.3828,
-      "d_bo_dif": -0.1452,
-      "d_bo_macd": 0.1585,
-      "d_bo_dm": -0.3037,
-      "volume": 1034.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "7799",
-     "name": "禾榮科",
-     "market": "TWSE",
-     "close": 485.0,
-     "volume_lots": 1751,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.7026,
-      "w_ro_dif": 4.1117,
-      "w_ro_dm": 10.0715,
-      "d_ro_dif": 11.0307,
-      "d_ro_macd": 11.2972,
-      "d_ro_dm": -0.2665,
-      "d_ro_dm_prev": 0.1406,
-      "d_ro_dm_prev2": 0.4159,
-      "d_mi_macd": 10.1257,
-      "d_mi_dm": 4.006,
-      "d_mi_dm_prev": 4.2974,
-      "d_bo_dif": 6.3469,
-      "d_bo_macd": 6.6199,
-      "d_bo_dm": -0.273,
-      "volume": 1750.967
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "7819",
-     "name": "精誠金融",
-     "market": "TPEX",
-     "close": 39.6,
-     "volume_lots": 499,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.3991,
-      "w_ro_dif": 1.6901,
-      "w_ro_dm": 0.8043,
-      "d_ro_dif": 0.5795,
-      "d_ro_macd": 1.1325,
-      "d_ro_dm": -0.553,
-      "d_ro_dm_prev": -0.48,
-      "d_ro_dm_prev2": -0.3694,
-      "d_mi_macd": 1.5764,
-      "d_mi_dm": 0.0974,
-      "d_mi_dm_prev": 0.1826,
-      "d_bo_dif": -0.232,
-      "d_bo_macd": -0.0297,
-      "d_bo_dm": -0.2023,
-      "volume": 499.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "8089",
-     "name": "康全電訊",
-     "market": "TPEX",
-     "close": 32.65,
-     "volume_lots": 2337,
+     "close": 53.2,
+     "volume_lots": 947,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -2658,21 +2171,58 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 1.9548,
-      "w_ro_dif": 2.57,
-      "w_ro_dm": 0.4081,
-      "d_ro_dif": 0.0434,
-      "d_ro_macd": 0.6465,
-      "d_ro_dm": -0.6031,
-      "d_ro_dm_prev": -0.6203,
-      "d_ro_dm_prev2": -0.6744,
-      "d_mi_macd": 1.8992,
-      "d_mi_dm": -0.2088,
-      "d_mi_dm_prev": -0.1542,
-      "d_bo_dif": -0.4719,
-      "d_bo_macd": -0.4265,
-      "d_bo_dm": -0.0455,
-      "volume": 2337.0
+      "m_ro_dm": 1.0403,
+      "w_ro_dif": 2.5833,
+      "w_ro_dm": 0.6286,
+      "d_ro_dif": -0.9839,
+      "d_ro_macd": 0.4023,
+      "d_ro_dm": -1.3863,
+      "d_ro_dm_prev": -1.4915,
+      "d_ro_dm_prev2": -1.5306,
+      "d_mi_macd": 2.2268,
+      "d_mi_dm": -0.6447,
+      "d_mi_dm_prev": -0.5492,
+      "d_bo_dif": -1.7618,
+      "d_bo_macd": -1.6697,
+      "d_bo_dm": -0.092,
+      "volume": 947.0
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
+     "code": "8099",
+     "name": "大世科",
+     "market": "TPEX",
+     "close": 164.5,
+     "volume_lots": 4060,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 13.1969,
+      "w_ro_dif": 22.5933,
+      "w_ro_dm": 2.1939,
+      "d_ro_dif": -1.1201,
+      "d_ro_macd": 3.4104,
+      "d_ro_dm": -4.5306,
+      "d_ro_dm_prev": -4.6304,
+      "d_ro_dm_prev2": -4.2539,
+      "d_mi_macd": 15.0736,
+      "d_mi_dm": -2.616,
+      "d_mi_dm_prev": -2.2351,
+      "d_bo_dif": -4.5853,
+      "d_bo_macd": -3.9248,
+      "d_bo_dm": -0.6605,
+      "volume": 4060.0
      },
      "failed": [
       "D4"
@@ -2682,8 +2232,8 @@
      "code": "8426",
      "name": "紅木-KY",
      "market": "TPEX",
-     "close": 23.6,
-     "volume_lots": 1306,
+     "close": 23.7,
+     "volume_lots": 696,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -2696,31 +2246,31 @@
      },
      "values": {
       "m_ro_dm": 0.1157,
-      "w_ro_dif": 0.3992,
-      "w_ro_dm": 0.4219,
-      "d_ro_dif": 0.8796,
-      "d_ro_macd": 0.7353,
-      "d_ro_dm": 0.1443,
-      "d_ro_dm_prev": 0.2013,
-      "d_ro_dm_prev2": 0.2526,
-      "d_mi_macd": 0.3645,
-      "d_mi_dm": 0.3499,
-      "d_mi_dm_prev": 0.3625,
-      "d_bo_dif": 0.6004,
-      "d_bo_macd": 0.654,
-      "d_bo_dm": -0.0536,
-      "volume": 1306.0
+      "w_ro_dif": 0.5887,
+      "w_ro_dm": 0.5003,
+      "d_ro_dif": 0.6933,
+      "d_ro_macd": 0.7528,
+      "d_ro_dm": -0.0595,
+      "d_ro_dm_prev": -0.0294,
+      "d_ro_dm_prev2": 0.0113,
+      "d_mi_macd": 0.6119,
+      "d_mi_dm": 0.2523,
+      "d_mi_dm_prev": 0.2753,
+      "d_bo_dif": 0.3262,
+      "d_bo_macd": 0.3786,
+      "d_bo_dm": -0.0524,
+      "volume": 696.0
      },
      "failed": [
       "D2"
      ]
     },
     {
-     "code": "8432",
-     "name": "東生華",
+     "code": "8489",
+     "name": "三貝德",
      "market": "TPEX",
-     "close": 61.4,
-     "volume_lots": 97,
+     "close": 22.0,
+     "volume_lots": 45,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -2732,132 +2282,21 @@
       "V1": false
      },
      "values": {
-      "m_ro_dm": 1.0586,
-      "w_ro_dif": 1.7412,
-      "w_ro_dm": 0.0759,
-      "d_ro_dif": 0.0936,
-      "d_ro_macd": 0.071,
-      "d_ro_dm": 0.0226,
-      "d_ro_dm_prev": -0.0028,
-      "d_ro_dm_prev2": -0.0577,
-      "d_mi_macd": 0.9314,
-      "d_mi_dm": -0.1407,
-      "d_mi_dm_prev": -0.1551,
-      "d_bo_dif": 0.1027,
-      "d_bo_macd": 0.0516,
-      "d_bo_dm": 0.0511,
-      "volume": 97.0
-     },
-     "failed": [
-      "V1"
-     ]
-    },
-    {
-     "code": "8463",
-     "name": "潤泰材",
-     "market": "TWSE",
-     "close": 21.4,
-     "volume_lots": 57,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": false
-     },
-     "values": {
-      "m_ro_dm": 0.09,
-      "w_ro_dif": 0.0291,
-      "w_ro_dm": 0.0323,
-      "d_ro_dif": 0.0215,
-      "d_ro_macd": 0.0375,
-      "d_ro_dm": -0.016,
-      "d_ro_dm_prev": -0.0171,
-      "d_ro_dm_prev2": -0.0123,
-      "d_mi_macd": 0.0443,
-      "d_mi_dm": 0.0065,
-      "d_mi_dm_prev": 0.008,
-      "d_bo_dif": -0.0016,
-      "d_bo_macd": 0.0013,
-      "d_bo_dm": -0.0028,
-      "volume": 57.105
-     },
-     "failed": [
-      "V1"
-     ]
-    },
-    {
-     "code": "9904",
-     "name": "寶成",
-     "market": "TWSE",
-     "close": 26.3,
-     "volume_lots": 25705,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.2476,
-      "w_ro_dif": 0.1664,
-      "w_ro_dm": 0.0323,
-      "d_ro_dif": 0.1373,
-      "d_ro_macd": 0.1898,
-      "d_ro_dm": -0.0525,
-      "d_ro_dm_prev": -0.0227,
-      "d_ro_dm_prev2": 0.0123,
-      "d_mi_macd": 0.1434,
-      "d_mi_dm": 0.0512,
-      "d_mi_dm_prev": 0.068,
-      "d_bo_dif": 0.0094,
-      "d_bo_macd": 0.0602,
-      "d_bo_dm": -0.0509,
-      "volume": 25705.325
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "9912",
-     "name": "偉聯",
-     "market": "TWSE",
-     "close": 13.25,
-     "volume_lots": 31,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": false
-     },
-     "values": {
-      "m_ro_dm": 0.0015,
-      "w_ro_dif": 0.0431,
-      "w_ro_dm": 0.0069,
-      "d_ro_dif": -0.0048,
-      "d_ro_macd": 0.0125,
-      "d_ro_dm": -0.0173,
-      "d_ro_dm_prev": -0.0232,
-      "d_ro_dm_prev2": -0.0135,
-      "d_mi_macd": 0.0388,
-      "d_mi_dm": -0.006,
-      "d_mi_dm_prev": -0.0063,
-      "d_bo_dif": -0.0161,
-      "d_bo_macd": -0.0172,
-      "d_bo_dm": 0.0011,
-      "volume": 30.725
+      "m_ro_dm": 0.3054,
+      "w_ro_dif": 0.0065,
+      "w_ro_dm": 0.0954,
+      "d_ro_dif": 0.0067,
+      "d_ro_macd": 0.0044,
+      "d_ro_dm": 0.0023,
+      "d_ro_dm_prev": -0.0593,
+      "d_ro_dm_prev2": -0.0731,
+      "d_mi_macd": 0.0291,
+      "d_mi_dm": 0.0026,
+      "d_mi_dm_prev": -0.0185,
+      "d_bo_dif": 0.0287,
+      "d_bo_macd": -0.0275,
+      "d_bo_dm": 0.0562,
+      "volume": 45.0
      },
      "failed": [
       "V1"
@@ -2867,8 +2306,8 @@
      "code": "9933",
      "name": "中鼎",
      "market": "TWSE",
-     "close": 56.6,
-     "volume_lots": 53644,
+     "close": 57.5,
+     "volume_lots": 71173,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -2881,57 +2320,20 @@
      },
      "values": {
       "m_ro_dm": 0.6349,
-      "w_ro_dif": 2.2128,
-      "w_ro_dm": 0.8147,
-      "d_ro_dif": 1.6088,
-      "d_ro_macd": 1.162,
-      "d_ro_dm": 0.4468,
-      "d_ro_dm_prev": 0.4513,
-      "d_ro_dm_prev2": 0.4699,
-      "d_mi_macd": 1.5566,
-      "d_mi_dm": 0.4504,
-      "d_mi_dm_prev": 0.418,
-      "d_bo_dif": 1.3834,
-      "d_bo_macd": 1.3062,
-      "d_bo_dm": 0.0771,
-      "volume": 53644.219
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "9935",
-     "name": "慶豐富",
-     "market": "TWSE",
-     "close": 20.15,
-     "volume_lots": 333,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.024,
-      "w_ro_dif": 0.3893,
-      "w_ro_dm": 0.2368,
-      "d_ro_dif": 0.2091,
-      "d_ro_macd": 0.2823,
-      "d_ro_dm": -0.0732,
-      "d_ro_dm_prev": -0.0679,
-      "d_ro_dm_prev2": -0.0593,
-      "d_mi_macd": 0.4065,
-      "d_mi_dm": 0.0475,
-      "d_mi_dm_prev": 0.0587,
-      "d_bo_dif": 0.0556,
-      "d_bo_macd": 0.0743,
-      "d_bo_dm": -0.0188,
-      "volume": 333.097
+      "w_ro_dif": 2.6277,
+      "w_ro_dm": 1.006,
+      "d_ro_dif": 1.6686,
+      "d_ro_macd": 1.5078,
+      "d_ro_dm": 0.1608,
+      "d_ro_dm_prev": 0.2165,
+      "d_ro_dm_prev2": 0.334,
+      "d_mi_macd": 1.9547,
+      "d_mi_dm": 0.4507,
+      "d_mi_dm_prev": 0.4648,
+      "d_bo_dif": 1.0777,
+      "d_bo_macd": 1.1591,
+      "d_bo_dm": -0.0814,
+      "volume": 71173.275
      },
      "failed": [
       "D2"
@@ -3038,14 +2440,14 @@
    },
    "available": true,
    "stats": {
-    "universe": 1952,
-    "evaluated": 1751,
-    "insufficient_data": 201,
-    "hits": 8,
-    "near_miss": 55,
+    "universe": 1957,
+    "evaluated": 1746,
+    "insufficient_data": 211,
+    "hits": 4,
+    "near_miss": 53,
     "insufficient_reasons": {
      "未滿 60 個月": 191,
-     "日期落後": 10
+     "日期落後": 20
     }
    },
    "warnings": [],
@@ -3054,8 +2456,8 @@
      "code": "1216",
      "name": "統一",
      "market": "TWSE",
-     "close": 79.2,
-     "volume_lots": 17148,
+     "close": 78.8,
+     "volume_lots": 11826,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3070,244 +2472,100 @@
       "m_ro_dm": 0.5922,
       "w_ro_dif": 1.2821,
       "w_ro_dm": 0.1732,
-      "d_ro_dif": 0.1152,
-      "d_ro_macd": 0.2839,
-      "d_ro_dm": -0.1688,
-      "d_ro_dm_prev": -0.2957,
-      "d_ro_dm_prev2": -0.4009,
-      "d_mi_macd": 0.9231,
-      "d_mi_dm": -0.0728,
-      "d_mi_dm_prev": -0.0992,
-      "d_bo_dif": 0.0029,
-      "d_bo_macd": -0.1442,
-      "d_bo_dm": 0.1471,
-      "volume": 17148.467
-     },
-     "streak": 3,
-     "is_new": false
-    },
-    {
-     "code": "2412",
-     "name": "中華電",
-     "market": "TWSE",
-     "close": 164.5,
-     "volume_lots": 21838,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.1127,
-      "w_ro_dif": 6.5422,
-      "w_ro_dm": 2.3294,
-      "d_ro_dif": 2.8292,
-      "d_ro_macd": 2.9437,
-      "d_ro_dm": -0.1145,
-      "d_ro_dm_prev": -0.1379,
-      "d_ro_dm_prev2": -0.1152,
-      "d_mi_macd": 4.9673,
-      "d_mi_dm": 0.5457,
-      "d_mi_dm_prev": 0.5672,
-      "d_bo_dif": 1.6103,
-      "d_bo_macd": 1.5787,
-      "d_bo_dm": 0.0315,
-      "volume": 21837.945
-     },
-     "streak": 1,
-     "is_new": true
-    },
-    {
-     "code": "2886",
-     "name": "兆豐金",
-     "market": "TWSE",
-     "close": 54.7,
-     "volume_lots": 33236,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.4535,
-      "w_ro_dif": 2.5904,
-      "w_ro_dm": 0.2354,
-      "d_ro_dif": 0.5642,
-      "d_ro_macd": 0.6096,
-      "d_ro_dm": -0.0454,
-      "d_ro_dm_prev": -0.0519,
-      "d_ro_dm_prev2": -0.0487,
-      "d_mi_macd": 1.5207,
-      "d_mi_dm": 0.0049,
-      "d_mi_dm_prev": 0.0082,
-      "d_bo_dif": 0.3248,
-      "d_bo_macd": 0.3032,
-      "d_bo_dm": 0.0216,
-      "volume": 33235.996
-     },
-     "streak": 1,
-     "is_new": true
-    },
-    {
-     "code": "2923",
-     "name": "鼎固-KY",
-     "market": "TWSE",
-     "close": 31.6,
-     "volume_lots": 562,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.6661,
-      "w_ro_dif": 0.4086,
-      "w_ro_dm": 0.0358,
-      "d_ro_dif": 0.5757,
-      "d_ro_macd": 0.5365,
-      "d_ro_dm": 0.0392,
-      "d_ro_dm_prev": -0.2927,
-      "d_ro_dm_prev2": -0.4901,
-      "d_mi_macd": 0.2529,
-      "d_mi_dm": 0.2524,
-      "d_mi_dm_prev": 0.14,
-      "d_bo_dif": 0.4565,
-      "d_bo_macd": 0.123,
-      "d_bo_dm": 0.3336,
-      "volume": 561.9
-     },
-     "streak": 1,
-     "is_new": true
-    },
-    {
-     "code": "4155",
-     "name": "訊映",
-     "market": "TWSE",
-     "close": 18.55,
-     "volume_lots": 3656,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.5275,
-      "w_ro_dif": 0.5056,
-      "w_ro_dm": 0.2606,
-      "d_ro_dif": 0.4522,
-      "d_ro_macd": 0.412,
-      "d_ro_dm": 0.0403,
-      "d_ro_dm_prev": -0.0339,
-      "d_ro_dm_prev2": -0.0454,
-      "d_mi_macd": 0.4389,
-      "d_mi_dm": 0.1447,
-      "d_mi_dm_prev": 0.1187,
-      "d_bo_dif": 0.3168,
-      "d_bo_macd": 0.2521,
-      "d_bo_dm": 0.0648,
-      "volume": 3656.311
-     },
-     "streak": 3,
-     "is_new": false
-    },
-    {
-     "code": "5013",
-     "name": "強新",
-     "market": "TPEX",
-     "close": 66.6,
-     "volume_lots": 5952,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.4828,
-      "w_ro_dif": 7.5606,
-      "w_ro_dm": 3.2901,
-      "d_ro_dif": 4.0644,
-      "d_ro_macd": 4.5728,
-      "d_ro_dm": -0.5084,
-      "d_ro_dm_prev": -0.6456,
-      "d_ro_dm_prev2": -0.2145,
-      "d_mi_macd": 7.1946,
-      "d_mi_dm": 0.8242,
-      "d_mi_dm_prev": 0.8537,
-      "d_bo_dif": 1.8363,
-      "d_bo_macd": 2.0438,
-      "d_bo_dm": -0.2075,
-      "volume": 5952.0
-     },
-     "streak": 1,
-     "is_new": true
-    },
-    {
-     "code": "5876",
-     "name": "上海商銀",
-     "market": "TWSE",
-     "close": 53.3,
-     "volume_lots": 9632,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.6313,
-      "w_ro_dif": 2.8955,
-      "w_ro_dm": 0.3675,
-      "d_ro_dif": 0.2467,
-      "d_ro_macd": 0.3395,
-      "d_ro_dm": -0.0928,
-      "d_ro_dm_prev": -0.1607,
-      "d_ro_dm_prev2": -0.2415,
-      "d_mi_macd": 1.9525,
-      "d_mi_dm": -0.2228,
-      "d_mi_dm_prev": -0.2399,
-      "d_bo_dif": 0.1519,
-      "d_bo_macd": 0.0481,
-      "d_bo_dm": 0.1038,
-      "volume": 9632.019
+      "d_ro_dif": 0.1447,
+      "d_ro_macd": 0.2586,
+      "d_ro_dm": -0.1139,
+      "d_ro_dm_prev": -0.1688,
+      "d_ro_dm_prev2": -0.2957,
+      "d_mi_macd": 0.9121,
+      "d_mi_dm": -0.0659,
+      "d_mi_dm_prev": -0.0728,
+      "d_bo_dif": 0.0626,
+      "d_bo_macd": -0.0408,
+      "d_bo_dm": 0.1034,
+      "volume": 11826.351
      },
      "streak": 4,
      "is_new": false
     },
     {
+     "code": "2603",
+     "name": "長榮",
+     "market": "TWSE",
+     "close": 257.5,
+     "volume_lots": 9287,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 6.7927,
+      "w_ro_dif": 13.0638,
+      "w_ro_dm": 0.9649,
+      "d_ro_dif": 0.3443,
+      "d_ro_macd": 1.3711,
+      "d_ro_dm": -1.0268,
+      "d_ro_dm_prev": -1.303,
+      "d_ro_dm_prev2": -1.5473,
+      "d_mi_macd": 8.5993,
+      "d_mi_dm": -1.2659,
+      "d_mi_dm_prev": -1.2782,
+      "d_bo_dif": -0.387,
+      "d_bo_macd": -0.6564,
+      "d_bo_dm": 0.2694,
+      "volume": 9287.442
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "6199",
+     "name": "天品",
+     "market": "TPEX",
+     "close": 171.5,
+     "volume_lots": 8906,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 2.5802,
+      "w_ro_dif": 15.366,
+      "w_ro_dm": 6.4226,
+      "d_ro_dif": 6.2678,
+      "d_ro_macd": 7.188,
+      "d_ro_dm": -0.9202,
+      "d_ro_dm_prev": -0.9459,
+      "d_ro_dm_prev2": -0.8898,
+      "d_mi_macd": 14.223,
+      "d_mi_dm": 0.7526,
+      "d_mi_dm_prev": 0.8733,
+      "d_bo_dif": 2.9578,
+      "d_bo_macd": 3.0935,
+      "d_bo_dm": -0.1356,
+      "volume": 8906.0
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
      "code": "6240",
      "name": "松崗",
      "market": "TPEX",
-     "close": 31.35,
-     "volume_lots": 303,
+     "close": 33.8,
+     "volume_lots": 327,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3322,67 +2580,30 @@
       "m_ro_dm": 1.6739,
       "w_ro_dif": 2.5508,
       "w_ro_dm": 0.5106,
-      "d_ro_dif": 0.1513,
-      "d_ro_macd": 0.5049,
-      "d_ro_dm": -0.3536,
-      "d_ro_dm_prev": -0.5196,
-      "d_ro_dm_prev2": -0.8483,
-      "d_mi_macd": 2.2747,
-      "d_mi_dm": -0.2691,
-      "d_mi_dm_prev": -0.2927,
-      "d_bo_dif": -0.0747,
-      "d_bo_macd": -0.3075,
-      "d_bo_dm": 0.2328,
-      "volume": 303.0
+      "d_ro_dif": 0.4256,
+      "d_ro_macd": 0.4905,
+      "d_ro_dm": -0.0649,
+      "d_ro_dm_prev": -0.3536,
+      "d_ro_dm_prev2": -0.5196,
+      "d_mi_macd": 2.2455,
+      "d_mi_dm": -0.1753,
+      "d_mi_dm_prev": -0.2691,
+      "d_bo_dif": 0.3815,
+      "d_bo_macd": 0.037,
+      "d_bo_dm": 0.3445,
+      "volume": 327.0
      },
-     "streak": 2,
+     "streak": 3,
      "is_new": false
     }
    ],
    "near_miss": [
     {
-     "code": "1103",
-     "name": "嘉泥",
-     "market": "TWSE",
-     "close": 13.2,
-     "volume_lots": 564,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.1668,
-      "w_ro_dif": 0.0792,
-      "w_ro_dm": 0.0274,
-      "d_ro_dif": -0.0404,
-      "d_ro_macd": 0.0111,
-      "d_ro_dm": -0.0515,
-      "d_ro_dm_prev": -0.0532,
-      "d_ro_dm_prev2": -0.051,
-      "d_mi_macd": 0.0772,
-      "d_mi_dm": -0.0245,
-      "d_mi_dm_prev": -0.0202,
-      "d_bo_dif": -0.0668,
-      "d_bo_macd": -0.0625,
-      "d_bo_dm": -0.0044,
-      "volume": 563.934
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
      "code": "1416",
      "name": "廣豐",
      "market": "TWSE",
-     "close": 17.55,
-     "volume_lots": 5774,
+     "close": 16.15,
+     "volume_lots": 13916,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3397,92 +2618,18 @@
       "m_ro_dm": 0.1298,
       "w_ro_dif": 1.127,
       "w_ro_dm": 0.6466,
-      "d_ro_dif": 1.4324,
-      "d_ro_macd": 1.1851,
-      "d_ro_dm": 0.2473,
-      "d_ro_dm_prev": 0.4512,
-      "d_ro_dm_prev2": 0.4934,
-      "d_mi_macd": 1.0098,
-      "d_mi_dm": 0.4881,
-      "d_mi_dm_prev": 0.5445,
-      "d_bo_dif": 0.9837,
-      "d_bo_macd": 1.1529,
-      "d_bo_dm": -0.1692,
-      "volume": 5773.965
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "1569",
-     "name": "濱川",
-     "market": "TPEX",
-     "close": 84.5,
-     "volume_lots": 8243,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.5791,
-      "w_ro_dif": 9.8028,
-      "w_ro_dm": 4.543,
-      "d_ro_dif": 3.1457,
-      "d_ro_macd": 4.5433,
-      "d_ro_dm": -1.3976,
-      "d_ro_dm_prev": -0.6193,
-      "d_ro_dm_prev2": 0.2525,
-      "d_mi_macd": 9.6339,
-      "d_mi_dm": 0.0867,
-      "d_mi_dm_prev": 0.5153,
-      "d_bo_dif": 0.4428,
-      "d_bo_macd": 1.5323,
-      "d_bo_dm": -1.0895,
-      "volume": 8243.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "1789",
-     "name": "神隆",
-     "market": "TWSE",
-     "close": 19.15,
-     "volume_lots": 552,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.2597,
-      "w_ro_dif": 0.0219,
-      "w_ro_dm": 0.1625,
-      "d_ro_dif": 0.0215,
-      "d_ro_macd": 0.1463,
-      "d_ro_dm": -0.1247,
-      "d_ro_dm_prev": -0.081,
-      "d_ro_dm_prev2": -0.0631,
-      "d_mi_macd": 0.1485,
-      "d_mi_dm": 0.0097,
-      "d_mi_dm_prev": 0.0384,
-      "d_bo_dif": -0.1163,
-      "d_bo_macd": -0.0525,
-      "d_bo_dm": -0.0639,
-      "volume": 552.207
+      "d_ro_dif": 1.1762,
+      "d_ro_macd": 1.1835,
+      "d_ro_dm": -0.0073,
+      "d_ro_dm_prev": 0.2473,
+      "d_ro_dm_prev2": 0.4512,
+      "d_mi_macd": 1.0748,
+      "d_mi_dm": 0.3902,
+      "d_mi_dm_prev": 0.4881,
+      "d_bo_dif": 0.5642,
+      "d_bo_macd": 0.8585,
+      "d_bo_dm": -0.2944,
+      "volume": 13916.408
      },
      "failed": [
       "D2"
@@ -3492,8 +2639,8 @@
      "code": "1802",
      "name": "台玻",
      "market": "TWSE",
-     "close": 69.0,
-     "volume_lots": 153809,
+     "close": 65.2,
+     "volume_lots": 194526,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3508,18 +2655,18 @@
       "m_ro_dm": 0.7484,
       "w_ro_dif": 2.7982,
       "w_ro_dm": 1.6214,
-      "d_ro_dif": 3.0885,
-      "d_ro_macd": 2.1943,
-      "d_ro_dm": 0.8942,
-      "d_ro_dm_prev": 1.802,
-      "d_ro_dm_prev2": 2.1825,
-      "d_mi_macd": 2.044,
-      "d_mi_dm": 1.0278,
-      "d_mi_dm_prev": 1.277,
-      "d_bo_dif": 2.4696,
-      "d_bo_macd": 3.0773,
-      "d_bo_dm": -0.6076,
-      "volume": 153808.798
+      "d_ro_dif": 2.1812,
+      "d_ro_macd": 2.1919,
+      "d_ro_dm": -0.0107,
+      "d_ro_dm_prev": 0.8942,
+      "d_ro_dm_prev2": 1.802,
+      "d_mi_macd": 2.16,
+      "d_mi_dm": 0.6958,
+      "d_mi_dm_prev": 1.0278,
+      "d_bo_dif": 0.9316,
+      "d_bo_macd": 2.0044,
+      "d_bo_dm": -1.0728,
+      "volume": 194526.361
      },
      "failed": [
       "D2"
@@ -3529,8 +2676,8 @@
      "code": "2033",
      "name": "佳大",
      "market": "TWSE",
-     "close": 73.9,
-     "volume_lots": 4639,
+     "close": 73.4,
+     "volume_lots": 2934,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3545,18 +2692,18 @@
       "m_ro_dm": 4.8771,
       "w_ro_dif": 13.3562,
       "w_ro_dm": 4.7498,
-      "d_ro_dif": 4.8341,
-      "d_ro_macd": 5.5377,
-      "d_ro_dm": -0.7036,
-      "d_ro_dm_prev": -0.298,
-      "d_ro_dm_prev2": -0.5032,
-      "d_mi_macd": 11.1204,
-      "d_mi_dm": 0.531,
-      "d_mi_dm_prev": 0.7687,
-      "d_bo_dif": 2.2611,
-      "d_bo_macd": 2.5599,
-      "d_bo_dm": -0.2988,
-      "volume": 4638.647
+      "d_ro_dif": 4.291,
+      "d_ro_macd": 5.311,
+      "d_ro_dm": -1.02,
+      "d_ro_dm_prev": -0.7036,
+      "d_ro_dm_prev2": -0.298,
+      "d_mi_macd": 11.17,
+      "d_mi_dm": 0.2977,
+      "d_mi_dm_prev": 0.531,
+      "d_bo_dif": 1.6018,
+      "d_bo_macd": 2.0808,
+      "d_bo_dm": -0.4791,
+      "volume": 2934.014
      },
      "failed": [
       "D2"
@@ -3566,8 +2713,8 @@
      "code": "2355",
      "name": "敬鵬",
      "market": "TWSE",
-     "close": 56.5,
-     "volume_lots": 39655,
+     "close": 58.6,
+     "volume_lots": 60364,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3582,18 +2729,55 @@
       "m_ro_dm": 0.5239,
       "w_ro_dif": 2.2366,
       "w_ro_dm": 1.9638,
-      "d_ro_dif": 2.6581,
-      "d_ro_macd": 1.8942,
-      "d_ro_dm": 0.7639,
-      "d_ro_dm_prev": 1.1784,
-      "d_ro_dm_prev2": 1.2586,
-      "d_mi_macd": 2.0347,
-      "d_mi_dm": 0.8651,
-      "d_mi_dm_prev": 0.9556,
-      "d_bo_dif": 2.2737,
-      "d_bo_macd": 2.4021,
-      "d_bo_dm": -0.1284,
-      "volume": 39655.153
+      "d_ro_dif": 2.6126,
+      "d_ro_macd": 2.0248,
+      "d_ro_dm": 0.5878,
+      "d_ro_dm_prev": 0.7639,
+      "d_ro_dm_prev2": 1.1784,
+      "d_mi_macd": 2.1748,
+      "d_mi_dm": 0.8409,
+      "d_mi_dm_prev": 0.8651,
+      "d_bo_dif": 2.0266,
+      "d_bo_macd": 2.2144,
+      "d_bo_dm": -0.1878,
+      "volume": 60364.145
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
+     "code": "2412",
+     "name": "中華電",
+     "market": "TWSE",
+     "close": 164.5,
+     "volume_lots": 12796,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 2.1127,
+      "w_ro_dif": 6.5422,
+      "w_ro_dm": 2.3294,
+      "d_ro_dif": 2.7787,
+      "d_ro_macd": 2.9137,
+      "d_ro_dm": -0.1349,
+      "d_ro_dm_prev": -0.1145,
+      "d_ro_dm_prev2": -0.1379,
+      "d_mi_macd": 5.0519,
+      "d_mi_dm": 0.5075,
+      "d_mi_dm_prev": 0.5457,
+      "d_bo_dif": 1.5561,
+      "d_bo_macd": 1.5674,
+      "d_bo_dm": -0.0113,
+      "volume": 12795.606
      },
      "failed": [
       "D2"
@@ -3603,8 +2787,8 @@
      "code": "2465",
      "name": "麗臺",
      "market": "TWSE",
-     "close": 146.0,
-     "volume_lots": 30884,
+     "close": 136.0,
+     "volume_lots": 20589,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3619,18 +2803,18 @@
       "m_ro_dm": 4.9353,
       "w_ro_dif": 11.1531,
       "w_ro_dm": 5.1885,
-      "d_ro_dif": 13.9546,
-      "d_ro_macd": 10.7748,
-      "d_ro_dm": 3.1797,
-      "d_ro_dm_prev": 4.628,
-      "d_ro_dm_prev2": 5.8467,
-      "d_mi_macd": 7.8906,
-      "d_mi_dm": 4.9478,
-      "d_mi_dm_prev": 5.2307,
-      "d_bo_dif": 10.442,
-      "d_bo_macd": 11.5099,
-      "d_bo_dm": -1.0678,
-      "volume": 30884.174
+      "d_ro_dif": 12.2981,
+      "d_ro_macd": 11.0518,
+      "d_ro_dm": 1.2463,
+      "d_ro_dm_prev": 3.1797,
+      "d_ro_dm_prev2": 4.628,
+      "d_mi_macd": 8.6093,
+      "d_mi_dm": 4.3124,
+      "d_mi_dm_prev": 4.9478,
+      "d_bo_dif": 7.4045,
+      "d_bo_macd": 9.4572,
+      "d_bo_dm": -2.0527,
+      "volume": 20588.874
      },
      "failed": [
       "D2"
@@ -3640,8 +2824,8 @@
      "code": "2466",
      "name": "冠西電",
      "market": "TWSE",
-     "close": 435.5,
-     "volume_lots": 640,
+     "close": 436.5,
+     "volume_lots": 458,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3656,18 +2840,18 @@
       "m_ro_dm": 22.9922,
       "w_ro_dif": 62.1369,
       "w_ro_dm": 27.3928,
-      "d_ro_dif": 44.689,
-      "d_ro_macd": 40.9178,
-      "d_ro_dm": 3.7712,
-      "d_ro_dm_prev": 2.7895,
-      "d_ro_dm_prev2": 3.8079,
-      "d_mi_macd": 55.4664,
-      "d_mi_dm": 11.9026,
-      "d_mi_dm_prev": 11.5087,
-      "d_bo_dif": 30.2062,
-      "d_bo_macd": 29.1517,
-      "d_bo_dm": 1.0545,
-      "volume": 640.11
+      "d_ro_dif": 45.3488,
+      "d_ro_macd": 41.7235,
+      "d_ro_dm": 3.6254,
+      "d_ro_dm_prev": 3.7712,
+      "d_ro_dm_prev2": 2.7895,
+      "d_mi_macd": 57.4477,
+      "d_mi_dm": 11.8877,
+      "d_mi_dm_prev": 11.9026,
+      "d_bo_dif": 30.3286,
+      "d_bo_macd": 29.7401,
+      "d_bo_dm": 0.5885,
+      "volume": 457.911
      },
      "failed": [
       "D2"
@@ -3677,8 +2861,8 @@
      "code": "2468",
      "name": "華經",
      "market": "TWSE",
-     "close": 73.5,
-     "volume_lots": 17749,
+     "close": 66.2,
+     "volume_lots": 21335,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3693,18 +2877,18 @@
       "m_ro_dm": 0.3085,
       "w_ro_dif": 6.5761,
       "w_ro_dm": 3.4389,
-      "d_ro_dif": 6.2683,
-      "d_ro_macd": 4.7964,
-      "d_ro_dm": 1.4719,
-      "d_ro_dm_prev": 1.8704,
-      "d_ro_dm_prev2": 1.287,
-      "d_mi_macd": 5.6327,
-      "d_mi_dm": 1.8689,
-      "d_mi_dm_prev": 1.903,
-      "d_bo_dif": 5.0159,
-      "d_bo_macd": 4.8938,
-      "d_bo_dm": 0.1221,
-      "volume": 17749.428
+      "d_ro_dif": 5.4748,
+      "d_ro_macd": 4.9198,
+      "d_ro_dm": 0.555,
+      "d_ro_dm_prev": 1.4719,
+      "d_ro_dm_prev2": 1.8704,
+      "d_mi_macd": 5.8941,
+      "d_mi_dm": 1.5683,
+      "d_mi_dm_prev": 1.8689,
+      "d_bo_dif": 3.4814,
+      "d_bo_macd": 4.1876,
+      "d_bo_dm": -0.7062,
+      "volume": 21335.301
      },
      "failed": [
       "D2"
@@ -3714,8 +2898,8 @@
      "code": "2480",
      "name": "敦陽科",
      "market": "TWSE",
-     "close": 184.5,
-     "volume_lots": 692,
+     "close": 182.0,
+     "volume_lots": 417,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3730,66 +2914,29 @@
       "m_ro_dm": 1.7998,
       "w_ro_dif": 7.7767,
       "w_ro_dm": 1.9391,
-      "d_ro_dif": 2.4773,
-      "d_ro_macd": 1.5019,
-      "d_ro_dm": 0.9754,
-      "d_ro_dm_prev": 1.1596,
-      "d_ro_dm_prev2": 0.9068,
-      "d_mi_macd": 5.2735,
-      "d_mi_dm": 0.141,
-      "d_mi_dm_prev": 0.1187,
-      "d_bo_dif": 2.6947,
-      "d_bo_macd": 2.3684,
-      "d_bo_dm": 0.3263,
-      "volume": 691.982
+      "d_ro_dif": 2.2421,
+      "d_ro_macd": 1.6365,
+      "d_ro_dm": 0.6056,
+      "d_ro_dm_prev": 0.9754,
+      "d_ro_dm_prev2": 1.1596,
+      "d_mi_macd": 5.2844,
+      "d_mi_dm": 0.065,
+      "d_mi_dm_prev": 0.141,
+      "d_bo_dif": 2.0079,
+      "d_bo_macd": 2.1881,
+      "d_bo_dm": -0.1803,
+      "volume": 417.431
      },
      "failed": [
       "D2"
      ]
     },
     {
-     "code": "2603",
-     "name": "長榮",
-     "market": "TWSE",
-     "close": 256.5,
-     "volume_lots": 11941,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 6.7927,
-      "w_ro_dif": 13.0638,
-      "w_ro_dm": 0.9649,
-      "d_ro_dif": 0.2963,
-      "d_ro_macd": 1.5992,
-      "d_ro_dm": -1.303,
-      "d_ro_dm_prev": -1.5473,
-      "d_ro_dm_prev2": -1.8966,
-      "d_mi_macd": 8.8103,
-      "d_mi_dm": -1.2782,
-      "d_mi_dm_prev": -1.2511,
-      "d_bo_dif": -0.6722,
-      "d_bo_macd": -0.9258,
-      "d_bo_dm": 0.2536,
-      "volume": 11940.559
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
      "code": "2610",
      "name": "華航",
      "market": "TWSE",
-     "close": 23.1,
-     "volume_lots": 41002,
+     "close": 22.9,
+     "volume_lots": 38631,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3804,29 +2951,66 @@
       "m_ro_dm": 0.1011,
       "w_ro_dif": 0.3797,
       "w_ro_dm": 0.1389,
-      "d_ro_dif": 0.634,
-      "d_ro_macd": 0.4345,
-      "d_ro_dm": 0.1995,
-      "d_ro_dm_prev": 0.2277,
-      "d_ro_dm_prev2": 0.2888,
-      "d_mi_macd": 0.2247,
-      "d_mi_dm": 0.241,
-      "d_mi_dm_prev": 0.2354,
-      "d_bo_dif": 0.5283,
-      "d_bo_macd": 0.5492,
-      "d_bo_dm": -0.0208,
-      "volume": 41002.201
+      "d_ro_dif": 0.6176,
+      "d_ro_macd": 0.4678,
+      "d_ro_dm": 0.1498,
+      "d_ro_dm_prev": 0.1995,
+      "d_ro_dm_prev2": 0.2277,
+      "d_mi_macd": 0.2637,
+      "d_mi_dm": 0.2341,
+      "d_mi_dm_prev": 0.241,
+      "d_bo_dif": 0.4657,
+      "d_bo_macd": 0.5075,
+      "d_bo_dm": -0.0417,
+      "volume": 38630.918
      },
      "failed": [
       "D2"
      ]
     },
     {
+     "code": "2611",
+     "name": "志信",
+     "market": "TWSE",
+     "close": 15.5,
+     "volume_lots": 449,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.186,
+      "w_ro_dif": 0.4207,
+      "w_ro_dm": 0.1386,
+      "d_ro_dif": -0.0303,
+      "d_ro_macd": 0.0174,
+      "d_ro_dm": -0.0476,
+      "d_ro_dm_prev": -0.0506,
+      "d_ro_dm_prev2": -0.0336,
+      "d_mi_macd": 0.3177,
+      "d_mi_dm": -0.063,
+      "d_mi_dm_prev": -0.0598,
+      "d_bo_dif": -0.0443,
+      "d_bo_macd": -0.0398,
+      "d_bo_dm": -0.0046,
+      "volume": 448.625
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
      "code": "2618",
      "name": "長榮航",
      "market": "TWSE",
-     "close": 48.1,
-     "volume_lots": 32855,
+     "close": 46.8,
+     "volume_lots": 32296,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3841,92 +3025,18 @@
       "m_ro_dm": 0.6671,
       "w_ro_dif": 1.4524,
       "w_ro_dm": 0.1521,
-      "d_ro_dif": 1.2314,
-      "d_ro_macd": 0.8098,
-      "d_ro_dm": 0.4216,
-      "d_ro_dm_prev": 0.4336,
-      "d_ro_dm_prev2": 0.4744,
-      "d_mi_macd": 0.7474,
-      "d_mi_dm": 0.3989,
-      "d_mi_dm_prev": 0.3681,
-      "d_bo_dif": 1.0905,
-      "d_bo_macd": 1.0533,
-      "d_bo_dm": 0.0372,
-      "volume": 32855.114
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "2801",
-     "name": "彰銀",
-     "market": "TWSE",
-     "close": 28.15,
-     "volume_lots": 25647,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.0494,
-      "w_ro_dif": 1.717,
-      "w_ro_dm": 0.0284,
-      "d_ro_dif": -0.1436,
-      "d_ro_macd": 0.0394,
-      "d_ro_dm": -0.183,
-      "d_ro_dm_prev": -0.1887,
-      "d_ro_dm_prev2": -0.2101,
-      "d_mi_macd": 1.0534,
-      "d_mi_dm": -0.2427,
-      "d_mi_dm_prev": -0.2309,
-      "d_bo_dif": -0.214,
-      "d_bo_macd": -0.2211,
-      "d_bo_dm": 0.0071,
-      "volume": 25647.219
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
-     "code": "2816",
-     "name": "旺旺保",
-     "market": "TWSE",
-     "close": 42.55,
-     "volume_lots": 399,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 1.4371,
-      "w_ro_dif": 2.2666,
-      "w_ro_dm": 0.0743,
-      "d_ro_dif": 0.2776,
-      "d_ro_macd": 0.065,
-      "d_ro_dm": 0.2126,
-      "d_ro_dm_prev": 0.2157,
-      "d_ro_dm_prev2": 0.1224,
-      "d_mi_macd": 1.2201,
-      "d_mi_dm": -0.1335,
-      "d_mi_dm_prev": -0.1568,
-      "d_bo_dif": 0.4288,
-      "d_bo_macd": 0.3193,
-      "d_bo_dm": 0.1095,
-      "volume": 399.236
+      "d_ro_dif": 1.158,
+      "d_ro_macd": 0.8731,
+      "d_ro_dm": 0.285,
+      "d_ro_dm_prev": 0.4216,
+      "d_ro_dm_prev2": 0.4336,
+      "d_mi_macd": 0.8096,
+      "d_mi_dm": 0.373,
+      "d_mi_dm_prev": 0.3989,
+      "d_bo_dif": 0.8877,
+      "d_bo_macd": 0.9705,
+      "d_bo_dm": -0.0828,
+      "volume": 32295.656
      },
      "failed": [
       "D2"
@@ -3936,8 +3046,8 @@
      "code": "2891",
      "name": "中信金",
      "market": "TWSE",
-     "close": 77.5,
-     "volume_lots": 61152,
+     "close": 73.4,
+     "volume_lots": 66799,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3952,18 +3062,55 @@
       "m_ro_dm": 2.0533,
       "w_ro_dif": 3.6308,
       "w_ro_dm": 0.4951,
-      "d_ro_dif": 1.2164,
-      "d_ro_macd": 1.1022,
-      "d_ro_dm": 0.1142,
-      "d_ro_dm_prev": 0.0814,
-      "d_ro_dm_prev2": 0.0757,
-      "d_mi_macd": 2.1552,
-      "d_mi_dm": 0.1951,
-      "d_mi_dm_prev": 0.1783,
-      "d_bo_dif": 0.8746,
-      "d_bo_macd": 0.7874,
-      "d_bo_dm": 0.0872,
-      "volume": 61151.653
+      "d_ro_dif": 0.8834,
+      "d_ro_macd": 1.0624,
+      "d_ro_dm": -0.1791,
+      "d_ro_dm_prev": 0.1142,
+      "d_ro_dm_prev2": 0.0814,
+      "d_mi_macd": 2.1671,
+      "d_mi_dm": 0.0716,
+      "d_mi_dm_prev": 0.1951,
+      "d_bo_dif": 0.3282,
+      "d_bo_macd": 0.5578,
+      "d_bo_dm": -0.2296,
+      "volume": 66798.572
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
+     "code": "2923",
+     "name": "鼎固-KY",
+     "market": "TWSE",
+     "close": 31.8,
+     "volume_lots": 403,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.6661,
+      "w_ro_dif": 0.4086,
+      "w_ro_dm": 0.0358,
+      "d_ro_dif": 0.8352,
+      "d_ro_macd": 0.5908,
+      "d_ro_dm": 0.2444,
+      "d_ro_dm_prev": 0.0392,
+      "d_ro_dm_prev2": -0.2927,
+      "d_mi_macd": 0.3095,
+      "d_mi_dm": 0.3394,
+      "d_mi_dm_prev": 0.2524,
+      "d_bo_dif": 0.8208,
+      "d_bo_macd": 0.4719,
+      "d_bo_dm": 0.3489,
+      "volume": 403.004
      },
      "failed": [
       "D2"
@@ -3973,8 +3120,8 @@
      "code": "3029",
      "name": "零壹",
      "market": "TWSE",
-     "close": 123.0,
-     "volume_lots": 6863,
+     "close": 121.0,
+     "volume_lots": 4943,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -3989,18 +3136,18 @@
       "m_ro_dm": 0.0191,
       "w_ro_dif": 4.859,
       "w_ro_dm": 1.2788,
-      "d_ro_dif": 2.2818,
-      "d_ro_macd": 1.5659,
-      "d_ro_dm": 0.7159,
-      "d_ro_dm_prev": 1.4899,
-      "d_ro_dm_prev2": 1.7652,
-      "d_mi_macd": 3.0914,
-      "d_mi_dm": 0.4183,
-      "d_mi_dm_prev": 0.6231,
-      "d_bo_dif": 1.9039,
-      "d_bo_macd": 2.3896,
-      "d_bo_dm": -0.4856,
-      "volume": 6863.375
+      "d_ro_dif": 1.6139,
+      "d_ro_macd": 1.5746,
+      "d_ro_dm": 0.0393,
+      "d_ro_dm_prev": 0.7159,
+      "d_ro_dm_prev2": 1.4899,
+      "d_mi_macd": 3.1222,
+      "d_mi_dm": 0.1847,
+      "d_mi_dm_prev": 0.4183,
+      "d_bo_dif": 0.7494,
+      "d_bo_macd": 1.5695,
+      "d_bo_dm": -0.8201,
+      "volume": 4943.01
      },
      "failed": [
       "D2"
@@ -4011,7 +3158,7 @@
      "name": "微端",
      "market": "TPEX",
      "close": 49.9,
-     "volume_lots": 1365,
+     "volume_lots": 571,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4026,55 +3173,18 @@
       "m_ro_dm": 1.4807,
       "w_ro_dif": 2.1505,
       "w_ro_dm": 0.2175,
-      "d_ro_dif": 2.0224,
-      "d_ro_macd": 1.1264,
-      "d_ro_dm": 0.896,
-      "d_ro_dm_prev": 1.0703,
-      "d_ro_dm_prev2": 0.5846,
-      "d_mi_macd": 1.3405,
-      "d_mi_dm": 0.6077,
-      "d_mi_dm_prev": 0.5904,
-      "d_bo_dif": 2.0565,
-      "d_bo_macd": 1.8602,
-      "d_bo_dm": 0.1964,
-      "volume": 1365.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "3287",
-     "name": "廣寰科",
-     "market": "TPEX",
-     "close": 55.8,
-     "volume_lots": 2106,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.4654,
-      "w_ro_dif": 8.546,
-      "w_ro_dm": 3.4321,
-      "d_ro_dif": 2.0133,
-      "d_ro_macd": 4.346,
-      "d_ro_dm": -2.3327,
-      "d_ro_dm_prev": -1.4066,
-      "d_ro_dm_prev2": -0.574,
-      "d_mi_macd": 7.7127,
-      "d_mi_dm": 0.0084,
-      "d_mi_dm_prev": 0.577,
-      "d_bo_dif": -1.31,
-      "d_bo_macd": 0.1565,
-      "d_bo_dm": -1.4665,
-      "volume": 2106.0
+      "d_ro_dif": 2.0058,
+      "d_ro_macd": 1.2863,
+      "d_ro_dm": 0.7195,
+      "d_ro_dm_prev": 0.896,
+      "d_ro_dm_prev2": 1.0703,
+      "d_mi_macd": 1.4416,
+      "d_mi_dm": 0.6067,
+      "d_mi_dm_prev": 0.6077,
+      "d_bo_dif": 1.8092,
+      "d_bo_macd": 1.8347,
+      "d_bo_dm": -0.0255,
+      "volume": 571.0
      },
      "failed": [
       "D2"
@@ -4084,8 +3194,8 @@
      "code": "3691",
      "name": "碩禾",
      "market": "TPEX",
-     "close": 112.0,
-     "volume_lots": 4085,
+     "close": 104.5,
+     "volume_lots": 4788,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4100,18 +3210,18 @@
       "m_ro_dm": 3.6382,
       "w_ro_dif": 2.2305,
       "w_ro_dm": 4.03,
-      "d_ro_dif": 2.8192,
-      "d_ro_macd": 6.394,
-      "d_ro_dm": -3.5748,
-      "d_ro_dm_prev": -1.8466,
-      "d_ro_dm_prev2": -0.3192,
-      "d_mi_macd": 4.3809,
-      "d_mi_dm": 1.3213,
-      "d_mi_dm_prev": 2.3273,
-      "d_bo_dif": -2.4152,
-      "d_bo_macd": 0.0869,
-      "d_bo_dm": -2.5022,
-      "volume": 4085.0
+      "d_ro_dif": 0.2536,
+      "d_ro_macd": 5.2776,
+      "d_ro_dm": -5.0239,
+      "d_ro_dm_prev": -3.5748,
+      "d_ro_dm_prev2": -1.8466,
+      "d_mi_macd": 4.4284,
+      "d_mi_dm": 0.2852,
+      "d_mi_dm_prev": 1.3213,
+      "d_bo_dif": -5.2162,
+      "d_bo_macd": -2.5646,
+      "d_bo_dm": -2.6516,
+      "volume": 4788.0
      },
      "failed": [
       "D2"
@@ -4121,8 +3231,8 @@
      "code": "3703",
      "name": "欣陸",
      "market": "TWSE",
-     "close": 22.75,
-     "volume_lots": 1508,
+     "close": 22.7,
+     "volume_lots": 1411,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4137,66 +3247,29 @@
       "m_ro_dm": 0.0788,
       "w_ro_dif": 0.2752,
       "w_ro_dm": 0.3197,
-      "d_ro_dif": 0.6743,
-      "d_ro_macd": 0.5579,
-      "d_ro_dm": 0.1163,
-      "d_ro_dm_prev": 0.1909,
-      "d_ro_dm_prev2": 0.2531,
-      "d_mi_macd": 0.3961,
-      "d_mi_dm": 0.248,
-      "d_mi_dm_prev": 0.2679,
-      "d_bo_dif": 0.4685,
-      "d_bo_macd": 0.5404,
-      "d_bo_dm": -0.072,
-      "volume": 1507.67
+      "d_ro_dif": 0.6222,
+      "d_ro_macd": 0.5696,
+      "d_ro_dm": 0.0526,
+      "d_ro_dm_prev": 0.1163,
+      "d_ro_dm_prev2": 0.1909,
+      "d_mi_macd": 0.4337,
+      "d_mi_dm": 0.2259,
+      "d_mi_dm_prev": 0.248,
+      "d_bo_dif": 0.3738,
+      "d_bo_macd": 0.4571,
+      "d_bo_dm": -0.0833,
+      "volume": 1410.963
      },
      "failed": [
       "D2"
      ]
     },
     {
-     "code": "3705",
-     "name": "永信",
-     "market": "TWSE",
-     "close": 58.6,
-     "volume_lots": 334,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": true,
-      "D3": true,
-      "D4": false,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.1089,
-      "w_ro_dif": 1.3017,
-      "w_ro_dm": 0.1916,
-      "d_ro_dif": -0.038,
-      "d_ro_macd": 0.1551,
-      "d_ro_dm": -0.1931,
-      "d_ro_dm_prev": -0.2021,
-      "d_ro_dm_prev2": -0.2362,
-      "d_mi_macd": 0.9959,
-      "d_mi_dm": -0.1674,
-      "d_mi_dm_prev": -0.1532,
-      "d_bo_dif": -0.1665,
-      "d_bo_macd": -0.1646,
-      "d_bo_dm": -0.002,
-      "volume": 334.1
-     },
-     "failed": [
-      "D4"
-     ]
-    },
-    {
      "code": "4105",
      "name": "東洋",
      "market": "TPEX",
-     "close": 83.0,
-     "volume_lots": 870,
+     "close": 82.4,
+     "volume_lots": 544,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4211,18 +3284,18 @@
       "m_ro_dm": 0.0782,
       "w_ro_dif": 1.3422,
       "w_ro_dm": 0.392,
-      "d_ro_dif": 0.7508,
-      "d_ro_macd": 0.4753,
-      "d_ro_dm": 0.2755,
-      "d_ro_dm_prev": 0.3226,
-      "d_ro_dm_prev2": 0.3815,
-      "d_mi_macd": 0.9243,
-      "d_mi_dm": 0.1558,
-      "d_mi_dm_prev": 0.148,
-      "d_bo_dif": 0.6976,
-      "d_bo_macd": 0.7006,
-      "d_bo_dm": -0.003,
-      "volume": 870.0
+      "d_ro_dif": 0.6963,
+      "d_ro_macd": 0.5155,
+      "d_ro_dm": 0.1808,
+      "d_ro_dm_prev": 0.2755,
+      "d_ro_dm_prev2": 0.3226,
+      "d_mi_macd": 0.9474,
+      "d_mi_dm": 0.1381,
+      "d_mi_dm_prev": 0.1558,
+      "d_bo_dif": 0.5496,
+      "d_bo_macd": 0.6251,
+      "d_bo_dm": -0.0755,
+      "volume": 544.0
      },
      "failed": [
       "D2"
@@ -4232,8 +3305,8 @@
      "code": "4116",
      "name": "明基醫",
      "market": "TPEX",
-     "close": 42.6,
-     "volume_lots": 151,
+     "close": 42.7,
+     "volume_lots": 204,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4248,29 +3321,66 @@
       "m_ro_dm": 0.6421,
       "w_ro_dif": 0.7262,
       "w_ro_dm": 0.2144,
-      "d_ro_dif": 0.2482,
-      "d_ro_macd": 0.2798,
-      "d_ro_dm": -0.0316,
-      "d_ro_dm_prev": -0.1193,
-      "d_ro_dm_prev2": -0.241,
-      "d_mi_macd": 0.631,
-      "d_mi_dm": 0.0165,
-      "d_mi_dm_prev": -0.0096,
-      "d_bo_dif": 0.1684,
-      "d_bo_macd": 0.0472,
-      "d_bo_dm": 0.1211,
-      "volume": 151.0
+      "d_ro_dif": 0.3122,
+      "d_ro_macd": 0.2857,
+      "d_ro_dm": 0.0265,
+      "d_ro_dm_prev": -0.0316,
+      "d_ro_dm_prev2": -0.1193,
+      "d_mi_macd": 0.6372,
+      "d_mi_dm": 0.0377,
+      "d_mi_dm_prev": 0.0165,
+      "d_bo_dif": 0.2594,
+      "d_bo_macd": 0.1533,
+      "d_bo_dm": 0.1061,
+      "volume": 204.0
      },
      "failed": [
       "V1"
      ]
     },
     {
+     "code": "4155",
+     "name": "訊映",
+     "market": "TWSE",
+     "close": 17.95,
+     "volume_lots": 2175,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.5275,
+      "w_ro_dif": 0.5056,
+      "w_ro_dm": 0.2606,
+      "d_ro_dif": 0.454,
+      "d_ro_macd": 0.4196,
+      "d_ro_dm": 0.0344,
+      "d_ro_dm_prev": 0.0403,
+      "d_ro_dm_prev2": -0.0339,
+      "d_mi_macd": 0.4626,
+      "d_mi_dm": 0.1422,
+      "d_mi_dm_prev": 0.1447,
+      "d_bo_dif": 0.3074,
+      "d_bo_macd": 0.2797,
+      "d_bo_dm": 0.0277,
+      "volume": 2175.353
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
      "code": "4174",
      "name": "浩鼎",
      "market": "TPEX",
-     "close": 78.4,
-     "volume_lots": 313,
+     "close": 77.5,
+     "volume_lots": 2762,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4285,29 +3395,66 @@
       "m_ro_dm": 3.4744,
       "w_ro_dif": 5.8411,
       "w_ro_dm": 3.5752,
-      "d_ro_dif": 5.5943,
-      "d_ro_macd": 2.9869,
-      "d_ro_dm": 2.6073,
-      "d_ro_dm_prev": 1.7781,
-      "d_ro_dm_prev2": 1.0028,
-      "d_mi_macd": 5.7671,
-      "d_mi_dm": 1.3581,
-      "d_mi_dm_prev": 0.8445,
-      "d_bo_dif": 6.1651,
-      "d_bo_macd": 4.7633,
-      "d_bo_dm": 1.4018,
-      "volume": 313.0
+      "d_ro_dif": 6.4622,
+      "d_ro_macd": 3.6188,
+      "d_ro_dm": 2.8434,
+      "d_ro_dm_prev": 2.6073,
+      "d_ro_dm_prev2": 1.7781,
+      "d_mi_macd": 6.0478,
+      "d_mi_dm": 1.6841,
+      "d_mi_dm_prev": 1.3581,
+      "d_bo_dif": 6.7357,
+      "d_bo_macd": 5.7495,
+      "d_bo_dm": 0.9862,
+      "volume": 2762.0
      },
      "failed": [
       "D2"
      ]
     },
     {
+     "code": "4502",
+     "name": "健信",
+     "market": "TPEX",
+     "close": 15.8,
+     "volume_lots": 38,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.6965,
+      "w_ro_dif": 0.0044,
+      "w_ro_dm": 0.0261,
+      "d_ro_dif": -0.0091,
+      "d_ro_macd": 0.0025,
+      "d_ro_dm": -0.0116,
+      "d_ro_dm_prev": -0.0152,
+      "d_ro_dm_prev2": -0.0139,
+      "d_mi_macd": 0.0226,
+      "d_mi_dm": -0.0063,
+      "d_mi_dm_prev": -0.0064,
+      "d_bo_dif": -0.0149,
+      "d_bo_macd": -0.0152,
+      "d_bo_dm": 0.0003,
+      "volume": 38.0
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
      "code": "4526",
      "name": "東台",
      "market": "TWSE",
-     "close": 46.55,
-     "volume_lots": 13658,
+     "close": 43.7,
+     "volume_lots": 18224,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4322,18 +3469,18 @@
       "m_ro_dm": 1.1735,
       "w_ro_dif": 4.3855,
       "w_ro_dm": 2.9615,
-      "d_ro_dif": 2.8534,
-      "d_ro_macd": 4.1941,
-      "d_ro_dm": -1.3407,
-      "d_ro_dm_prev": -0.5974,
-      "d_ro_dm_prev2": -0.017,
-      "d_mi_macd": 4.5976,
-      "d_mi_dm": 0.8502,
-      "d_mi_dm_prev": 1.2704,
-      "d_bo_dif": 0.1576,
-      "d_bo_macd": 1.153,
-      "d_bo_dm": -0.9955,
-      "volume": 13657.753
+      "d_ro_dif": 1.7864,
+      "d_ro_macd": 3.7563,
+      "d_ro_dm": -1.9699,
+      "d_ro_dm_prev": -1.3407,
+      "d_ro_dm_prev2": -0.5974,
+      "d_mi_macd": 4.6666,
+      "d_mi_dm": 0.4143,
+      "d_mi_dm_prev": 0.8502,
+      "d_bo_dif": -1.048,
+      "d_bo_macd": 0.0525,
+      "d_bo_dm": -1.1005,
+      "volume": 18223.804
      },
      "failed": [
       "D2"
@@ -4343,8 +3490,8 @@
      "code": "4577",
      "name": "達航科技",
      "market": "TPEX",
-     "close": 112.5,
-     "volume_lots": 1311,
+     "close": 103.0,
+     "volume_lots": 2853,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4359,66 +3506,66 @@
       "m_ro_dm": 2.6609,
       "w_ro_dif": 7.7353,
       "w_ro_dm": 5.649,
-      "d_ro_dif": 4.6739,
-      "d_ro_macd": 6.2577,
-      "d_ro_dm": -1.5838,
-      "d_ro_dm_prev": -0.2049,
-      "d_ro_dm_prev2": 0.5345,
-      "d_mi_macd": 8.3173,
-      "d_mi_dm": 1.1766,
-      "d_mi_dm_prev": 1.8594,
-      "d_bo_dif": 1.0482,
-      "d_bo_macd": 2.4804,
-      "d_bo_dm": -1.4322,
-      "volume": 1311.0
+      "d_ro_dif": 2.4892,
+      "d_ro_macd": 5.5726,
+      "d_ro_dm": -3.0834,
+      "d_ro_dm_prev": -1.5838,
+      "d_ro_dm_prev2": -0.2049,
+      "d_mi_macd": 8.3703,
+      "d_mi_dm": 0.3181,
+      "d_mi_dm_prev": 1.1766,
+      "d_bo_dif": -1.808,
+      "d_bo_macd": 0.3362,
+      "d_bo_dm": -2.1442,
+      "volume": 2853.0
      },
      "failed": [
       "D2"
      ]
     },
     {
-     "code": "4737",
-     "name": "華廣",
-     "market": "TWSE",
-     "close": 59.6,
-     "volume_lots": 337,
+     "code": "4706",
+     "name": "大恭",
+     "market": "TPEX",
+     "close": 51.3,
+     "volume_lots": 286,
      "conditions": {
       "M1": true,
       "W1": true,
       "W2": true,
-      "D1": false,
+      "D1": true,
       "D2": true,
       "D3": true,
       "D4": true,
-      "V1": true
+      "V1": false
      },
      "values": {
-      "m_ro_dm": 0.3348,
-      "w_ro_dif": 0.0253,
-      "w_ro_dm": 0.1424,
-      "d_ro_dif": -0.1221,
-      "d_ro_macd": -0.1173,
-      "d_ro_dm": -0.0048,
-      "d_ro_dm_prev": -0.3009,
-      "d_ro_dm_prev2": -0.4176,
-      "d_mi_macd": 0.0623,
-      "d_mi_dm": -0.0605,
-      "d_mi_dm_prev": -0.163,
-      "d_bo_dif": 0.0374,
-      "d_bo_macd": -0.259,
-      "d_bo_dm": 0.2964,
-      "volume": 336.512
+      "m_ro_dm": 1.3439,
+      "w_ro_dif": 3.8326,
+      "w_ro_dm": 1.4774,
+      "d_ro_dif": 1.4158,
+      "d_ro_macd": 1.4286,
+      "d_ro_dm": -0.0128,
+      "d_ro_dm_prev": -0.312,
+      "d_ro_dm_prev2": -0.264,
+      "d_mi_macd": 3.1239,
+      "d_mi_dm": 0.1642,
+      "d_mi_dm_prev": 0.0706,
+      "d_bo_dif": 0.9686,
+      "d_bo_macd": 0.7248,
+      "d_bo_dm": 0.2437,
+      "volume": 286.0
      },
      "failed": [
-      "D1"
+      "V1"
      ]
     },
     {
      "code": "4741",
      "name": "泓瀚",
      "market": "TPEX",
-     "close": 47.75,
-     "volume_lots": 1390,
+     "close": 46.1,
+     "volume_lots": 782,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4433,18 +3580,18 @@
       "m_ro_dm": 1.8213,
       "w_ro_dif": 1.6593,
       "w_ro_dm": 1.6907,
-      "d_ro_dif": 1.8258,
-      "d_ro_macd": 3.0845,
-      "d_ro_dm": -1.2587,
-      "d_ro_dm_prev": -0.575,
-      "d_ro_dm_prev2": -0.0455,
-      "d_mi_macd": 2.1916,
-      "d_mi_dm": 0.7801,
-      "d_mi_dm_prev": 1.1693,
-      "d_bo_dif": -0.3863,
-      "d_bo_macd": 0.5905,
-      "d_bo_dm": -0.9768,
-      "volume": 1390.0
+      "d_ro_dif": 0.9381,
+      "d_ro_macd": 2.6943,
+      "d_ro_dm": -1.7561,
+      "d_ro_dm_prev": -1.2587,
+      "d_ro_dm_prev2": -0.575,
+      "d_mi_macd": 2.2603,
+      "d_mi_dm": 0.4122,
+      "d_mi_dm_prev": 0.7801,
+      "d_bo_dif": -1.3381,
+      "d_bo_macd": -0.3738,
+      "d_bo_dm": -0.9643,
+      "volume": 782.0
      },
      "failed": [
       "D2"
@@ -4454,8 +3601,8 @@
      "code": "4904",
      "name": "遠傳",
      "market": "TWSE",
-     "close": 108.5,
-     "volume_lots": 11075,
+     "close": 109.0,
+     "volume_lots": 9722,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4470,29 +3617,66 @@
       "m_ro_dm": 2.0008,
       "w_ro_dif": 3.325,
       "w_ro_dm": 0.1637,
-      "d_ro_dif": -0.3821,
-      "d_ro_macd": 0.2174,
-      "d_ro_dm": -0.5995,
-      "d_ro_dm_prev": -0.6824,
-      "d_ro_dm_prev2": -0.8169,
-      "d_mi_macd": 2.0507,
-      "d_mi_dm": -0.4546,
-      "d_mi_dm_prev": -0.4284,
-      "d_bo_dif": -0.6473,
-      "d_bo_macd": -0.7288,
-      "d_bo_dm": 0.0815,
-      "volume": 11074.854
+      "d_ro_dif": -0.3694,
+      "d_ro_macd": 0.1107,
+      "d_ro_dm": -0.4801,
+      "d_ro_dm_prev": -0.5995,
+      "d_ro_dm_prev2": -0.6824,
+      "d_mi_macd": 1.9747,
+      "d_mi_dm": -0.4558,
+      "d_mi_dm_prev": -0.4546,
+      "d_bo_dif": -0.5224,
+      "d_bo_macd": -0.6256,
+      "d_bo_dm": 0.1032,
+      "volume": 9721.671
      },
      "failed": [
       "D4"
      ]
     },
     {
-     "code": "4960",
-     "name": "誠美材",
+     "code": "4977",
+     "name": "眾達-KY",
      "market": "TWSE",
-     "close": 26.85,
-     "volume_lots": 21489,
+     "close": 197.0,
+     "volume_lots": 31332,
+     "conditions": {
+      "M1": false,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": -0.0294,
+      "w_ro_dif": 2.7584,
+      "w_ro_dm": 1.952,
+      "d_ro_dif": 2.5037,
+      "d_ro_macd": 1.4152,
+      "d_ro_dm": 1.0885,
+      "d_ro_dm_prev": -0.084,
+      "d_ro_dm_prev2": 0.0078,
+      "d_mi_macd": 3.8428,
+      "d_mi_dm": 0.3658,
+      "d_mi_dm_prev": -0.142,
+      "d_bo_dif": 2.6938,
+      "d_bo_macd": 1.7649,
+      "d_bo_dm": 0.9289,
+      "volume": 31331.647
+     },
+     "failed": [
+      "M1"
+     ]
+    },
+    {
+     "code": "5013",
+     "name": "強新",
+     "market": "TPEX",
+     "close": 63.0,
+     "volume_lots": 20188,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4504,21 +3688,21 @@
       "V1": true
      },
      "values": {
-      "m_ro_dm": 0.7769,
-      "w_ro_dif": 1.4846,
-      "w_ro_dm": 1.1285,
-      "d_ro_dif": 0.4803,
-      "d_ro_macd": 1.0969,
-      "d_ro_dm": -0.6166,
-      "d_ro_dm_prev": -0.3334,
-      "d_ro_dm_prev2": -0.1825,
-      "d_mi_macd": 1.8098,
-      "d_mi_dm": 0.0464,
-      "d_mi_dm_prev": 0.214,
-      "d_bo_dif": -0.3062,
-      "d_bo_macd": 0.0186,
-      "d_bo_dm": -0.3248,
-      "volume": 21488.626
+      "m_ro_dm": 2.4828,
+      "w_ro_dif": 7.5606,
+      "w_ro_dm": 3.2901,
+      "d_ro_dif": 3.7002,
+      "d_ro_macd": 4.4141,
+      "d_ro_dm": -0.7139,
+      "d_ro_dm_prev": -0.5084,
+      "d_ro_dm_prev2": -0.6456,
+      "d_mi_macd": 7.3042,
+      "d_mi_dm": 0.6575,
+      "d_mi_dm_prev": 0.8242,
+      "d_bo_dif": 1.4448,
+      "d_bo_macd": 1.7443,
+      "d_bo_dm": -0.2995,
+      "volume": 20188.0
      },
      "failed": [
       "D2"
@@ -4528,8 +3712,8 @@
      "code": "5209",
      "name": "新鼎",
      "market": "TPEX",
-     "close": 218.5,
-     "volume_lots": 558,
+     "close": 214.5,
+     "volume_lots": 307,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4544,55 +3728,18 @@
       "m_ro_dm": 3.0941,
       "w_ro_dif": 12.4789,
       "w_ro_dm": 5.6432,
-      "d_ro_dif": 8.3983,
-      "d_ro_macd": 6.9122,
-      "d_ro_dm": 1.4861,
-      "d_ro_dm_prev": 1.9592,
-      "d_ro_dm_prev2": 2.4463,
-      "d_mi_macd": 9.6876,
-      "d_mi_dm": 2.2136,
-      "d_mi_dm_prev": 2.286,
-      "d_bo_dif": 6.3578,
-      "d_bo_macd": 6.4236,
-      "d_bo_dm": -0.0658,
-      "volume": 558.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "5212",
-     "name": "凌網",
-     "market": "TPEX",
-     "close": 51.1,
-     "volume_lots": 546,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.0312,
-      "w_ro_dif": 0.5459,
-      "w_ro_dm": 0.3379,
-      "d_ro_dif": 0.9869,
-      "d_ro_macd": 0.4654,
-      "d_ro_dm": 0.5214,
-      "d_ro_dm_prev": 0.706,
-      "d_ro_dm_prev2": 0.2761,
-      "d_mi_macd": 0.4647,
-      "d_mi_dm": 0.3213,
-      "d_mi_dm_prev": 0.3399,
-      "d_bo_dif": 1.0848,
-      "d_bo_macd": 0.9918,
-      "d_bo_dm": 0.093,
-      "volume": 546.0
+      "d_ro_dif": 7.8008,
+      "d_ro_macd": 7.0738,
+      "d_ro_dm": 0.727,
+      "d_ro_dm_prev": 1.4861,
+      "d_ro_dm_prev2": 1.9592,
+      "d_mi_macd": 10.0161,
+      "d_mi_dm": 1.9707,
+      "d_mi_dm_prev": 2.2136,
+      "d_bo_dif": 5.1032,
+      "d_bo_macd": 5.7634,
+      "d_bo_dm": -0.6602,
+      "volume": 307.0
      },
      "failed": [
       "D2"
@@ -4602,8 +3749,8 @@
      "code": "5230",
      "name": "雷笛克光學",
      "market": "TPEX",
-     "close": 34.5,
-     "volume_lots": 16734,
+     "close": 32.35,
+     "volume_lots": 8792,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4618,29 +3765,103 @@
       "m_ro_dm": 1.1306,
       "w_ro_dif": 2.7048,
       "w_ro_dm": 1.2072,
-      "d_ro_dif": 2.2891,
-      "d_ro_macd": 1.7053,
-      "d_ro_dm": 0.5838,
-      "d_ro_dm_prev": 0.6552,
-      "d_ro_dm_prev2": 0.8861,
-      "d_mi_macd": 2.3645,
-      "d_mi_dm": 0.6187,
-      "d_mi_dm_prev": 0.5997,
-      "d_bo_dif": 1.8639,
-      "d_bo_macd": 1.8992,
-      "d_bo_dm": -0.0353,
-      "volume": 16734.0
+      "d_ro_dif": 2.1065,
+      "d_ro_macd": 1.7782,
+      "d_ro_dm": 0.3283,
+      "d_ro_dm_prev": 0.5838,
+      "d_ro_dm_prev2": 0.6552,
+      "d_mi_macd": 2.4561,
+      "d_mi_dm": 0.5495,
+      "d_mi_dm_prev": 0.6187,
+      "d_bo_dif": 1.4582,
+      "d_bo_macd": 1.6787,
+      "d_bo_dm": -0.2205,
+      "volume": 8792.0
      },
      "failed": [
       "D2"
      ]
     },
     {
+     "code": "5348",
+     "name": "正能量智能",
+     "market": "TPEX",
+     "close": 17.35,
+     "volume_lots": 1,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 0.2716,
+      "w_ro_dif": 0.0553,
+      "w_ro_dm": 0.0637,
+      "d_ro_dif": 0.0448,
+      "d_ro_macd": 0.0214,
+      "d_ro_dm": 0.0234,
+      "d_ro_dm_prev": -0.0147,
+      "d_ro_dm_prev2": -0.0123,
+      "d_mi_macd": 0.0962,
+      "d_mi_dm": 0.0033,
+      "d_mi_dm_prev": -0.0119,
+      "d_bo_dif": 0.0654,
+      "d_bo_macd": 0.0283,
+      "d_bo_dm": 0.0371,
+      "volume": 1.0
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
+     "code": "5876",
+     "name": "上海商銀",
+     "market": "TWSE",
+     "close": 52.9,
+     "volume_lots": 12115,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": false,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 1.6313,
+      "w_ro_dif": 2.8955,
+      "w_ro_dm": 0.3675,
+      "d_ro_dif": 0.2428,
+      "d_ro_macd": 0.3219,
+      "d_ro_dm": -0.0791,
+      "d_ro_dm_prev": -0.0928,
+      "d_ro_dm_prev2": -0.1607,
+      "d_mi_macd": 1.9153,
+      "d_mi_dm": -0.2229,
+      "d_mi_dm_prev": -0.2228,
+      "d_bo_dif": 0.142,
+      "d_bo_macd": 0.095,
+      "d_bo_dm": 0.0469,
+      "volume": 12115.046
+     },
+     "failed": [
+      "D4"
+     ]
+    },
+    {
      "code": "6108",
      "name": "競國",
      "market": "TWSE",
-     "close": 41.45,
-     "volume_lots": 5779,
+     "close": 42.5,
+     "volume_lots": 4298,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4655,18 +3876,18 @@
       "m_ro_dm": 1.5205,
       "w_ro_dif": 3.4499,
       "w_ro_dm": 1.1759,
-      "d_ro_dif": 2.8546,
-      "d_ro_macd": 1.7307,
-      "d_ro_dm": 1.124,
-      "d_ro_dm_prev": 1.0739,
-      "d_ro_dm_prev2": 0.9705,
-      "d_mi_macd": 2.559,
-      "d_mi_dm": 0.7723,
-      "d_mi_dm_prev": 0.6594,
-      "d_bo_dif": 2.8141,
-      "d_bo_macd": 2.5087,
-      "d_bo_dm": 0.3054,
-      "volume": 5778.7
+      "d_ro_dif": 3.1181,
+      "d_ro_macd": 1.9829,
+      "d_ro_dm": 1.1352,
+      "d_ro_dm_prev": 1.124,
+      "d_ro_dm_prev2": 1.0739,
+      "d_mi_macd": 2.7042,
+      "d_mi_dm": 0.8712,
+      "d_mi_dm_prev": 0.7723,
+      "d_bo_dif": 2.9238,
+      "d_bo_macd": 2.7163,
+      "d_bo_dm": 0.2075,
+      "volume": 4297.946
      },
      "failed": [
       "D2"
@@ -4676,8 +3897,8 @@
      "code": "6112",
      "name": "邁達特",
      "market": "TWSE",
-     "close": 53.0,
-     "volume_lots": 14295,
+     "close": 47.75,
+     "volume_lots": 10638,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4692,18 +3913,18 @@
       "m_ro_dm": 0.4484,
       "w_ro_dif": 2.1309,
       "w_ro_dm": 1.008,
-      "d_ro_dif": 1.9824,
-      "d_ro_macd": 1.5621,
-      "d_ro_dm": 0.4203,
-      "d_ro_dm_prev": 0.8554,
-      "d_ro_dm_prev2": 0.9497,
-      "d_mi_macd": 1.5387,
-      "d_mi_dm": 0.6233,
-      "d_mi_dm_prev": 0.7445,
-      "d_bo_dif": 1.4151,
-      "d_bo_macd": 1.7356,
-      "d_bo_dm": -0.3206,
-      "volume": 14295.437
+      "d_ro_dif": 1.2407,
+      "d_ro_macd": 1.5037,
+      "d_ro_dm": -0.263,
+      "d_ro_dm_prev": 0.4203,
+      "d_ro_dm_prev2": 0.8554,
+      "d_mi_macd": 1.5975,
+      "d_mi_dm": 0.3524,
+      "d_mi_dm_prev": 0.6233,
+      "d_bo_dif": 0.2311,
+      "d_bo_macd": 0.9834,
+      "d_bo_dm": -0.7523,
+      "volume": 10637.903
      },
      "failed": [
       "D2"
@@ -4713,8 +3934,8 @@
      "code": "6150",
      "name": "撼訊",
      "market": "TPEX",
-     "close": 80.1,
-     "volume_lots": 6327,
+     "close": 79.0,
+     "volume_lots": 3214,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4729,92 +3950,18 @@
       "m_ro_dm": 0.7061,
       "w_ro_dif": 2.4503,
       "w_ro_dm": 1.4369,
-      "d_ro_dif": 2.9503,
-      "d_ro_macd": 1.5893,
-      "d_ro_dm": 1.361,
-      "d_ro_dm_prev": 1.3842,
-      "d_ro_dm_prev2": 1.3457,
-      "d_mi_macd": 2.2772,
-      "d_mi_dm": 0.8383,
-      "d_mi_dm_prev": 0.7287,
-      "d_bo_dif": 3.0741,
-      "d_bo_macd": 2.799,
-      "d_bo_dm": 0.2751,
-      "volume": 6327.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6170",
-     "name": "統振",
-     "market": "TPEX",
-     "close": 50.8,
-     "volume_lots": 455,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 0.0396,
-      "w_ro_dif": 0.7358,
-      "w_ro_dm": 0.2493,
-      "d_ro_dif": 0.263,
-      "d_ro_macd": 0.1762,
-      "d_ro_dm": 0.0868,
-      "d_ro_dm_prev": 0.0589,
-      "d_ro_dm_prev2": 0.0618,
-      "d_mi_macd": 0.4965,
-      "d_mi_dm": 0.0284,
-      "d_mi_dm_prev": 0.0112,
-      "d_bo_dif": 0.2669,
-      "d_bo_macd": 0.2083,
-      "d_bo_dm": 0.0586,
-      "volume": 455.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6199",
-     "name": "天品",
-     "market": "TPEX",
-     "close": 170.0,
-     "volume_lots": 9540,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.5802,
-      "w_ro_dif": 15.366,
-      "w_ro_dm": 6.4226,
-      "d_ro_dif": 6.4466,
-      "d_ro_macd": 7.3925,
-      "d_ro_dm": -0.9459,
-      "d_ro_dm_prev": -0.8898,
-      "d_ro_dm_prev2": -0.7679,
-      "d_mi_macd": 14.0976,
-      "d_mi_dm": 0.8733,
-      "d_mi_dm_prev": 1.0277,
-      "d_bo_dif": 3.003,
-      "d_bo_macd": 3.2291,
-      "d_bo_dm": -0.2261,
-      "volume": 9540.0
+      "d_ro_dif": 3.0107,
+      "d_ro_macd": 1.8478,
+      "d_ro_dm": 1.1629,
+      "d_ro_dm_prev": 1.361,
+      "d_ro_dm_prev2": 1.3842,
+      "d_mi_macd": 2.4217,
+      "d_mi_dm": 0.8672,
+      "d_mi_dm_prev": 0.8383,
+      "d_bo_dif": 2.8215,
+      "d_bo_macd": 2.8103,
+      "d_bo_dm": 0.0112,
+      "volume": 3214.0
      },
      "failed": [
       "D2"
@@ -4824,8 +3971,8 @@
      "code": "6221",
      "name": "晉泰",
      "market": "TPEX",
-     "close": 40.9,
-     "volume_lots": 5480,
+     "close": 36.85,
+     "volume_lots": 4926,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4840,29 +3987,66 @@
       "m_ro_dm": 0.8071,
       "w_ro_dif": 3.9541,
       "w_ro_dm": 1.9182,
-      "d_ro_dif": 2.0614,
-      "d_ro_macd": 2.1556,
-      "d_ro_dm": -0.0941,
-      "d_ro_dm_prev": 0.198,
-      "d_ro_dm_prev2": 0.0831,
-      "d_mi_macd": 3.8931,
-      "d_mi_dm": 0.3421,
-      "d_mi_dm_prev": 0.465,
-      "d_bo_dif": 1.1044,
-      "d_bo_macd": 1.3019,
-      "d_bo_dm": -0.1974,
-      "volume": 5480.0
+      "d_ro_dif": 1.4433,
+      "d_ro_macd": 2.0261,
+      "d_ro_dm": -0.5827,
+      "d_ro_dm_prev": -0.0941,
+      "d_ro_dm_prev2": 0.198,
+      "d_mi_macd": 3.9109,
+      "d_mi_dm": 0.1067,
+      "d_mi_dm_prev": 0.3421,
+      "d_bo_dif": 0.1992,
+      "d_bo_macd": 0.7506,
+      "d_bo_dm": -0.5513,
+      "volume": 4926.0
      },
      "failed": [
       "D2"
      ]
     },
     {
+     "code": "6225",
+     "name": "天瀚",
+     "market": "TWSE",
+     "close": 82.8,
+     "volume_lots": 115,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": true,
+      "D3": true,
+      "D4": true,
+      "V1": false
+     },
+     "values": {
+      "m_ro_dm": 6.9341,
+      "w_ro_dif": 12.6458,
+      "w_ro_dm": 1.7917,
+      "d_ro_dif": 0.9315,
+      "d_ro_macd": 1.7895,
+      "d_ro_dm": -0.858,
+      "d_ro_dm_prev": -1.1273,
+      "d_ro_dm_prev2": -1.1766,
+      "d_mi_macd": 8.6436,
+      "d_mi_dm": -1.0232,
+      "d_mi_dm_prev": -1.0472,
+      "d_bo_dif": -0.0213,
+      "d_bo_macd": -0.1539,
+      "d_bo_dm": 0.1326,
+      "volume": 114.699
+     },
+     "failed": [
+      "V1"
+     ]
+    },
+    {
      "code": "6233",
      "name": "旺玖",
      "market": "TPEX",
-     "close": 30.9,
-     "volume_lots": 2432,
+     "close": 28.9,
+     "volume_lots": 2163,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4877,18 +4061,18 @@
       "m_ro_dm": 0.8279,
       "w_ro_dif": 2.0007,
       "w_ro_dm": 1.464,
-      "d_ro_dif": 1.4489,
-      "d_ro_macd": 1.75,
-      "d_ro_dm": -0.3011,
-      "d_ro_dm_prev": -0.0825,
-      "d_ro_dm_prev2": 0.1682,
-      "d_mi_macd": 2.1122,
-      "d_mi_dm": 0.4106,
-      "d_mi_dm_prev": 0.5299,
-      "d_bo_dif": 0.4999,
-      "d_bo_macd": 0.795,
-      "d_bo_dm": -0.295,
-      "volume": 2432.0
+      "d_ro_dif": 1.0394,
+      "d_ro_macd": 1.6208,
+      "d_ro_dm": -0.5815,
+      "d_ro_dm_prev": -0.3011,
+      "d_ro_dm_prev2": -0.0825,
+      "d_mi_macd": 2.153,
+      "d_mi_dm": 0.2448,
+      "d_mi_dm_prev": 0.4106,
+      "d_bo_dif": -0.0237,
+      "d_bo_macd": 0.3856,
+      "d_bo_dm": -0.4093,
+      "volume": 2163.0
      },
      "failed": [
       "D2"
@@ -4898,8 +4082,8 @@
      "code": "6234",
      "name": "高僑",
      "market": "TPEX",
-     "close": 52.0,
-     "volume_lots": 21458,
+     "close": 48.95,
+     "volume_lots": 8318,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4914,18 +4098,18 @@
       "m_ro_dm": 1.3178,
       "w_ro_dif": 2.903,
       "w_ro_dm": 1.6374,
-      "d_ro_dif": 2.3186,
-      "d_ro_macd": 1.9113,
-      "d_ro_dm": 0.4073,
-      "d_ro_dm_prev": 0.6956,
-      "d_ro_dm_prev2": 0.6843,
-      "d_mi_macd": 2.6665,
-      "d_mi_dm": 0.6408,
-      "d_mi_dm_prev": 0.7197,
-      "d_bo_dif": 1.7787,
-      "d_bo_macd": 1.8556,
-      "d_bo_dm": -0.0769,
-      "volume": 21458.0
+      "d_ro_dif": 1.8679,
+      "d_ro_macd": 1.9034,
+      "d_ro_dm": -0.0354,
+      "d_ro_dm_prev": 0.4073,
+      "d_ro_dm_prev2": 0.6956,
+      "d_mi_macd": 2.7444,
+      "d_mi_dm": 0.4676,
+      "d_mi_dm_prev": 0.6408,
+      "d_bo_dif": 0.9899,
+      "d_bo_macd": 1.4227,
+      "d_bo_dm": -0.4328,
+      "volume": 8318.0
      },
      "failed": [
       "D2"
@@ -4935,8 +4119,8 @@
      "code": "6589",
      "name": "台康生技",
      "market": "TWSE",
-     "close": 53.0,
-     "volume_lots": 1008,
+     "close": 51.5,
+     "volume_lots": 781,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4951,18 +4135,55 @@
       "m_ro_dm": 0.3461,
       "w_ro_dif": 0.3206,
       "w_ro_dm": 0.5748,
-      "d_ro_dif": 1.0011,
-      "d_ro_macd": 0.3533,
-      "d_ro_dm": 0.6477,
-      "d_ro_dm_prev": 0.7707,
-      "d_ro_dm_prev2": 0.8674,
-      "d_mi_macd": 0.2634,
-      "d_mi_dm": 0.3275,
-      "d_mi_dm_prev": 0.3099,
-      "d_bo_dif": 1.15,
-      "d_bo_macd": 1.1613,
-      "d_bo_dm": -0.0114,
-      "volume": 1008.098
+      "d_ro_dif": 0.8694,
+      "d_ro_macd": 0.4472,
+      "d_ro_dm": 0.4222,
+      "d_ro_dm_prev": 0.6477,
+      "d_ro_dm_prev2": 0.7707,
+      "d_mi_macd": 0.3114,
+      "d_mi_dm": 0.2878,
+      "d_mi_dm_prev": 0.3275,
+      "d_bo_dif": 0.8063,
+      "d_bo_macd": 0.9838,
+      "d_bo_dm": -0.1775,
+      "volume": 780.679
+     },
+     "failed": [
+      "D2"
+     ]
+    },
+    {
+     "code": "6590",
+     "name": "普鴻",
+     "market": "TPEX",
+     "close": 73.2,
+     "volume_lots": 445,
+     "conditions": {
+      "M1": true,
+      "W1": true,
+      "W2": true,
+      "D1": true,
+      "D2": false,
+      "D3": true,
+      "D4": true,
+      "V1": true
+     },
+     "values": {
+      "m_ro_dm": 0.9984,
+      "w_ro_dif": 5.5761,
+      "w_ro_dm": 2.9892,
+      "d_ro_dif": 2.2392,
+      "d_ro_macd": 3.0294,
+      "d_ro_dm": -0.7902,
+      "d_ro_dm_prev": 0.1331,
+      "d_ro_dm_prev2": 0.7035,
+      "d_mi_macd": 4.6142,
+      "d_mi_dm": 0.4133,
+      "d_mi_dm_prev": 0.8283,
+      "d_bo_dif": 0.3628,
+      "d_bo_macd": 1.3225,
+      "d_bo_dm": -0.9596,
+      "volume": 445.0
      },
      "failed": [
       "D2"
@@ -4972,8 +4193,8 @@
      "code": "6609",
      "name": "瀧澤科",
      "market": "TPEX",
-     "close": 52.3,
-     "volume_lots": 3579,
+     "close": 48.75,
+     "volume_lots": 2766,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -4988,18 +4209,18 @@
       "m_ro_dm": 0.0296,
       "w_ro_dif": 1.9216,
       "w_ro_dm": 1.5888,
-      "d_ro_dif": 3.2473,
-      "d_ro_macd": 2.427,
-      "d_ro_dm": 0.8203,
-      "d_ro_dm_prev": 1.2387,
-      "d_ro_dm_prev2": 1.6346,
-      "d_mi_macd": 1.6893,
-      "d_mi_dm": 1.1798,
-      "d_mi_dm_prev": 1.268,
-      "d_bo_dif": 2.5139,
-      "d_bo_macd": 2.8209,
-      "d_bo_dm": -0.307,
-      "volume": 3579.0
+      "d_ro_dif": 2.7089,
+      "d_ro_macd": 2.4782,
+      "d_ro_dm": 0.2306,
+      "d_ro_dm_prev": 0.8203,
+      "d_ro_dm_prev2": 1.2387,
+      "d_mi_macd": 1.8521,
+      "d_mi_dm": 0.9767,
+      "d_mi_dm_prev": 1.1798,
+      "d_bo_dif": 1.5515,
+      "d_bo_macd": 2.1862,
+      "d_bo_dm": -0.6347,
+      "volume": 2766.0
      },
      "failed": [
       "D2"
@@ -5010,7 +4231,7 @@
      "name": "科定",
      "market": "TWSE",
      "close": 138.5,
-     "volume_lots": 11,
+     "volume_lots": 5,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5025,18 +4246,18 @@
       "m_ro_dm": 1.0459,
       "w_ro_dif": 3.4298,
       "w_ro_dm": 1.6313,
-      "d_ro_dif": 1.107,
-      "d_ro_macd": 1.4435,
-      "d_ro_dm": -0.3365,
-      "d_ro_dm_prev": -0.7105,
-      "d_ro_dm_prev2": -0.882,
-      "d_mi_macd": 3.5382,
-      "d_mi_dm": 0.0081,
-      "d_mi_dm_prev": -0.0793,
-      "d_bo_dif": 0.5552,
-      "d_bo_macd": 0.1858,
-      "d_bo_dm": 0.3694,
-      "volume": 11.136
+      "d_ro_dif": 1.3092,
+      "d_ro_macd": 1.4191,
+      "d_ro_dm": -0.1098,
+      "d_ro_dm_prev": -0.3365,
+      "d_ro_dm_prev2": -0.7105,
+      "d_mi_macd": 3.5492,
+      "d_mi_dm": 0.0662,
+      "d_mi_dm_prev": 0.0081,
+      "d_bo_dif": 0.8858,
+      "d_bo_macd": 0.5358,
+      "d_bo_dm": 0.35,
+      "volume": 5.157
      },
      "failed": [
       "V1"
@@ -5046,8 +4267,8 @@
      "code": "6689",
      "name": "伊雲谷",
      "market": "TWSE",
-     "close": 74.4,
-     "volume_lots": 4428,
+     "close": 70.1,
+     "volume_lots": 3874,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5062,18 +4283,18 @@
       "m_ro_dm": 2.2576,
       "w_ro_dif": 2.8207,
       "w_ro_dm": 1.9044,
-      "d_ro_dif": 2.1748,
-      "d_ro_macd": 2.0771,
-      "d_ro_dm": 0.0977,
-      "d_ro_dm_prev": 0.5524,
-      "d_ro_dm_prev2": 0.4154,
-      "d_mi_macd": 2.6387,
-      "d_mi_dm": 0.606,
-      "d_mi_dm_prev": 0.7712,
-      "d_bo_dif": 1.331,
-      "d_bo_macd": 1.5711,
-      "d_bo_dm": -0.2401,
-      "volume": 4427.686
+      "d_ro_dif": 1.4444,
+      "d_ro_macd": 1.962,
+      "d_ro_dm": -0.5177,
+      "d_ro_dm_prev": 0.0977,
+      "d_ro_dm_prev2": 0.5524,
+      "d_mi_macd": 2.6935,
+      "d_mi_dm": 0.3286,
+      "d_mi_dm_prev": 0.606,
+      "d_bo_dif": 0.2138,
+      "d_bo_macd": 0.8925,
+      "d_bo_dm": -0.6787,
+      "volume": 3873.856
      },
      "failed": [
       "D2"
@@ -5083,8 +4304,8 @@
      "code": "6690",
      "name": "安碁資訊",
      "market": "TPEX",
-     "close": 210.0,
-     "volume_lots": 1479,
+     "close": 190.5,
+     "volume_lots": 1965,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5099,18 +4320,18 @@
       "m_ro_dm": 2.549,
       "w_ro_dif": 7.6952,
       "w_ro_dm": 3.1734,
-      "d_ro_dif": 7.2988,
-      "d_ro_macd": 4.1313,
-      "d_ro_dm": 3.1675,
-      "d_ro_dm_prev": 3.6895,
-      "d_ro_dm_prev2": 1.4073,
-      "d_mi_macd": 5.598,
-      "d_mi_dm": 2.1044,
-      "d_mi_dm_prev": 2.0152,
-      "d_bo_dif": 7.5513,
-      "d_bo_macd": 6.5008,
-      "d_bo_dm": 1.0505,
-      "volume": 1479.0
+      "d_ro_dif": 5.6186,
+      "d_ro_macd": 4.4017,
+      "d_ro_dm": 1.2169,
+      "d_ro_dm_prev": 3.1675,
+      "d_ro_dm_prev2": 3.6895,
+      "d_mi_macd": 5.8503,
+      "d_mi_dm": 1.514,
+      "d_mi_dm_prev": 2.1044,
+      "d_bo_dif": 4.1512,
+      "d_bo_macd": 5.326,
+      "d_bo_dm": -1.1748,
+      "volume": 1965.0
      },
      "failed": [
       "D2"
@@ -5120,8 +4341,8 @@
      "code": "6697",
      "name": "東捷資訊",
      "market": "TPEX",
-     "close": 79.8,
-     "volume_lots": 2492,
+     "close": 71.9,
+     "volume_lots": 481,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5136,18 +4357,18 @@
       "m_ro_dm": 0.5187,
       "w_ro_dif": 4.9242,
       "w_ro_dm": 3.6537,
-      "d_ro_dif": 8.3999,
-      "d_ro_macd": 5.7457,
-      "d_ro_dm": 2.6542,
-      "d_ro_dm_prev": 3.0888,
-      "d_ro_dm_prev2": 2.3434,
-      "d_mi_macd": 4.2461,
-      "d_mi_dm": 2.9991,
-      "d_mi_dm_prev": 2.9482,
-      "d_bo_dif": 7.3589,
-      "d_bo_macd": 6.9684,
-      "d_bo_dm": 0.3905,
-      "volume": 2492.0
+      "d_ro_dif": 7.6853,
+      "d_ro_macd": 6.0983,
+      "d_ro_dm": 1.587,
+      "d_ro_dm_prev": 2.6542,
+      "d_ro_dm_prev2": 3.0888,
+      "d_mi_macd": 4.7007,
+      "d_mi_dm": 2.7277,
+      "d_mi_dm_prev": 2.9991,
+      "d_bo_dif": 5.6665,
+      "d_bo_macd": 6.3175,
+      "d_bo_dm": -0.6509,
+      "volume": 481.0
      },
      "failed": [
       "D2"
@@ -5157,8 +4378,8 @@
      "code": "6708",
      "name": "天擎",
      "market": "TPEX",
-     "close": 83.8,
-     "volume_lots": 1095,
+     "close": 76.1,
+     "volume_lots": 1750,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5173,55 +4394,18 @@
       "m_ro_dm": 2.2005,
       "w_ro_dif": 8.3424,
       "w_ro_dm": 4.2256,
-      "d_ro_dif": 6.8266,
-      "d_ro_macd": 5.5022,
-      "d_ro_dm": 1.3245,
-      "d_ro_dm_prev": 2.0672,
-      "d_ro_dm_prev2": 1.8745,
-      "d_mi_macd": 7.5972,
-      "d_mi_dm": 1.8159,
-      "d_mi_dm_prev": 1.986,
-      "d_bo_dif": 5.0882,
-      "d_bo_macd": 5.4315,
-      "d_bo_dm": -0.3433,
-      "volume": 1095.0
-     },
-     "failed": [
-      "D2"
-     ]
-    },
-    {
-     "code": "6751",
-     "name": "智聯服務",
-     "market": "TPEX",
-     "close": 102.0,
-     "volume_lots": 649,
-     "conditions": {
-      "M1": true,
-      "W1": true,
-      "W2": true,
-      "D1": true,
-      "D2": false,
-      "D3": true,
-      "D4": true,
-      "V1": true
-     },
-     "values": {
-      "m_ro_dm": 2.3626,
-      "w_ro_dif": 9.2566,
-      "w_ro_dm": 6.0985,
-      "d_ro_dif": 10.741,
-      "d_ro_macd": 8.5404,
-      "d_ro_dm": 2.2006,
-      "d_ro_dm_prev": 2.8958,
-      "d_ro_dm_prev2": 2.2752,
-      "d_mi_macd": 9.0217,
-      "d_mi_dm": 3.4281,
-      "d_mi_dm_prev": 3.5336,
-      "d_bo_dif": 8.3599,
-      "d_bo_macd": 8.2916,
-      "d_bo_dm": 0.0683,
-      "volume": 649.0
+      "d_ro_dif": 5.7098,
+      "d_ro_macd": 5.5399,
+      "d_ro_dm": 0.1699,
+      "d_ro_dm_prev": 1.3245,
+      "d_ro_dm_prev2": 2.0672,
+      "d_mi_macd": 7.8298,
+      "d_mi_dm": 1.3953,
+      "d_mi_dm_prev": 1.8159,
+      "d_bo_dif": 3.1333,
+      "d_bo_macd": 4.2824,
+      "d_bo_dm": -1.1491,
+      "volume": 1750.0
      },
      "failed": [
       "D2"
@@ -5231,8 +4415,8 @@
      "code": "6782",
      "name": "視陽",
      "market": "TWSE",
-     "close": 267.5,
-     "volume_lots": 413,
+     "close": 266.5,
+     "volume_lots": 538,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5247,18 +4431,18 @@
       "m_ro_dm": 10.5613,
       "w_ro_dif": 18.7676,
       "w_ro_dm": 5.1874,
-      "d_ro_dif": 5.6503,
-      "d_ro_macd": 6.5405,
-      "d_ro_dm": -0.8902,
-      "d_ro_dm_prev": 0.1645,
-      "d_ro_dm_prev2": 1.0882,
-      "d_mi_macd": 12.8219,
-      "d_mi_dm": 0.5566,
-      "d_mi_dm_prev": 1.0301,
-      "d_bo_dif": 2.2104,
-      "d_bo_macd": 3.4848,
-      "d_bo_dm": -1.2744,
-      "volume": 413.051
+      "d_ro_dif": 4.5388,
+      "d_ro_macd": 6.1765,
+      "d_ro_dm": -1.6378,
+      "d_ro_dm_prev": -0.8902,
+      "d_ro_dm_prev2": 0.1645,
+      "d_mi_macd": 12.8424,
+      "d_mi_dm": 0.1231,
+      "d_mi_dm_prev": 0.5566,
+      "d_bo_dif": 0.8387,
+      "d_bo_macd": 2.1617,
+      "d_bo_dm": -1.3231,
+      "volume": 538.366
      },
      "failed": [
       "D2"
@@ -5268,8 +4452,8 @@
      "code": "8089",
      "name": "康全電訊",
      "market": "TPEX",
-     "close": 32.65,
-     "volume_lots": 2337,
+     "close": 35.9,
+     "volume_lots": 2172,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5284,18 +4468,18 @@
       "m_ro_dm": 0.3323,
       "w_ro_dif": 2.196,
       "w_ro_dm": 1.9548,
-      "d_ro_dif": 2.57,
-      "d_ro_macd": 2.1619,
-      "d_ro_dm": 0.4081,
-      "d_ro_dm_prev": 0.6332,
-      "d_ro_dm_prev2": 0.7401,
-      "d_mi_macd": 2.2722,
-      "d_mi_dm": 0.8236,
-      "d_mi_dm_prev": 0.882,
-      "d_bo_dif": 1.8632,
-      "d_bo_macd": 1.9686,
-      "d_bo_dm": -0.1054,
-      "volume": 2337.0
+      "d_ro_dif": 2.7074,
+      "d_ro_macd": 2.2611,
+      "d_ro_dm": 0.4463,
+      "d_ro_dm_prev": 0.4081,
+      "d_ro_dm_prev2": 0.6332,
+      "d_mi_macd": 2.4156,
+      "d_mi_dm": 0.8601,
+      "d_mi_dm_prev": 0.8236,
+      "d_bo_dif": 1.99,
+      "d_bo_macd": 1.9793,
+      "d_bo_dm": 0.0107,
+      "volume": 2172.0
      },
      "failed": [
       "D2"
@@ -5305,8 +4489,8 @@
      "code": "8099",
      "name": "大世科",
      "market": "TPEX",
-     "close": 180.0,
-     "volume_lots": 1327,
+     "close": 164.5,
+     "volume_lots": 4060,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5321,18 +4505,18 @@
       "m_ro_dm": 2.4564,
       "w_ro_dif": 19.1358,
       "w_ro_dm": 13.1969,
-      "d_ro_dif": 24.5457,
-      "d_ro_macd": 19.9118,
-      "d_ro_dm": 4.6338,
-      "d_ro_dm_prev": 5.9139,
-      "d_ro_dm_prev2": 4.6472,
-      "d_mi_macd": 16.7135,
-      "d_mi_dm": 8.5199,
-      "d_mi_dm_prev": 8.6919,
-      "d_bo_dif": 18.2901,
-      "d_bo_macd": 18.1003,
-      "d_bo_dm": 0.1898,
-      "volume": 1327.0
+      "d_ro_dif": 22.5933,
+      "d_ro_macd": 20.3994,
+      "d_ro_dm": 2.1939,
+      "d_ro_dm_prev": 4.6338,
+      "d_ro_dm_prev2": 5.9139,
+      "d_mi_macd": 17.999,
+      "d_mi_dm": 7.7127,
+      "d_mi_dm_prev": 8.5199,
+      "d_bo_dif": 14.408,
+      "d_bo_macd": 16.2542,
+      "d_bo_dm": -1.8462,
+      "volume": 4060.0
      },
      "failed": [
       "D2"
@@ -5342,8 +4526,8 @@
      "code": "9933",
      "name": "中鼎",
      "market": "TWSE",
-     "close": 56.6,
-     "volume_lots": 53644,
+     "close": 57.5,
+     "volume_lots": 71173,
      "conditions": {
       "M1": true,
       "W1": true,
@@ -5358,18 +4542,18 @@
       "m_ro_dm": 1.5787,
       "w_ro_dif": 2.3623,
       "w_ro_dm": 0.6349,
-      "d_ro_dif": 2.2128,
-      "d_ro_macd": 1.3981,
-      "d_ro_dm": 0.8147,
-      "d_ro_dm_prev": 0.4887,
-      "d_ro_dm_prev2": 0.469,
-      "d_mi_macd": 1.7975,
-      "d_mi_dm": 0.6435,
-      "d_mi_dm_prev": 0.4624,
-      "d_bo_dif": 2.1391,
-      "d_bo_macd": 1.7403,
-      "d_bo_dm": 0.3987,
-      "volume": 53644.219
+      "d_ro_dif": 2.6277,
+      "d_ro_macd": 1.6217,
+      "d_ro_dm": 1.006,
+      "d_ro_dm_prev": 0.8147,
+      "d_ro_dm_prev2": 0.4887,
+      "d_mi_macd": 1.9299,
+      "d_mi_dm": 0.794,
+      "d_mi_dm_prev": 0.6435,
+      "d_bo_dif": 2.5562,
+      "d_bo_macd": 2.1483,
+      "d_bo_dm": 0.4079,
+      "volume": 71173.275
      },
      "failed": [
       "D2"
@@ -5429,60 +4613,221 @@
    },
    "available": true,
    "stats": {
-    "universe": 1952,
-    "evaluated": 1938,
-    "insufficient_data": 14,
-    "hits": 2,
+    "universe": 1957,
+    "evaluated": 1933,
+    "insufficient_data": 24,
+    "hits": 9,
     "near_miss": 0,
     "insufficient_reasons": {
-     "日期落後": 10,
+     "日期落後": 20,
      "未滿 60 日": 4
     }
    },
    "warnings": [],
    "hits": [
     {
-     "code": "3004",
-     "name": "豐達科",
+     "code": "2535",
+     "name": "達欣工",
      "market": "TWSE",
-     "close": 129.0,
-     "volume_lots": 676,
+     "close": 90.1,
+     "volume_lots": 284,
      "conditions": {
       "A1": true,
       "A2": true,
       "A3": true
      },
      "values": {
-      "macd": 0.7106,
-      "dif": 1.1687,
-      "close": 129.0,
-      "close_prev": 123.5,
-      "ma": 124.05,
-      "ma_prev": 123.7,
-      "volume_lots": 675.967
+      "macd": 0.0873,
+      "dif": 0.0323,
+      "close": 90.1,
+      "close_prev": 89.9,
+      "ma": 90.0,
+      "ma_prev": 90.0,
+      "volume_lots": 283.85
      },
      "streak": 1,
      "is_new": true
     },
     {
-     "code": "5013",
-     "name": "強新",
-     "market": "TPEX",
-     "close": 66.6,
-     "volume_lots": 5952,
+     "code": "2607",
+     "name": "榮運",
+     "market": "TWSE",
+     "close": 57.8,
+     "volume_lots": 650,
      "conditions": {
       "A1": true,
       "A2": true,
       "A3": true
      },
      "values": {
-      "macd": 4.5728,
-      "dif": 4.0644,
-      "close": 66.6,
-      "close_prev": 60.6,
-      "ma": 63.9,
-      "ma_prev": 63.9,
-      "volume_lots": 5952.0
+      "macd": 0.474,
+      "dif": 0.3983,
+      "close": 57.8,
+      "close_prev": 57.5,
+      "ma": 57.45,
+      "ma_prev": 57.51,
+      "volume_lots": 650.119
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "2611",
+     "name": "志信",
+     "market": "TWSE",
+     "close": 15.5,
+     "volume_lots": 449,
+     "conditions": {
+      "A1": true,
+      "A2": true,
+      "A3": true
+     },
+     "values": {
+      "macd": 0.0174,
+      "dif": -0.0303,
+      "close": 15.5,
+      "close_prev": 15.35,
+      "ma": 15.455,
+      "ma_prev": 15.47,
+      "volume_lots": 448.625
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "3701",
+     "name": "大眾控",
+     "market": "TWSE",
+     "close": 63.2,
+     "volume_lots": 13010,
+     "conditions": {
+      "A1": true,
+      "A2": true,
+      "A3": true
+     },
+     "values": {
+      "macd": 1.5457,
+      "dif": 2.0639,
+      "close": 63.2,
+      "close_prev": 57.5,
+      "ma": 59.51,
+      "ma_prev": 58.82,
+      "volume_lots": 13010.285
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "4904",
+     "name": "遠傳",
+     "market": "TWSE",
+     "close": 109.0,
+     "volume_lots": 9722,
+     "conditions": {
+      "A1": true,
+      "A2": true,
+      "A3": true
+     },
+     "values": {
+      "macd": 0.1107,
+      "dif": -0.3694,
+      "close": 109.0,
+      "close_prev": 108.5,
+      "ma": 108.8,
+      "ma_prev": 109.3,
+      "volume_lots": 9721.671
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "4977",
+     "name": "眾達-KY",
+     "market": "TWSE",
+     "close": 197.0,
+     "volume_lots": 31332,
+     "conditions": {
+      "A1": true,
+      "A2": true,
+      "A3": true
+     },
+     "values": {
+      "macd": 1.4152,
+      "dif": 2.5037,
+      "close": 197.0,
+      "close_prev": 179.5,
+      "ma": 180.9,
+      "ma_prev": 179.55,
+      "volume_lots": 31331.647
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "5490",
+     "name": "同亨",
+     "market": "TPEX",
+     "close": 26.75,
+     "volume_lots": 890,
+     "conditions": {
+      "A1": true,
+      "A2": true,
+      "A3": true
+     },
+     "values": {
+      "macd": 0.2615,
+      "dif": 0.4344,
+      "close": 26.75,
+      "close_prev": 26.25,
+      "ma": 26.58,
+      "ma_prev": 26.275,
+      "volume_lots": 890.0
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "5521",
+     "name": "工信",
+     "market": "TWSE",
+     "close": 11.2,
+     "volume_lots": 2232,
+     "conditions": {
+      "A1": true,
+      "A2": true,
+      "A3": true
+     },
+     "values": {
+      "macd": 0.0264,
+      "dif": 0.0102,
+      "close": 11.2,
+      "close_prev": 11.05,
+      "ma": 11.08,
+      "ma_prev": 11.075,
+      "volume_lots": 2231.77
+     },
+     "streak": 1,
+     "is_new": true
+    },
+    {
+     "code": "6443",
+     "name": "元晶",
+     "market": "TWSE",
+     "close": 27.75,
+     "volume_lots": 27872,
+     "conditions": {
+      "A1": true,
+      "A2": true,
+      "A3": true
+     },
+     "values": {
+      "macd": 0.0485,
+      "dif": 0.2897,
+      "close": 27.75,
+      "close_prev": 25.25,
+      "ma": 26.41,
+      "ma_prev": 25.93,
+      "volume_lots": 27872.128
      },
      "streak": 1,
      "is_new": true
