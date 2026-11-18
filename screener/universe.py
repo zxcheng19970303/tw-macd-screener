@@ -16,7 +16,7 @@ import requests
 
 log = logging.getLogger(__name__)
 
-COLUMNS = ["code", "name", "market", "open", "high", "low", "close", "volume_lots", "value", "trade_date"]
+COLUMNS = ["code", "name", "market", "open", "high", "low", "close", "change", "volume_lots", "value", "trade_date"]
 MARKET_NAMES = {"TWSE": "上市", "TPEX": "上櫃"}
 
 # 各市場的端點與收盤行情表欄位名稱（以名稱定位，不依賴欄位順序；比對前先去掉空白與 <br>）
@@ -26,12 +26,15 @@ SOURCES = {
         "params": lambda d: {"date": d.strftime("%Y%m%d"), "type": "ALLBUT0999", "response": "json"},
         "fields": {"code": "證券代號", "name": "證券名稱", "volume": "成交股數", "value": "成交金額",
                    "open": "開盤價", "high": "最高價", "low": "最低價", "close": "收盤價"},
+        # 漲跌只用來顯示，缺欄位時不影響選股：正負號另放在一欄 HTML（<p style= color:red>+</p>），X 表示不比價
+        "optional": {"sign": "漲跌(+/-)", "change": "漲跌價差"},
     },
     "TPEX": {
         "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/otc",
         "params": lambda d: {"date": d.strftime("%Y/%m/%d"), "type": "EW", "id": "", "response": "json"},
         "fields": {"code": "代號", "name": "名稱", "volume": "成交股數", "value": "成交金額(元)",
                    "open": "開盤", "high": "最高", "low": "最低", "close": "收盤"},
+        "optional": {"change": "漲跌"},  # 帶正負號的數字，除權息當天是「除息」等文字
     },
 }
 
@@ -50,6 +53,17 @@ def _num(x) -> float | None:
 
 def _norm(field: str) -> str:
     return re.sub(r"<br\s*/?>|\s", "", str(field))
+
+
+def _change(row: list, col: dict[str, int]) -> float | None:
+    """漲跌點數（與前一交易日收盤比）；不比價、除權息或欄位缺漏時回傳 None。"""
+    if "change" not in col:
+        return None
+    value = _num(row[col["change"]])
+    if value is None or "sign" not in col:
+        return value
+    sign = re.sub(r"<[^>]*>|\s", "", str(row[col["sign"]]))
+    return {"+": abs(value), "-": -abs(value), "": 0.0}.get(sign)
 
 
 def parse_quotes(
@@ -72,6 +86,7 @@ def parse_quotes(
     if missing:
         raise RuntimeError(f"{MARKET_NAMES[market]}收盤行情缺少欄位 {missing}，回傳格式可能已變更")
     col = {k: names.index(v) for k, v in fields.items()}
+    col.update({k: names.index(v) for k, v in SOURCES[market].get("optional", {}).items() if v in names})
     trade_date = datetime.strptime(str(payload["date"]), "%Y%m%d").date()
 
     code_re = re.compile(code_pattern)
@@ -94,6 +109,7 @@ def parse_quotes(
                 "high": _num(r[col["high"]]) or close,
                 "low": _num(r[col["low"]]) or close,
                 "close": close,
+                "change": _change(r, col),
                 "volume_lots": (_num(r[col["volume"]]) or 0.0) / 1000,
                 "value": _num(r[col["value"]]) or 0.0,
                 "trade_date": trade_date,
@@ -123,10 +139,10 @@ def fetch_quotes(market: str, day: date, timeout: float, retries: int, retry_wai
     raise RuntimeError(f"{MARKET_NAMES[market]}行情連線失敗（已重試 {retries} 次）：{last_error}")
 
 
-def load_universe(markets: list[str], cfg: dict, day: date) -> pd.DataFrame:
-    """回傳上市、上櫃合併的股票池：code、name、market、open、high、low、close、volume_lots、value、trade_date。
+def load_universe(markets: list[str], cfg: dict, day: date, raw: dict | None = None) -> pd.DataFrame:
+    """回傳上市、上櫃合併的股票池：code、name、market、open、high、low、close、change、volume_lots、value、trade_date。
 
-    任一市場沒有當日資料就丟出 DataNotReady，避免只發布半個市場。
+    任一市場沒有當日資料就丟出 DataNotReady，避免只發布半個市場。raw 有給時存入各市場的原始回應（大盤指數沿用）。
     """
     unsupported = set(markets) - set(SOURCES)
     if unsupported:
@@ -135,6 +151,8 @@ def load_universe(markets: list[str], cfg: dict, day: date) -> pd.DataFrame:
     frames = []
     for m in markets:
         payload = fetch_quotes(m, day, ec["timeout_sec"], ec["retries"], ec["retry_wait_sec"])
+        if raw is not None:
+            raw[m] = payload
         frames.append(parse_quotes(payload, m, uc["code_pattern"], uc["exclude_name_patterns"]))
     return combine(frames)
 

@@ -133,3 +133,30 @@ def test_check_universe_size(cfg):
     check_universe_size(df, {}, 0.9)  # 沒有上次紀錄：不檢查
     with pytest.raises(DataNotReady):
         check_universe_size(df, {"TWSE": 120, "TPEX": 1}, 0.9)
+
+
+def test_change_parsing_twse_sign_html_and_tpex_signed_text(cfg):
+    fields = TWSE_FIELDS + ["漲跌價差"]
+
+    def row(code, sign, diff):
+        return twse_row(code, "測試")[:9] + [sign, diff]
+
+    rows = [row("2330", "<p style= color:red>+</p>", "5.00"), row("2317", "<p style= color:green>-</p>", "1.50"),
+            row("2454", "<p> </p>", "0.00"), row("2603", "<p>X</p>", "0.00")]
+    p = {"stat": "OK", "date": "20261118", "tables": [{"fields": fields, "data": rows}]}
+    got = dict(zip(*parse(p, "TWSE", cfg)[["code", "change"]].T.values))
+    assert got["2330"] == 5.0 and got["2317"] == -1.5 and got["2454"] == 0.0 and pd.isna(got["2603"])
+
+    rows = [tpex_row("6488"), tpex_row("3105"), tpex_row("8069"), tpex_row("5347")]
+    for r, chg in zip(rows, ["-2.00", "+1.50", "0.00", "除息"]):
+        r[3] = chg
+    got = dict(zip(*parse(tpex(rows), "TPEX", cfg)[["code", "change"]].T.values))
+    assert got["6488"] == -2.0 and got["3105"] == 1.5 and got["8069"] == 0.0 and pd.isna(got["5347"])
+
+
+def test_change_missing_fields_is_none(cfg):
+    # 舊格式或欄位改名：漲跌只是顯示用，不能讓股票池解析失敗
+    p = twse([twse_row("2330", "台積電")])
+    p["tables"][1]["fields"] = TWSE_FIELDS[:9] + ["其他"]
+    df = parse(p, "TWSE", cfg)
+    assert df["code"].tolist() == ["2330"] and pd.isna(df.iloc[0]["change"])

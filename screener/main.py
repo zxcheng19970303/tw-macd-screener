@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import yaml
 
-from . import demo, indicators, prices, report, rules, universe
+from . import demo, indicators, market, prices, report, rules, universe
 
 log = logging.getLogger("screener")
 
@@ -78,6 +78,13 @@ def _new_result(n: int) -> dict:
     }
 
 
+def change_fields(close: float, change: float | None) -> dict:
+    """交易所公布的漲跌與漲跌幅（%，相對前一交易日收盤）；不比價或除權息時為 None。"""
+    if change is None or pd.isna(change) or close - change <= 0:
+        return {"change": None, "change_pct": None}
+    return {"change": round(float(change), 2), "change_pct": round(float(change) / (close - change) * 100, 2)}
+
+
 def screen(
     univ: pd.DataFrame,
     histories: dict[str, pd.DataFrame],
@@ -124,7 +131,8 @@ def screen(
                 intra = prices.patch_intraday_close(intraday[row.code], row.close, ts, cfg["prices"]["intraday_close_max_gap"])
         frames = indicators.build_frames(df, ts, cfg, intra)
         today = {"volume_lots": row.volume_lots, **indicators.volume_averages(frames["D"], row.volume_lots, row.value)}
-        item = {"code": row.code, "name": row.name, "market": row.market, "close": row.close, "volume_lots": round(row.volume_lots)}
+        item = {"code": row.code, "name": row.name, "market": row.market, "close": row.close, **change_fields(row.close, row.change),
+                "volume_lots": round(row.volume_lots)}
         if wl:
             r = results[wl["id"]]
             if len(frames["D"]) < wl["min_bars"]:
@@ -199,7 +207,8 @@ def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) ->
             return EXIT_SKIP
         log.info("%s 已發布但有名單停用，重新執行", expected)
 
-    univ = universe.load_universe(cfg["markets"], cfg, expected)
+    raw: dict = {}
+    univ = universe.load_universe(cfg["markets"], cfg, expected, raw)
     trade_date = universe.check_trade_date(univ, expected)
     if current:
         universe.check_universe_size(univ, current.get("universe", {}).get("markets", {}), cfg["exchange"]["min_universe_ratio"])
@@ -234,11 +243,26 @@ def run_live(cfg: dict, out_dir: Path, expected: date, skip_if_current: bool) ->
         log.info("%s 早於目前發布的 %s：只更新歷史紀錄，latest.json 不變", trade_date, current["trade_date"])
     else:
         report.write_latest(out_dir, latest)
+        publish_market(out_dir, cfg, trade_date, raw.get("TWSE"))
 
     elapsed = time.monotonic() - started
     report.write_job_summary(report.job_summary(latest, first["fetch_failed"], first["patched"], elapsed))
     log.info("完成：%s，耗時 %.0f 秒", "、".join(f"{g['name']} 入選 {g['stats']['hits']}" for g in latest["groups"]), elapsed)
     return EXIT_OK
+
+
+def publish_market(out_dir: Path, cfg: dict, trade_date: date, mi_payload: dict | None) -> None:
+    """更新 market.json（大盤指數）。只供顯示：任何錯誤都只記錄，不影響本次發布。"""
+    try:
+        old = market.load_market(out_dir / "market.json", demo=False)
+        payload, errors = market.build_market(trade_date, cfg, old, mi_payload, False, taipei_now().isoformat(timespec="seconds"))
+        market.write_market(out_dir, payload)
+        for e in errors:
+            log.warning("大盤：%s", e)
+        report.write_job_summary(market.summary_line(payload, errors))
+    except Exception:  # noqa: BLE001
+        log.exception("大盤指數更新失敗，保留上次的 market.json")
+        report.write_job_summary("\n- ⚠️ 大盤指數更新失敗，保留上次資料（詳見執行紀錄）\n")
 
 
 def run_demo(cfg: dict, out_dir: Path, trade_date: date, n_stocks: int = 120, days: int | None = None) -> int:
@@ -266,6 +290,7 @@ def run_demo(cfg: dict, out_dir: Path, trade_date: date, n_stocks: int = 120, da
         latest, history = _publish(results, univ, day, cfg, history, True)
     report.write_history(out_dir, history)
     report.write_latest(out_dir, latest)
+    market.write_market(out_dir, market.demo_market(trade_date, cfg, taipei_now().isoformat(timespec="seconds")))
     elapsed = time.monotonic() - started
     first = next(iter(results.values()))
     report.write_job_summary(report.job_summary(latest, first["fetch_failed"], first["patched"], elapsed))

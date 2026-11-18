@@ -1,7 +1,7 @@
 """main 的流程、結束碼與輸出格式（不連網）。"""
 
 import json
-from datetime import date
+from datetime import date, timedelta
 
 import pandas as pd
 import pytest
@@ -90,7 +90,11 @@ def test_intraday_guard_disables_only_60m_group(cfg, demo_data):
 
 
 def _patch_live(monkeypatch, cfg, names, histories, markets, intraday, day):
-    monkeypatch.setattr(main.universe, "load_universe", lambda m, c, d: _universe(cfg, names, histories, markets, day))
+    monkeypatch.setattr(main.universe, "load_universe", lambda m, c, d, raw=None: _universe(cfg, names, histories, markets, day))
+    # 大盤指數不連網：Yahoo 與櫃買中心各給一天
+    monkeypatch.setattr(main.market, "yahoo_history", lambda symbol, end, days: {(end - timedelta(days=1)).isoformat(): 40000.0})
+    monkeypatch.setattr(main.market, "fetch_tpex_month", lambda month, timeout: {f"{month:%Y-%m}-03": 300.0})
+    monkeypatch.setattr(main.market.time, "sleep", lambda s: None)
     monkeypatch.setattr(main.prices, "fetch_history", lambda codes, *a, **k: {c: histories[c] for c in codes if c in histories})
     monkeypatch.setattr(main.prices, "fetch_intraday", lambda codes, *a, **k: {c: intraday[c] for c in codes if c in intraday})
     monkeypatch.setattr(main.universe, "previous_trading_day", lambda d, c: (pd.Timestamp(d) - pd.offsets.BDay(1)).date())
@@ -110,7 +114,7 @@ def test_live_exit_codes_and_history(tmp_path, monkeypatch, cfg, demo_data):
     assert not out.exists()
 
     # 交易所回應沒有資料（假日）→ 2
-    def not_ready(m, c, d):
+    def not_ready(m, c, d, raw=None):
         raise universe.DataNotReady("很抱歉，沒有符合條件的資料!")
 
     monkeypatch.setattr(main.universe, "load_universe", not_ready)
@@ -184,7 +188,7 @@ def test_live_guards(tmp_path, monkeypatch, cfg, demo_data):
     # 交易所股票數只有上次的一半（資料更新到一半）→ 2，不發布
     _patch_live(monkeypatch, cfg, names, histories, markets, intraday, DAY)
     half = _universe(cfg, names, histories, markets).iloc[::2].reset_index(drop=True)
-    monkeypatch.setattr(main.universe, "load_universe", lambda m, c, d: half)
+    monkeypatch.setattr(main.universe, "load_universe", lambda m, c, d, raw=None: half)
     assert main.main(args) == main.EXIT_SKIP
     assert (out / "latest.json").read_text(encoding="utf-8") == published
 
@@ -257,3 +261,28 @@ def test_auto_date_flag(monkeypatch, tmp_path):
     assert seen == {"d": date(2026, 11, 3), "skip": True}
     main.main(["--auto-date", "--date", "2026-10-30", "--out", str(tmp_path)])
     assert seen["d"] == date(2026, 10, 30)  # 有指定日期時以指定為準
+
+
+def test_live_publishes_market_and_survives_market_errors(tmp_path, monkeypatch, cfg, demo_data):
+    names, histories, markets, intraday = demo_data
+    out = tmp_path / "data"
+    args = ["--date", "2026-10-30", "--out", str(out)]
+    _patch_live(monkeypatch, cfg, names, histories, markets, intraday, DAY)
+    assert main.main(args) == main.EXIT_OK
+    m = _read(out, "market.json")
+    assert m["demo"] is False and m["trade_date"] == "2026-10-30" and [i["id"] for i in m["indices"]] == ["TAIEX", "TPEX"]
+    hit = next(h for g in _read(out)["groups"] for h in g["hits"])
+    assert {"change", "change_pct"} <= set(hit)
+
+    # 大盤整個壞掉：選股照常發布，market.json 保留上次內容
+    before = (out / "market.json").read_text(encoding="utf-8")
+    monkeypatch.setattr(main.market, "build_market", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom")))
+    assert main.main(args) == main.EXIT_OK
+    assert (out / "market.json").read_text(encoding="utf-8") == before
+
+
+def test_change_fields():
+    assert main.change_fields(105.0, 5.0) == {"change": 5.0, "change_pct": 5.0}
+    assert main.change_fields(95.0, -5.0) == {"change": -5.0, "change_pct": -5.0}
+    assert main.change_fields(100.0, None) == {"change": None, "change_pct": None}
+    assert main.change_fields(100.0, float("nan")) == {"change": None, "change_pct": None}

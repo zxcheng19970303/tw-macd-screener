@@ -21,7 +21,7 @@ EXCLUDED = [
     ("9999", "示範無成交", "--"),
 ]
 TPEX_EXCLUDED = [("00679B", "元大美債20年", "26.46"), ("6999", "示範上櫃無成交", "---")]
-MI_FIELDS = ["證券代號", "證券名稱", "成交股數", "成交筆數", "成交金額", "開盤價", "最高價", "最低價", "收盤價"]
+MI_FIELDS = ["證券代號", "證券名稱", "成交股數", "成交筆數", "成交金額", "開盤價", "最高價", "最低價", "收盤價", "漲跌(+/-)", "漲跌價差"]
 # 櫃買中心欄位名稱實際帶有空白與 <br>，照抄以驗證解析
 TPEX_FIELDS = ["代號", "名稱", "收盤 ", "漲跌", "開盤 ", "最高 ", "最低", "成交股數  ", " 成交金額(元)", " 成交筆數 ", "最後買量<br>(張數)"]
 
@@ -111,12 +111,14 @@ def quotes(day: date, names: dict[str, str], histories: dict[str, pd.DataFrame],
         b = bars.iloc[-1]
         o, h, low, c = (f"{b[k]:,.2f}" for k in ("Open", "High", "Low", "Close"))
         vol, val = f"{int(b['Volume']):,}", f"{int(b['Volume'] * b['Close']):,}"
+        chg = round(float(b["Close"] - bars["Close"].iloc[-2]), 2) if len(bars) > 1 else 0.0
         if market == "TWSE":
-            rows.append([code, names[code], vol, "1,000", val, o, h, low, c])
+            sign = "<p style= color:red>+</p>" if chg > 0 else "<p style= color:green>-</p>" if chg < 0 else "<p> </p>"
+            rows.append([code, names[code], vol, "1,000", val, o, h, low, c, sign, f"{abs(chg):,.2f}"])
         else:
-            rows.append([code, names[code], c, "+0.10", o, h, low, vol, val, "1,000", "10"])
+            rows.append([code, names[code], c, f"{chg:+.2f}", o, h, low, vol, val, "1,000", "10"])
     if market == "TWSE":
-        rows += [[code, name, "5,000,000", "1,000", "500,000,000", close, close, close, close] for code, name, close in EXCLUDED]
+        rows += [[code, name, "5,000,000", "1,000", "500,000,000", close, close, close, close, "<p> </p>", "0.00"] for code, name, close in EXCLUDED]
         table = {"title": f"{day:%Y年%m月%d日} 每日收盤行情（示範）", "fields": MI_FIELDS, "data": rows}
         return {"stat": "OK", "date": f"{day:%Y%m%d}", "tables": [table]}
     rows += [[code, name, close, "0.00", close, close, close, "41,103,000", "1,089,904,110", "5,102", "299"] for code, name, close in TPEX_EXCLUDED]
